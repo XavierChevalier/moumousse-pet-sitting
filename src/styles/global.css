@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Bazinga';
+  src: url('/fonts/bazinga/Bazinga-Regular.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --font-serif: Bazinga, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: oklch(98% 0.00342 67.8);
+  overflow-x: hidden;
+}
+
+.text-outline {
+  position: relative;
+  display: inline-block;
+}
+
+.text-outline::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  -webkit-text-stroke: 6px #000;
+  color: transparent;
+}

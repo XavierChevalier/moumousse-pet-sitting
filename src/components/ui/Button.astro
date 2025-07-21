@@ -1,0 +1,39 @@
+---
+import ButtonFilled from './_ButtonFilled.astro'
+
+export interface Props {
+  variant?: 'outline' | 'filled'
+  class?: string
+  href?: string
+}
+
+const { variant = 'outline', class: className = '', href, ...props } = Astro.props
+
+const baseClasses =
+  'group relative transform cursor-pointer border-4 px-8 py-4 font-black tracking-wider uppercase transition-all duration-200 hover:-translate-y-0.5'
+
+const variantClasses = {
+  outline:
+    'border-black bg-transparent text-black hover:bg-teal-400/5 hover:text-teal-400 hover:border-teal-400',
+  filled: 'border-black bg-black text-white hover:bg-teal-400 hover:border-teal-400',
+}
+
+const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${className}`
+---
+
+{
+  href ? (
+    <a href={href} class={combinedClasses} {...props}>
+      <span class="relative z-10">
+        <slot />
+      </span>
+      {variant === 'filled' && <ButtonFilled />}
+    </a>
+  ) : (
+    <button class={combinedClasses} {...props}>
+      <span class="relative z-10">
+        <slot />
+      </span>
+    </button>
+  )
+}

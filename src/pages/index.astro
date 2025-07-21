@@ -1,11 +1,46 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from '../layouts/Layout.astro'
+import HeroSection from '../components/home/HeroSection.astro'
+import Services from '../components/home/Services.astro'
 ---
 
 <Layout>
-	<Welcome />
+  <main class="min-h-screen overflow-hidden text-black">
+    <HeroSection />
+
+    <Services />
+
+    <!-- Why Choose Us Section -->
+    <section class="px-4 py-20">
+      <div class="container mx-auto max-w-6xl">
+        <h2 class="mb-16 text-center text-4xl font-black uppercase lg:text-6xl">
+          <span class="text-teal-400 drop-shadow-[3px_3px_0px_#000]">POURQUOI</span>
+          <span class="block text-purple-400 drop-shadow-[3px_3px_0px_#000]">ON DÉCHIRE</span>
+        </h2>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div class="space-y-4 text-center">
+            <div class="mb-4 text-5xl">🤘</div>
+            <h3 class="text-xl font-black text-yellow-400 uppercase">Passion Authentique</h3>
+            <p class="text-gray-400">Amoureuse des animaux depuis toujours</p>
+          </div>
+          <div class="space-y-4 text-center">
+            <div class="mb-4 text-5xl">📱</div>
+            <h3 class="text-xl font-black text-purple-400 uppercase">Updates Quotidiennes</h3>
+            <p class="text-gray-400">Photos et nouvelles de ton compagnon chaque jour</p>
+          </div>
+          <div class="space-y-4 text-center">
+            <div class="mb-4 text-5xl">🔒</div>
+            <h3 class="text-xl font-black text-teal-400 uppercase">Sécurité Max</h3>
+            <p class="text-gray-400">Assurance et déclaration en règle</p>
+          </div>
+          <div class="space-y-4 text-center">
+            <div class="mb-4 text-5xl">💜</div>
+            <h3 class="text-xl font-black text-yellow-400 uppercase">Flexibilité Totale</h3>
+            <p class="text-gray-400">Disponible selon TES besoins</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 </Layout>

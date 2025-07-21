@@ -1,0 +1,53 @@
+---
+import MoumousseMalisse from '../../assets/moumousse-malisse.webp'
+import PunkBackground from '../ui/PunkBackground.astro'
+import { Picture } from 'astro:assets'
+import Button from '../ui/Button.astro'
+---
+
+<section class="relative flex min-h-[90vh] flex-col justify-center gap-40 px-4 py-20">
+  <PunkBackground />
+
+  <div class="relative z-10 container mx-auto max-w-7xl">
+    <div class="grid items-center gap-24 lg:grid-cols-2">
+      <!-- Hero Content -->
+      <div class="space-y-8 text-center lg:text-left">
+        <!-- Main Headline -->
+        <h1
+          class="font-['Inter'] text-5xl leading-tight font-black tracking-wide uppercase lg:text-7xl"
+        >
+          <span class="text-outline transform text-purple-400" data-text="Faite garder">
+            Faite garder
+          </span>
+          <span class="text-outline transform text-yellow-400" data-text="vos animaux">
+            vos animaux
+          </span>
+          <span class="text-outline transform text-teal-400" data-text="en bonne"> en bonne </span>
+          <span class="transform text-black" data-text="compagnie"> compagnie </span>
+        </h1>
+
+        <!-- CTA Buttons -->
+        <div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+          <Button>Tarifs</Button>
+          <Button variant="filled">Contactez-moi</Button>
+        </div>
+      </div>
+
+      <Picture src={MoumousseMalisse} formats={['avif', 'webp']} alt="Moumousse Malisse" />
+    </div>
+  </div>
+
+  <!-- Trusted By Section -->
+  <div class="text-center">
+    <p class="mb-8 font-bold text-gray-500 uppercase">
+      Approuvé par les propriétaires les plus exigeants
+    </p>
+    <div class="flex items-center justify-center gap-8 opacity-60">
+      <div class="text-4xl">🏆</div>
+      <div class="text-4xl">⭐</div>
+      <div class="text-4xl">💎</div>
+      <div class="text-4xl">🎯</div>
+      <div class="text-4xl">🔥</div>
+    </div>
+  </div>
+</section>

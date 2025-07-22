@@ -27,7 +27,7 @@ const links = [
             class="place-items-start justify-start self-end justify-self-start align-bottom"
           />
           <span
-            class="flex flex-col text-xl leading-5 font-black uppercase transition duration-150 group-hover:translate-x-1 group-hover:text-teal-400"
+            class="group-hover:text-primary flex flex-col text-xl leading-5 font-black uppercase transition duration-150 group-hover:translate-x-1"
           >
             <span> Moumousse </span>
             <span> Pet Sitting </span>
@@ -42,7 +42,7 @@ const links = [
             links.map((link) => (
               <a
                 href={link.href}
-                class="p-4 text-sm font-bold tracking-wide uppercase transition-colors duration-150 hover:text-teal-400"
+                class="hover:text-primary p-4 text-sm font-bold tracking-wide uppercase transition-colors duration-150"
               >
                 {link.label}
               </a>

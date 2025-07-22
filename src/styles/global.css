@@ -1,22 +1,62 @@
 @import 'tailwindcss';
 
-@font-face {
-  font-family: 'Bazinga';
-  src: url('/fonts/bazinga/Bazinga-Regular.otf');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @theme {
-  --font-serif: Bazinga, system-ui, -apple-system, sans-serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body {
-  background: oklch(98% 0.00342 67.8);
-  overflow-x: hidden;
+.bg-body {
+  background-color: #faf8f6;
 }
 
+.text-primary {
+  @apply text-teal-400;
+}
+
+.bg-primary {
+  @apply bg-teal-400;
+}
+
+.border-primary {
+  @apply border-teal-400;
+}
+
+.text-secondary {
+  @apply text-yellow-400;
+}
+
+.bg-secondary {
+  @apply bg-yellow-400;
+}
+
+.border-secondary {
+  @apply border-yellow-400;
+}
+
+.text-tertiary {
+  @apply text-purple-400;
+}
+
+.bg-tertiary {
+  @apply bg-purple-400;
+}
+
+.border-tertiary {
+  @apply border-purple-400;
+}
+
+.text-accent {
+  @apply text-pink-400;
+}
+
+.bg-accent {
+  @apply bg-pink-400;
+}
+
+.border-accent {
+  @apply border-pink-400;
+}
+
+/* Text Outline */
 .text-outline {
   position: relative;
   display: inline-block;

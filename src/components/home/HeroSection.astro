@@ -5,17 +5,14 @@ import { Picture } from 'astro:assets'
 import Button from '../ui/Button.astro'
 ---
 
-<section class="relative flex min-h-[90vh] flex-col justify-center gap-40 px-4 py-20">
+<section class="relative flex min-h-[80vh] flex-col justify-center gap-24 px-4 py-20">
   <PunkBackground />
 
   <div class="relative z-10 container mx-auto max-w-7xl">
-    <div class="grid items-center gap-24 lg:grid-cols-2">
-      <!-- Hero Content -->
-      <div class="space-y-8 text-center lg:text-left">
+    <div class="grid justify-items-center gap-24 lg:grid-cols-2">
+      <div class="space-y-4 text-center lg:text-left">
         <!-- Main Headline -->
-        <h1
-          class="font-['Inter'] text-5xl leading-tight font-black tracking-wide uppercase lg:text-7xl"
-        >
+        <h1 class="text-5xl leading-tight font-black tracking-wide uppercase lg:text-7xl">
           <span class="text-outline transform text-purple-400" data-text="Faite garder">
             Faite garder
           </span>
@@ -26,6 +23,9 @@ import Button from '../ui/Button.astro'
           <span class="transform text-black" data-text="compagnie"> compagnie </span>
         </h1>
 
+        <!-- Sub Headline -->
+        <p class="text-xl font-bold text-black">À Pélussin et alentour</p>
+
         <!-- CTA Buttons -->
         <div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
           <Button>Tarifs</Button>
@@ -33,7 +33,12 @@ import Button from '../ui/Button.astro'
         </div>
       </div>
 
-      <Picture src={MoumousseMalisse} formats={['avif', 'webp']} alt="Moumousse Malisse" />
+      <Picture
+        src={MoumousseMalisse}
+        formats={['avif', 'webp']}
+        alt="Moumousse Pet Sitting logo"
+        class="w-48 md:w-80 lg:w-auto"
+      />
     </div>
   </div>
 

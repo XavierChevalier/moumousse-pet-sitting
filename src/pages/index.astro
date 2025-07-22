@@ -1,14 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Navigation from '../components/Navigation.astro'
 import HeroSection from '../components/home/HeroSection.astro'
-import Services from '../components/home/Services.astro'
+import ServicesSection from '../components/home/ServicesSection.astro'
 ---
 
 <Layout>
-  <main class="min-h-screen overflow-hidden text-black">
+  <Navigation />
+
+  <main class="min-h-screen overflow-hidden pt-20">
     <HeroSection />
 
-    <Services />
+    <ServicesSection />
 
     <!-- Why Choose Us Section -->
     <section class="px-4 py-20">

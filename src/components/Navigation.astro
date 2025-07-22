@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets'
+import MoumousseDog from '../assets/moumousse-dog.webp'
+import Button from './ui/Button.astro'
+
+const links = [
+  { href: '#tarifs', label: 'Tarifs' },
+  { href: '#services', label: 'Services' },
+  { href: '#galerie', label: 'Galerie' },
+  { href: '#faq', label: 'FAQ' },
+]
+---
+
+<nav
+  class="bg-body fixed top-5 z-50 w-full transform overflow-hidden rounded-2xl text-black backdrop-blur-sm md:left-1/2 md:w-full md:-translate-x-1/2 md:rounded-full"
+>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Desktop menu -->
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="group flex items-center gap-3">
+          <Image
+            src={MoumousseDog}
+            alt="Moumousse Pet Sitting Logo"
+            height={55}
+            class="place-items-start justify-start self-end justify-self-start align-bottom"
+          />
+          <span
+            class="flex flex-col text-xl leading-5 font-black uppercase transition duration-150 group-hover:translate-x-1 group-hover:text-teal-400"
+          >
+            <span> Moumousse </span>
+            <span> Pet Sitting </span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline">
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="p-4 text-sm font-bold tracking-wide uppercase transition-colors duration-150 hover:text-teal-400"
+              >
+                {link.label}
+              </a>
+            ))
+          }
+
+          <!-- Contact Button -->
+          <Button href="#contact" size="small" class="ml-4"> Contactez-moi </Button>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button
+          type="button"
+          id="mobile-menu-button"
+          class="hover:text-secondary focus:text-secondary transition-colors duration-200 focus:outline-none"
+          aria-label="Menu mobile"
+        >
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden">
+      <div class="flex flex-col gap-8 p-8 text-lg">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="hover:text-secondary block px-3 py-2 font-bold tracking-wide uppercase transition-colors duration-200"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+
+        <!-- Contact Button -->
+        <Button href="#contact" size="large" class="text-center"> Contactez-moi </Button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuButton = document.getElementById('mobile-menu-button')
+    const mobileMenu = document.getElementById('mobile-menu')
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'))
+    }
+  })
+</script>

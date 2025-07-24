@@ -1,0 +1,54 @@
+---
+import { Picture } from 'astro:assets'
+import SteffieOttawa from '../../assets/steffie-ottawa.jpg'
+---
+
+<!--<section class="to-primary/10 from-tertiary/10 bg-gradient-to-bl px-4 py-20">-->
+<section class="bg-tertiary/5 px-4 py-20">
+  <div class="container mx-auto max-w-7xl">
+    <div class="text-center">
+      <h2
+        class="text-outline text-secondary mb-16 text-center text-4xl font-black uppercase lg:text-6xl"
+        data-text="Faisons connaissance"
+      >
+        Faisons connaissance
+      </h2>
+    </div>
+
+    <div class="bg-body flex gap-8 rounded-xl p-8 text-xl leading-loose">
+      <div class="w-full">
+        <Picture
+          src={SteffieOttawa}
+          alt="Steffie et Ottawa"
+          width={800}
+          class="pointer-events-none rounded-2xl border-4 border-black select-none"
+        />
+      </div>
+
+      <div class="flex flex-col justify-between">
+        <div class="flex flex-col gap-8">
+          <h3 class="text-2xl font-bold">Pourquoi « Moumousse » ?</h3>
+
+          <p>
+            Moumousse a été le <strong>premier chat dont je me suis occupée</strong>, qui en réalité
+            était celui de ma voisine. D’aussi loin que je me souvienne, elle me laissait m’en
+            occuper comme mon propre chat. Moumousse m'a apporté 17 ans d’amour et de câlins poilus.
+          </p>
+          <p>
+            Une passion et une sensibilité envers les animaux s'est développée tout au long de ma
+            vie pour qu’à l’aube de mes 30 ans, je plaque un super travail, décision dur mais
+            nécessaire, pour <strong>me consacrer à la cause animale</strong> et le bien-être de nos
+            boules de poils.
+          </p>
+          <p>
+            Une expérience en refuge et <strong>la garde d’animaux</strong> dans mon entourage aura donné
+            naissance à <strong>Moumousse Pet Sitting</strong> qui un jour, je l'espère, deviendra un
+            refuge à son tour et un havre de paix pour tous les animaux dans le besoin.
+          </p>
+        </div>
+
+        <span class="text-right text-xl tracking-tight text-black/40">Steffie Thollot</span>
+      </div>
+    </div>
+  </div>
+</section>

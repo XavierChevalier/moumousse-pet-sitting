@@ -4,17 +4,14 @@ import MoumousseDog from '../assets/moumousse-dog.webp'
 import Button from './ui/Button.astro'
 
 const links = [
-  { href: '#tarifs', label: 'Tarifs' },
-  { href: '#services', label: 'Services' },
+  { href: '#tarifs', label: 'Prestations & Tarifs' },
   { href: '#galerie', label: 'Galerie' },
   { href: '#faq', label: 'FAQ' },
 ]
 ---
 
-<nav
-  class="bg-body fixed top-5 z-50 w-full transform overflow-hidden rounded-2xl text-black backdrop-blur-sm md:left-1/2 md:w-full md:-translate-x-1/2 md:rounded-full"
->
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<nav class="bg-body fixed top-0 right-0 left-0 z-50 w-full transform overflow-hidden text-black">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-4">
     <!-- Desktop menu -->
     <div class="flex h-16 items-center justify-between">
       <!-- Logo -->

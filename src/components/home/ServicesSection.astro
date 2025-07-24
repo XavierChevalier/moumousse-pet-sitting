@@ -1,59 +1,141 @@
 ---
-
+import { Picture } from 'astro:assets'
+import Jazz from '../../assets/jazz.jpeg'
+import Leika from '../../assets/leika.jpeg'
+import Button from '../ui/Button.astro'
 ---
 
-<section class="from-tertiary/20 bg-gradient-to-bl to-teal-400/20 px-4 py-20">
-  <div class="container mx-auto max-w-6xl text-center">
-    <h2
-      class="text-outline text-secondary mb-16 text-center text-4xl font-black uppercase lg:text-6xl"
-      data-text="Mes services"
-    >
-      Mes services
-    </h2>
-
-    <div class="grid gap-8 md:grid-cols-3">
-      <!-- Service 1 -->
-      <div
-        class="group relative transform border-4 border-purple-500 bg-black p-6 transition-all duration-300 hover:scale-105 hover:border-yellow-400"
+<section class="relative overflow-hidden px-4 py-24">
+  <div class="relative z-10 container mx-auto max-w-7xl">
+    <div class="text-center">
+      <h2
+        class="text-outline text-secondary mb-20 text-center text-5xl font-black tracking-tight uppercase lg:text-7xl"
+        data-text="Mes services"
       >
-        <div
-          class="absolute inset-0 -z-10 translate-x-2 translate-y-2 transform bg-purple-600 transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-        >
+        Mes services
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-28">
+      <!-- VISITES PONCTUELLES -->
+      <div class="flex flex-col gap-8 lg:flex-row">
+        <div class="relative lg:w-2/5">
+          <Picture
+            src={Leika}
+            alt="Leika"
+            width={800}
+            class="pointer-events-none rounded-2xl border-4 border-black shadow-lg select-none"
+          />
         </div>
-        <div class="space-y-4 text-center">
-          <div class="mb-4 text-6xl">🏠</div>
-          <h3 class="text-xl font-black text-yellow-400 uppercase">Garde à Domicile</h3>
-          <p class="text-gray-300">Ton animal reste dans SON territoire, avec TOUS ses repères</p>
+
+        <div class="flex flex-col gap-10 lg:w-3/5">
+          <div class="flex flex-col gap-6">
+            <h3 class="text-primary text-4xl font-black tracking-tight uppercase">
+              Visites <span class="text-secondary">ponctuelles</span>
+            </h3>
+
+            <p>
+              Je passe à domicile pour m'occuper de vos <strong>chien</strong>, <strong
+                >chats</strong
+              >
+              et <strong>NAC</strong>, sur des créneaux de 30 minutes (ou plus sur devis).
+            </p>
+
+            <p>
+              📅 Une <strong>pré-visite obligatoire</strong> est prévue avant toute première garde. Elle
+              permet de :
+            </p>
+            <ul class="list-inside list-disc">
+              <li>vous rencontrer,</li>
+              <li>créer un premier contact avec votre compagnon,</li>
+              <li>collecter toutes les infos utiles pour des visites en toute confiance.</li>
+            </ul>
+
+            <p>Chaque passage inclut :</p>
+            <ul class="space-y-1">
+              <li>🥣 Remplissage des gamelles d'eau et de nourriture</li>
+              <li>🧼 Nettoyage ou remplacement de la litière</li>
+              <li>🎾 Jeux et/ou câlins selon l'envie de votre animal</li>
+            </ul>
+
+            <p>
+              📸 Vous recevez des <strong>nouvelles, photos et vidéos</strong> après chaque passage.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div
+              class="rounded-2xl border-2 border-black bg-white p-4 text-center shadow-lg transition hover:scale-[1.03]"
+            >
+              <div class="text-muted text-sm">La visite</div>
+              <div class="text-xl font-black">10€</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Service 2 -->
-      <div
-        class="group relative transform border-4 border-teal-500 bg-black p-6 transition-all duration-300 hover:scale-105 hover:border-yellow-400"
-      >
-        <div
-          class="absolute inset-0 -z-10 translate-x-2 translate-y-2 transform bg-teal-600 transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-        >
-        </div>
-        <div class="space-y-4 text-center">
-          <div class="mb-4 text-6xl">🚶‍♀️</div>
-          <h3 class="text-xl font-black text-yellow-400 uppercase">Promenades Rock</h3>
-          <p class="text-gray-300">Des balades énergiques pour que ton chien reste en forme</p>
-        </div>
-      </div>
+      <hr class="border-t border-dashed border-black/10" />
 
-      <!-- Service 3 -->
-      <div
-        class="group hover:border-tertiary relative transform border-4 border-yellow-500 bg-black p-6 transition-all duration-300 hover:scale-105"
-      >
-        <div
-          class="absolute inset-0 -z-10 translate-x-2 translate-y-2 transform bg-yellow-600 transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-        >
+      <!-- PROMENADE CANINE -->
+      <div class="flex flex-col gap-8 lg:flex-row-reverse">
+        <div class="relative lg:w-2/5">
+          <Picture
+            src={Jazz}
+            alt="Jazz"
+            width={800}
+            class="pointer-events-none rounded-2xl border-4 border-black shadow-lg select-none"
+          />
         </div>
-        <div class="space-y-4 text-center">
-          <div class="mb-4 text-6xl">💊</div>
-          <h3 class="text-xl font-black uppercase">Soins & Câlins</h3>
-          <p class="font-bold text-gray-800">Médicaments, repas, et surtout beaucoup d'amour</p>
+
+        <div class="flex flex-col gap-10 lg:w-3/5">
+          <div class="flex flex-col gap-6">
+            <h3 class="text-primary text-4xl font-black tracking-tight uppercase">
+              Promenade <span class="text-secondary">canine</span>
+            </h3>
+
+            <p>
+              Je propose des <strong>promenades personnalisées</strong> pour votre chien, sur des créneaux
+              de
+              <strong>30 minutes à 2 heures</strong> (ou plus selon vos besoins).
+            </p>
+
+            <p>
+              📅 Une <strong>pré-visite obligatoire</strong> est prévue avant la première sortie. Elle
+              permet de :
+            </p>
+            <ul class="list-inside list-disc">
+              <li>faire connaissance,</li>
+              <li>rencontrer votre chien,</li>
+              <li>recueillir toutes les infos essentielles pour des balades adaptées</li>
+            </ul>
+
+            <p>Chaque balade inclut :</p>
+            <ul class="space-y-1">
+              <li>🚶 Une vraie sortie pour ses besoins</li>
+              <li>🧠 Un temps de jeu et de stimulation</li>
+              <li>💞 Et bien sûr… des câlins à volonté !</li>
+            </ul>
+
+            <p>
+              📸 Vous recevez des <strong>nouvelles, photos et vidéos</strong> après chaque balade.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {
+              [
+                ['30min', '15€'],
+                ['1h', '20€'],
+                ['1h30', '25€'],
+                ['2h', '30€'],
+              ].map(([label, price]) => (
+                <div class="rounded-2xl border-2 border-black bg-white p-4 text-center shadow-lg transition hover:scale-[1.03]">
+                  <div class="text-muted text-sm">{label}</div>
+                  <div class="text-xl font-black">{price}</div>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>

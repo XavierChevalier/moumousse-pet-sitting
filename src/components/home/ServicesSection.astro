@@ -2,10 +2,20 @@
 import { Picture } from 'astro:assets'
 import Jazz from '../../assets/jazz.jpeg'
 import Leika from '../../assets/leika.jpeg'
-import Button from '../ui/Button.astro'
+import {
+  UtensilsCrossedIcon,
+  PawPrintIcon,
+  BubblesIcon,
+  VolleyballIcon,
+  CalendarCheckIcon,
+  CameraIcon,
+  FootprintsIcon,
+  BrainIcon,
+  HeartIcon,
+} from '@lucide/astro'
 ---
 
-<section class="relative overflow-hidden px-4 py-24">
+<section class="relative overflow-hidden px-4 py-24 text-lg">
   <div class="relative z-10 container mx-auto max-w-7xl">
     <div class="text-center">
       <h2
@@ -18,13 +28,13 @@ import Button from '../ui/Button.astro'
 
     <div class="flex flex-col gap-28">
       <!-- VISITES PONCTUELLES -->
-      <div class="flex flex-col gap-8 lg:flex-row">
+      <div class="flex flex-col gap-14 lg:flex-row">
         <div class="relative lg:w-2/5">
           <Picture
             src={Leika}
             alt="Leika"
             width={800}
-            class="pointer-events-none rounded-2xl border-4 border-black shadow-lg select-none"
+            class="after:bg-primary/10 pointer-events-none rounded-xl border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] select-none"
           />
         </div>
 
@@ -35,37 +45,51 @@ import Button from '../ui/Button.astro'
             </h3>
 
             <p>
-              Je passe à domicile pour m'occuper de vos <strong>chien</strong>, <strong
+              Je passe à domicile pour m'occuper de vos <strong>chiens</strong> et <strong
                 >chats</strong
-              >
-              et <strong>NAC</strong>, sur des créneaux de 30 minutes (ou plus sur devis).
+              >.
+            </p>
+
+            <p>Chaque passage inclut :</p>
+            <ul class="space-y-1">
+              <li>
+                <UtensilsCrossedIcon class="mr-1 inline w-5 align-bottom" /> Remplissage des gamelles
+                d'eau et de nourriture
+              </li>
+              <li>
+                <PawPrintIcon class="mr-1 inline w-5 align-bottom" /> Sortie dédiée aux besoins
+              </li>
+              <li>
+                <BubblesIcon class="mr-1 inline w-5 align-bottom" /> Nettoyage ou remplacement de la
+                litière
+              </li>
+              <li>
+                <VolleyballIcon class="mr-1 inline w-5 align-bottom" /> Jeux et/ou câlins selon l'envie
+                de votre animal
+              </li>
+            </ul>
+
+            <p>
+              <CameraIcon class="mr-1 inline w-5 align-bottom" /> Vous recevez des <strong
+                >nouvelles, photos et vidéos</strong
+              > après chaque passage.
             </p>
 
             <p>
-              📅 Une <strong>pré-visite obligatoire</strong> est prévue avant toute première garde. Elle
-              permet de :
+              <CalendarCheckIcon class="mr-1 inline w-5 align-bottom" /> Une <strong
+                >pré-visite obligatoire</strong
+              > est prévue avant toute première garde. Elle permet de :
             </p>
             <ul class="list-inside list-disc">
               <li>vous rencontrer,</li>
               <li>créer un premier contact avec votre compagnon,</li>
               <li>collecter toutes les infos utiles pour des visites en toute confiance.</li>
             </ul>
-
-            <p>Chaque passage inclut :</p>
-            <ul class="space-y-1">
-              <li>🥣 Remplissage des gamelles d'eau et de nourriture</li>
-              <li>🧼 Nettoyage ou remplacement de la litière</li>
-              <li>🎾 Jeux et/ou câlins selon l'envie de votre animal</li>
-            </ul>
-
-            <p>
-              📸 Vous recevez des <strong>nouvelles, photos et vidéos</strong> après chaque passage.
-            </p>
           </div>
 
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div
-              class="rounded-2xl border-2 border-black bg-white p-4 text-center shadow-lg transition hover:scale-[1.03]"
+              class="rounded-2xl border-2 border-black bg-white p-4 text-center transition hover:scale-[1.03]"
             >
               <div class="text-muted text-sm">La visite</div>
               <div class="text-xl font-black">10€</div>
@@ -77,13 +101,13 @@ import Button from '../ui/Button.astro'
       <hr class="border-t border-dashed border-black/10" />
 
       <!-- PROMENADE CANINE -->
-      <div class="flex flex-col gap-8 lg:flex-row-reverse">
+      <div class="flex flex-col gap-14 lg:flex-row-reverse">
         <div class="relative lg:w-2/5">
           <Picture
             src={Jazz}
             alt="Jazz"
             width={800}
-            class="pointer-events-none rounded-2xl border-4 border-black shadow-lg select-none"
+            class="pointer-events-none rounded-xl border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] select-none"
           />
         </div>
 
@@ -99,26 +123,37 @@ import Button from '../ui/Button.astro'
               <strong>30 minutes à 2 heures</strong> (ou plus selon vos besoins).
             </p>
 
+            <p>Chaque balade inclut :</p>
+            <ul class="space-y-1">
+              <li>
+                <FootprintsIcon class="mr-1 inline w-5 align-bottom" /> Une vraie sortie nécessaire à
+                son bien-être
+              </li>
+              <li>
+                <BrainIcon class="mr-1 inline w-5 align-bottom" /> Un temps de jeu et de stimulation
+              </li>
+              <li>
+                <HeartIcon class="mr-1 inline w-5 align-bottom" /> Et bien sûr… des câlins à volonté
+                !
+              </li>
+            </ul>
+
             <p>
-              📅 Une <strong>pré-visite obligatoire</strong> est prévue avant la première sortie. Elle
-              permet de :
+              <CameraIcon class="mr-1 inline w-5 align-bottom" /> Vous recevez des <strong
+                >nouvelles, photos et vidéos</strong
+              > après chaque balade.
+            </p>
+
+            <p>
+              <CalendarCheckIcon class="mr-1 inline w-5 align-bottom" /> Une <strong
+                >pré-visite obligatoire</strong
+              > est prévue avant la première sortie. Elle permet de :
             </p>
             <ul class="list-inside list-disc">
               <li>faire connaissance,</li>
               <li>rencontrer votre chien,</li>
-              <li>recueillir toutes les infos essentielles pour des balades adaptées</li>
+              <li>recueillir toutes les infos essentielles pour des balades adaptées.</li>
             </ul>
-
-            <p>Chaque balade inclut :</p>
-            <ul class="space-y-1">
-              <li>🚶 Une vraie sortie pour ses besoins</li>
-              <li>🧠 Un temps de jeu et de stimulation</li>
-              <li>💞 Et bien sûr… des câlins à volonté !</li>
-            </ul>
-
-            <p>
-              📸 Vous recevez des <strong>nouvelles, photos et vidéos</strong> après chaque balade.
-            </p>
           </div>
 
           <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -129,7 +164,7 @@ import Button from '../ui/Button.astro'
                 ['1h30', '25€'],
                 ['2h', '30€'],
               ].map(([label, price]) => (
-                <div class="rounded-2xl border-2 border-black bg-white p-4 text-center shadow-lg transition hover:scale-[1.03]">
+                <div class="rounded-2xl border-2 border-black bg-white p-4 text-center transition hover:scale-[1.03]">
                   <div class="text-muted text-sm">{label}</div>
                   <div class="text-xl font-black">{price}</div>
                 </div>

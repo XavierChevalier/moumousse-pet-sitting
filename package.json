@@ -13,10 +13,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@lucide/astro": "^0.525.0",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.12.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "lucide": "^0.525.0",
     "sharp": "^0.34.3",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11"

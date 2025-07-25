@@ -1,0 +1,108 @@
+---
+import { Picture } from 'astro:assets'
+import { ArrowRight, AlertTriangle, Mail, Phone } from '@lucide/astro'
+import FAQListItem from '../ui/FAQListItem.astro'
+import MoumousseDog from '../../assets/moumousse-dog.webp'
+---
+
+<section class="px-4 py-20">
+  <div class="container mx-auto max-w-7xl">
+    <div class="text-center">
+      <h2
+        class="text-outline text-secondary mb-16 text-center text-4xl font-black uppercase lg:text-6xl"
+        data-text="FAQ"
+      >
+        FAQ
+      </h2>
+    </div>
+
+    <div class="flex items-end">
+      <div class="w-3/5 space-y-6">
+        <FAQListItem question="Quels animaux je garde ?" isOpen={true}>
+          <p class="mb-4">Je m'occupe actuellement des <strong class="text-primary">chats et chiens</strong>.</p>
+          <p>Les <strong class="text-accent">NAC</strong> (nouveaux animaux de compagnie) comme les lapins, cochons d'Inde ou furets seront bientôt acceptés — n'hésitez pas à me contacter pour en discuter.</p>
+        </FAQListItem>
+
+        <FAQListItem question="Quels sont mes services ?">
+          <ul class="space-y-4">
+            <li><strong class="text-primary">Visites à domicile :</strong> soins, nourriture, nettoyage, câlins, jeux, etc.</li>
+            <li><strong class="text-secondary">Promenades :</strong> sorties individuelles ou personnalisées selon les besoins du chien.</li>
+            <li><strong class="text-accent">Présence / compagnie :</strong> rester un moment avec l'animal pour éviter l'ennui ou l'anxiété.</li>
+          </ul>
+        </FAQListItem>
+
+        <FAQListItem question="Quels sont les tarifs ?">
+          <p class="mb-4">Les tarifs varient selon la formule choisie, le temps passé et la distance.</p>
+          <p class="flex items-center gap-2">
+            <ArrowRight class="text-secondary w-5 h-5" /> 
+            Retrouvez tous les détails sur la page <strong class="text-accent">Tarifs</strong>. Pour un devis personnalisé, contactez-moi directement.
+          </p>
+        </FAQListItem>
+
+        <FAQListItem question="Comment réserver ?">
+          <p class="mb-4">Par <strong class="text-primary">mail</strong>, <strong class="text-secondary">SMS</strong> ou <strong class="text-accent">appel téléphonique</strong>.</p>
+          <p class="flex items-center gap-2">
+            <AlertTriangle class="text-yellow-400 w-5 h-5" /> 
+            Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.
+          </p>
+        </FAQListItem>
+
+        <FAQListItem question="Ai-je une formation ?">
+          <p class="mb-4">Oui, je suis titulaire de :</p>
+          <ul class="space-y-3">
+            <li><strong class="text-primary">ACACED</strong> (Attestation de Connaissances pour les Animaux de Compagnie d'Espèces Domestiques) – Chien & Chat</li>
+            <li><strong class="text-accent">Formation de premiers secours canin/félin :</strong> pour réagir vite en cas d'urgence.</li>
+          </ul>
+        </FAQListItem>
+
+        <FAQListItem question="Et si mon animal tombe malade ou se blesse ?">
+          <ul class="space-y-3">
+            <li>Je contacte votre <strong class="text-primary">vétérinaire habituel</strong> en priorité.</li>
+            <li>En cas d'urgence, j'appelle le <strong class="text-secondary">vétérinaire le plus proche</strong>.</li>
+            <li>Vous êtes <strong class="text-accent">informé·e en temps réel</strong> de la situation.</li>
+          </ul>
+        </FAQListItem>
+
+        <FAQListItem question="Une question ? Un souci ?">
+          <p class="mb-4">Contactez-moi sans hésiter :</p>
+          <div class="space-y-2">
+            <p class="flex items-center gap-2">
+              <Mail class="text-primary w-5 h-5" /> 
+              contact@moumousse-pet-sitting.fr
+            </p>
+            <p class="flex items-center gap-2">
+              <Phone class="text-secondary w-5 h-5" /> 
+              06 26 26 26 26
+            </p>
+          </div>
+        </FAQListItem>
+      </div>
+
+      <div class="flex w-2/5 justify-end">
+        <Picture
+          src={MoumousseDog}
+          formats={['avif', 'webp']}
+          alt="Moumousse Pet Sitting logo"
+          width={300}
+          class="pointer-events-none w-48 select-none md:w-80 lg:w-auto"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqItems = document.querySelectorAll<HTMLElement>('.faq-item')
+
+    faqItems.forEach((item) => {
+      const question = item.querySelector<HTMLElement>('.faq-question')
+
+      question?.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open')
+        faqItems.forEach((item) => item.classList.remove('open'))
+        item.classList.toggle('open', !isOpen)
+      })
+    })
+  })
+</script>

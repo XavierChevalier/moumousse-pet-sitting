@@ -1,0 +1,148 @@
+---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+export interface Props {
+  images: { img: ImageMetadata; title: string; subtitle?: string }[]
+  className?: string
+}
+
+const { images, className = '' } = Astro.props
+
+const third = Math.ceil(images.length / 3)
+const columns = [images.slice(0, third), images.slice(third, 2 * third), images.slice(2 * third)]
+---
+
+<div id="gallery-parallax-container" class={`w-full ${className}`}>
+  <div
+    class="mx-auto grid max-w-7xl grid-cols-1 items-start gap-10 px-10 py-20 md:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      columns.map((column, columnIndex) => (
+        <div class="grid gap-10">
+          {column.map(({ img, title, subtitle }) => (
+            <div
+              class:list={{
+                'parallax-item-on-first-column': columnIndex === 0,
+                'parallax-item-on-third-column': columnIndex === 2,
+              }}
+            >
+              <div class="group relative overflow-hidden rounded-lg">
+                <Image
+                  src={img}
+                  class="!m-0 h-80 w-full gap-10 object-cover object-left-top !p-0"
+                  height="400"
+                  width="400"
+                  alt="thumbnail"
+                  loading="lazy"
+                  layout="fixed"
+                />
+
+                <div class="bg-opacity-50 group-hover:bg-secondary/15 absolute inset-0 flex items-end justify-center py-4 text-center font-bold text-white opacity-0 transition-all group-hover:opacity-100">
+                  <div>
+                    <div class="text-2xl">{title}</div>
+                    {subtitle && <div class="text-lg">{subtitle}</div>}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  function initParallaxGallery() {
+    const container = document.getElementById('gallery-parallax-container')
+    if (!container) return
+
+    const firstItems = container.querySelectorAll('.parallax-item-on-first-column')
+    const thirdItems = container.querySelectorAll('.parallax-item-on-third-column')
+
+    function applyTransform(
+      element: HTMLElement,
+      translateX: number,
+      translateY: number,
+      rotateZ: number
+    ) {
+      element.style.transform = `translateY(${translateY}px) translateX(${translateX}px) rotateZ(${rotateZ}deg)`
+    }
+
+    function updateParallax() {
+      if (!container) return
+      const rect = container.getBoundingClientRect()
+      const customOffsetTop = 500
+
+      // Calculate how much of the container is visible and scrolled
+      const containerTop = rect.top + customOffsetTop
+      const containerBottom = rect.bottom
+
+      const windowHeight = window.innerHeight
+      // Only apply parallax when container is in viewport
+      if (containerBottom < 0 || containerTop > windowHeight) return
+
+      // Calculate scroll progress based on container position in viewport
+      const scrollProgress = Math.max(
+        0,
+        Math.min(1, (windowHeight - containerTop) / (windowHeight + container.offsetHeight))
+      )
+
+      firstItems.forEach((item) =>
+        applyTransform(
+          item as HTMLElement,
+          scrollProgress * -50,
+          scrollProgress * -50,
+          scrollProgress * -10
+        )
+      )
+      thirdItems.forEach((item) =>
+        applyTransform(
+          item as HTMLElement,
+          scrollProgress * 50,
+          scrollProgress * -50,
+          scrollProgress * 10
+        )
+      )
+    }
+
+    // Use requestAnimationFrame for smooth animations
+    let ticking = false
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax)
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      requestTick()
+      ticking = false
+    })
+
+    // Initial call
+    updateParallax()
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initParallaxGallery)
+
+  // Re-initialize on navigation (for SPA behavior)
+  document.addEventListener('astro:page-load', initParallaxGallery)
+</script>
+
+<style>
+  .parallax-item-on-first-column,
+  .parallax-item-on-third-column {
+    transition: transform 0.1s ease-out;
+    will-change: transform;
+  }
+
+  /* Optimize for performance */
+  .parallax-item-on-first-column img,
+  .parallax-item-on-third-column img {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+</style>

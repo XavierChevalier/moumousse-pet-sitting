@@ -1,0 +1,58 @@
+---
+export interface Props {
+  question: string
+  isOpen?: boolean
+}
+
+const { question, isOpen = false } = Astro.props
+---
+
+<div
+  class:list={[
+    'faq-item bg-body hover:bg-primary/10 border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] transition-all duration-300',
+    { open: isOpen },
+  ]}
+>
+  <div class="faq-question w-full cursor-pointer px-8 py-6 text-left transition-all duration-300">
+    <div class="flex items-center justify-between">
+      <h3 class="text-primary text-xl font-black lg:text-2xl">{question}</h3>
+      <span class="faq-icon text-secondary text-3xl font-black transition-transform duration-300"
+      ></span>
+    </div>
+  </div>
+  <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+    <div class="px-8 pb-6 text-lg leading-relaxed">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .faq-answer {
+    transition: max-height 0.3s ease-out;
+  }
+
+  .faq-item:not(.open) .faq-answer {
+    max-height: 0;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 200px;
+  }
+
+  .faq-item:not(.open) .faq-icon {
+    transform: rotate(0deg);
+  }
+
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-item.open .faq-icon::before {
+    content: '+';
+  }
+
+  .faq-item:not(.open) .faq-icon::before {
+    content: '+';
+  }
+</style>

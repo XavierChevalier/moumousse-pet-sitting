@@ -19,61 +19,112 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
     <div class="flex items-end">
       <div class="w-3/5 space-y-6">
         <FAQListItem question="Quels animaux je garde ?" isOpen={true}>
-          <p class="mb-4">Je m'occupe actuellement des <strong class="text-primary">chats et chiens</strong>.</p>
-          <p>Les <strong class="text-accent">NAC</strong> (nouveaux animaux de compagnie) comme les lapins, cochons d'Inde ou furets seront bientôt acceptés — n'hésitez pas à me contacter pour en discuter.</p>
+          <p class="mb-4">
+            Je m'occupe actuellement des <strong>chats et chiens</strong>.
+          </p>
+          <p>
+            Les <strong>NAC</strong> (nouveaux animaux de compagnie) comme les lapins, cochons d'Inde
+            ou furets seront bientôt acceptés — n'hésitez pas à me contacter pour en discuter.
+          </p>
         </FAQListItem>
 
         <FAQListItem question="Quels sont mes services ?">
           <ul class="space-y-4">
-            <li><strong class="text-primary">Visites à domicile :</strong> soins, nourriture, nettoyage, câlins, jeux, etc.</li>
-            <li><strong class="text-secondary">Promenades :</strong> sorties individuelles ou personnalisées selon les besoins du chien.</li>
-            <li><strong class="text-accent">Présence / compagnie :</strong> rester un moment avec l'animal pour éviter l'ennui ou l'anxiété.</li>
+            <li>
+              <strong>Visites à domicile :</strong> soins, nourriture, nettoyage, câlins, jeux, etc.
+            </li>
+            <li>
+              <strong>Promenades :</strong> sorties individuelles ou personnalisées selon les besoins
+              du chien.
+            </li>
+            <li>
+              <strong>Présence / compagnie :</strong> rester un moment avec l'animal pour éviter l'ennui
+              ou l'anxiété.
+            </li>
           </ul>
         </FAQListItem>
 
         <FAQListItem question="Quels sont les tarifs ?">
-          <p class="mb-4">Les tarifs varient selon la formule choisie, le temps passé et la distance.</p>
-          <p class="flex items-center gap-2">
-            <ArrowRight class="text-secondary w-5 h-5" /> 
-            Retrouvez tous les détails sur la page <strong class="text-accent">Tarifs</strong>. Pour un devis personnalisé, contactez-moi directement.
+          <p class="mb-4">
+            Les tarifs varient selon la formule choisie, le temps passé et la distance.
+          </p>
+          <p class="flex items-center gap-4">
+            <ArrowRight width={18} />
+            <span>
+              Retrouvez tous les détails sur la page <strong>Tarifs</strong>. <br />Pour un devis
+              personnalisé, contactez-moi directement.
+            </span>
           </p>
         </FAQListItem>
 
         <FAQListItem question="Comment réserver ?">
-          <p class="mb-4">Par <strong class="text-primary">mail</strong>, <strong class="text-secondary">SMS</strong> ou <strong class="text-accent">appel téléphonique</strong>.</p>
+          <p class="mb-4">
+            Par <strong>mail</strong>, <strong>SMS</strong> ou <strong>appel téléphonique</strong>.
+          </p>
           <p class="flex items-center gap-2">
-            <AlertTriangle class="text-yellow-400 w-5 h-5" /> 
+            <AlertTriangle class="h-5 w-5 text-yellow-400" />
             Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.
+          </p>
+        </FAQListItem>
+
+        <FAQListItem question="Comment se passe le réglement ?">
+          <p class="mb-4">
+            Le paiement se fait en amont ou le jour-même de la prestation, selon la formule. Modes
+            de paiement acceptés :
+          </p>
+
+          <ul class="mb-4 list-inside list-disc">
+            <li>Espèces</li>
+            <li>Virement bancaire</li>
+          </ul>
+
+          <p>
+            Une facture peut être fournie sur demande. Pour les gardes longues ou récurrentes, un
+            acompte peut être demandé.
           </p>
         </FAQListItem>
 
         <FAQListItem question="Ai-je une formation ?">
           <p class="mb-4">Oui, je suis titulaire de :</p>
           <ul class="space-y-3">
-            <li><strong class="text-primary">ACACED</strong> (Attestation de Connaissances pour les Animaux de Compagnie d'Espèces Domestiques) – Chien & Chat</li>
-            <li><strong class="text-accent">Formation de premiers secours canin/félin :</strong> pour réagir vite en cas d'urgence.</li>
+            <li>
+              <strong>ACACED</strong> (Attestation de Connaissances pour les Animaux de Compagnie d'Espèces
+              Domestiques) – Chien & Chat
+            </li>
+            <li>
+              <strong>Formation de premiers secours canin/félin :</strong> pour réagir vite en cas d'urgence.
+            </li>
           </ul>
         </FAQListItem>
 
         <FAQListItem question="Et si mon animal tombe malade ou se blesse ?">
           <ul class="space-y-3">
-            <li>Je contacte votre <strong class="text-primary">vétérinaire habituel</strong> en priorité.</li>
-            <li>En cas d'urgence, j'appelle le <strong class="text-secondary">vétérinaire le plus proche</strong>.</li>
-            <li>Vous êtes <strong class="text-accent">informé·e en temps réel</strong> de la situation.</li>
+            <li>
+              Je contacte votre <strong>vétérinaire habituel</strong> en priorité.
+            </li>
+            <li>
+              En cas d'urgence, j'appelle le <strong>vétérinaire le plus proche</strong>.
+            </li>
+            <li>
+              Vous êtes <strong>informé·e en temps réel</strong> de la situation.
+            </li>
           </ul>
         </FAQListItem>
 
-        <FAQListItem question="Une question ? Un souci ?">
+        <FAQListItem id="faqListItemContact" question="Une question ? Un souci ?">
           <p class="mb-4">Contactez-moi sans hésiter :</p>
           <div class="space-y-2">
-            <p class="flex items-center gap-2">
-              <Mail class="text-primary w-5 h-5" /> 
+            <a
+              href="mailto:contact@moumousse-pet-sitting.fr"
+              class="hover:text-primary flex items-center gap-2 transition-colors"
+            >
+              <Mail width={18} />
               contact@moumousse-pet-sitting.fr
-            </p>
-            <p class="flex items-center gap-2">
-              <Phone class="text-secondary w-5 h-5" /> 
-              06 26 26 26 26
-            </p>
+            </a>
+            <a id="phoneLink" class="hover:text-primary flex items-center gap-2 transition-colors">
+              <Phone width={18} />
+              <span id="phoneNumber"></span>
+            </a>
           </div>
         </FAQListItem>
       </div>
@@ -90,6 +141,26 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
     </div>
   </div>
 </section>
+
+<script>
+  // Prevent bots from scraping phone number
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqListItemContactElement = document.getElementById(
+      'faqListItemContact'
+    ) as HTMLDivElement
+    faqListItemContactElement.addEventListener(
+      'click',
+      () => {
+        const phoneLinkElement = document.getElementById('phoneLink') as HTMLAnchorElement
+        const phoneNumberElement = document.getElementById('phoneNumber') as HTMLSpanElement
+        const phoneNumber = atob('MDYgNDYgNDcgMzAgMTE=')
+        phoneLinkElement.setAttribute('href', `tel:${phoneNumber.replaceAll(/ /g, '')}`)
+        phoneNumberElement.textContent = phoneNumber
+      },
+      { once: true }
+    )
+  })
+</script>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {

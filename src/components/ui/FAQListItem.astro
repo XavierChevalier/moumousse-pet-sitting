@@ -1,31 +1,44 @@
 ---
-export interface Props {
+export interface Props extends astroHTML.JSX.HTMLAttributes {
   question: string
   isOpen?: boolean
 }
 
-const { question, isOpen = false } = Astro.props
+const { question, isOpen = false, ...props } = Astro.props
 ---
 
 <div
+  {...props}
   class:list={[
-    'faq-item bg-body hover:bg-primary/10 border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] transition-all duration-300',
+    'faq-item bg-body hover:bg-secondary/5 border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] transition-all duration-300',
     { open: isOpen },
   ]}
 >
   <div class="faq-question w-full cursor-pointer px-8 py-6 text-left transition-all duration-300">
     <div class="flex items-center justify-between">
-      <h3 class="text-primary text-xl font-black lg:text-2xl">{question}</h3>
+      <h3 class="text-xl font-black lg:text-2xl">{question}</h3>
       <span class="faq-icon text-secondary text-3xl font-black transition-transform duration-300"
       ></span>
     </div>
   </div>
   <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-    <div class="px-8 pb-6 text-lg leading-relaxed">
+    <div class="faq-content px-8 pb-6 text-lg leading-relaxed">
       <slot />
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const faqItems = document.querySelectorAll<HTMLDivElement>('.faq-item')
+
+    faqItems.forEach((item) => {
+      const content = item.querySelector('.faq-content') as HTMLDivElement
+      const contentHeight = content.scrollHeight
+      item.style.setProperty('--content-height', `${contentHeight}px`)
+    })
+  })
+</script>
 
 <style>
   .faq-answer {
@@ -37,7 +50,7 @@ const { question, isOpen = false } = Astro.props
   }
 
   .faq-item.open .faq-answer {
-    max-height: 200px;
+    max-height: var(--content-height, 200px);
   }
 
   .faq-item:not(.open) .faq-icon {

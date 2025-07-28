@@ -1,11 +1,17 @@
 ---
 import { Picture } from 'astro:assets'
 import { ArrowRight, AlertTriangle, Mail, Phone } from '@lucide/astro'
-import FAQListItem from '../ui/FAQListItem.astro'
+import AccordionItem from '../ui/AccordionItem.astro'
+import ProtectedContent from '../ui/ProtectedContent.astro'
 import MoumousseDog from '../../assets/moumousse-dog.webp'
+import Accordion from '../ui/Accordion.astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+
+const props = Astro.props
 ---
 
-<section class="px-4 py-20">
+<section {...props} class="px-4 py-20">
   <div class="container mx-auto max-w-7xl">
     <div class="text-center">
       <h2
@@ -17,8 +23,9 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
     </div>
 
     <div class="flex items-end">
-      <div class="w-3/5 space-y-6">
-        <FAQListItem question="Quels animaux je garde ?" isOpen={true}>
+      <Accordion class="w-3/5">
+        <AccordionItem isOpen={true}>
+          <span slot="header">Quels animaux je garde ?</span>
           <p class="mb-4">
             Je m'occupe actuellement des <strong>chats et chiens</strong>.
           </p>
@@ -26,9 +33,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
             Les <strong>NAC</strong> (nouveaux animaux de compagnie) comme les lapins, cochons d'Inde
             ou furets seront bientôt acceptés — n'hésitez pas à me contacter pour en discuter.
           </p>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem question="Quels sont mes services ?">
+        <AccordionItem>
+          <span slot="header">Quels sont mes services ?</span>
           <ul class="space-y-4">
             <li>
               <strong>Visites à domicile :</strong> soins, nourriture, nettoyage, câlins, jeux, etc.
@@ -42,9 +50,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
               ou l'anxiété.
             </li>
           </ul>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem question="Quels sont les tarifs ?">
+        <AccordionItem>
+          <span slot="header">Quels sont les tarifs ?</span>
           <p class="mb-4">
             Les tarifs varient selon la formule choisie, le temps passé et la distance.
           </p>
@@ -55,9 +64,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
               personnalisé, contactez-moi directement.
             </span>
           </p>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem question="Comment réserver ?">
+        <AccordionItem>
+          <span slot="header">Comment réserver ?</span>
           <p class="mb-4">
             Par <strong>mail</strong>, <strong>SMS</strong> ou <strong>appel téléphonique</strong>.
           </p>
@@ -65,9 +75,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
             <AlertTriangle class="h-5 w-5 text-yellow-400" />
             Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.
           </p>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem question="Comment se passe le réglement ?">
+        <AccordionItem>
+          <span slot="header">Comment se passe le réglement ?</span>
           <p class="mb-4">
             Le paiement se fait en amont ou le jour-même de la prestation, selon la formule. Modes
             de paiement acceptés :
@@ -82,9 +93,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
             Une facture peut être fournie sur demande. Pour les gardes longues ou récurrentes, un
             acompte peut être demandé.
           </p>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem question="Ai-je une formation ?">
+        <AccordionItem>
+          <span slot="header">Ai-je une formation ?</span>
           <p class="mb-4">Oui, je suis titulaire de :</p>
           <ul class="space-y-3">
             <li>
@@ -95,9 +107,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
               <strong>Formation de premiers secours canin/félin :</strong> pour réagir vite en cas d'urgence.
             </li>
           </ul>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem question="Et si mon animal tombe malade ou se blesse ?">
+        <AccordionItem>
+          <span slot="header">Et si mon animal tombe malade ou se blesse ?</span>
           <ul class="space-y-3">
             <li>
               Je contacte votre <strong>vétérinaire habituel</strong> en priorité.
@@ -109,9 +122,10 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
               Vous êtes <strong>informé·e en temps réel</strong> de la situation.
             </li>
           </ul>
-        </FAQListItem>
+        </AccordionItem>
 
-        <FAQListItem id="faqListItemContact" question="Une question ? Un souci ?">
+        <AccordionItem id="faqListItemContact">
+          <span slot="header">Une question ? Un souci ?</span>
           <p class="mb-4">Contactez-moi sans hésiter :</p>
           <div class="space-y-2">
             <a
@@ -121,13 +135,16 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
               <Mail width={18} />
               contact@moumousse-pet-sitting.fr
             </a>
-            <a id="phoneLink" class="hover:text-primary flex items-center gap-2 transition-colors">
-              <Phone width={18} />
-              <span id="phoneNumber"></span>
-            </a>
+            <ProtectedContent
+              encodedContent="MDYgNDYgNDcgMzAgMTE="
+              placeholder="Cliquez pour voir le téléphone"
+              contentType="phone"
+            >
+              <Phone slot="prepend" width={18} />
+            </ProtectedContent>
           </div>
-        </FAQListItem>
-      </div>
+        </AccordionItem>
+      </Accordion>
 
       <div class="flex w-2/5 justify-end">
         <Picture
@@ -141,39 +158,3 @@ import MoumousseDog from '../../assets/moumousse-dog.webp'
     </div>
   </div>
 </section>
-
-<script>
-  // Prevent bots from scraping phone number
-  document.addEventListener('DOMContentLoaded', () => {
-    const faqListItemContactElement = document.getElementById(
-      'faqListItemContact'
-    ) as HTMLDivElement
-    faqListItemContactElement.addEventListener(
-      'click',
-      () => {
-        const phoneLinkElement = document.getElementById('phoneLink') as HTMLAnchorElement
-        const phoneNumberElement = document.getElementById('phoneNumber') as HTMLSpanElement
-        const phoneNumber = atob('MDYgNDYgNDcgMzAgMTE=')
-        phoneLinkElement.setAttribute('href', `tel:${phoneNumber.replaceAll(/ /g, '')}`)
-        phoneNumberElement.textContent = phoneNumber
-      },
-      { once: true }
-    )
-  })
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const faqItems = document.querySelectorAll<HTMLElement>('.faq-item')
-
-    faqItems.forEach((item) => {
-      const question = item.querySelector<HTMLElement>('.faq-question')
-
-      question?.addEventListener('click', () => {
-        const isOpen = item.classList.contains('open')
-        faqItems.forEach((item) => item.classList.remove('open'))
-        item.classList.toggle('open', !isOpen)
-      })
-    })
-  })
-</script>

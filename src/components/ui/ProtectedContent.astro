@@ -1,0 +1,75 @@
+---
+import { cn } from '../../core/tailwindcn'
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  encodedContent: string
+  placeholder?: string
+  contentType: 'phone' | 'text'
+}
+
+const {
+  encodedContent,
+  placeholder = 'Cliquez pour révéler',
+  class: className,
+  contentType,
+  ...props
+} = Astro.props
+---
+
+<div
+  {...props}
+  class={cn('protected-content', className)}
+  data-encoded={encodedContent}
+  data-content-type={contentType}
+>
+  <button
+    class="protected-trigger hover:text-primary flex cursor-pointer items-center gap-2 transition-colors"
+  >
+    <slot name="prepend" />
+    <span class="protected-placeholder">{placeholder}</span>
+  </button>
+  <div class="protected-revealed hidden">
+    <slot name="prepend" />
+    <span class="protected-content-text"></span>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const protectedElements = document.querySelectorAll('.protected-content')
+
+    protectedElements.forEach((element) => {
+      const trigger = element.querySelector('.protected-trigger') as HTMLButtonElement
+      const revealed = element.querySelector('.protected-revealed') as HTMLDivElement
+      const contentText = element.querySelector('.protected-content-text') as HTMLSpanElement
+      const encodedContent = element.getAttribute('data-encoded')
+      const contentType = element.getAttribute('data-content-type')
+      if (!trigger || !revealed || !contentText || !encodedContent) return
+
+      trigger.addEventListener(
+        'click',
+        () => {
+          const decodedContent = atob(encodedContent)
+
+          // Handle different content types
+          if (contentType === 'phone') {
+            const phoneLink = document.createElement('a')
+            phoneLink.href = `tel:${decodedContent.replaceAll(/ /g, '')}`
+            phoneLink.className = 'hover:text-primary flex items-center gap-2 transition-colors'
+            phoneLink.innerHTML = revealed.innerHTML.replace(
+              '<span class="protected-content-text"></span>',
+              `<span>${decodedContent}</span>`
+            )
+            element.replaceWith(phoneLink)
+            return
+          }
+
+          // Regular text content
+          contentText.textContent = decodedContent
+          trigger.classList.add('hidden')
+          revealed.classList.remove('hidden')
+        },
+        { once: true }
+      )
+    })
+  })
+</script>

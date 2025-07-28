@@ -1,0 +1,162 @@
+---
+import { Picture } from 'astro:assets'
+import Jazz from '../../assets/jazz.jpeg'
+import Leika from '../../assets/leika.jpeg'
+import {
+  UtensilsCrossedIcon,
+  PawPrintIcon,
+  BubblesIcon,
+  VolleyballIcon,
+  CameraIcon,
+  FootprintsIcon,
+  BrainIcon,
+  HeartIcon,
+  AsteriskIcon,
+} from '@lucide/astro'
+import Accordion from '../ui/Accordion.astro'
+import AccordionItem from '../ui/AccordionItem.astro'
+import Service from './Service.astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+---
+
+<section {...Astro.props} class="relative overflow-hidden px-4 py-24 text-lg">
+  <div class="relative z-10 container mx-auto max-w-7xl">
+    <div class="text-center">
+      <h2
+        class="text-outline text-secondary mb-20 text-center text-5xl font-black tracking-tight uppercase lg:text-7xl"
+        data-text="Mes services"
+      >
+        Mes services
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-28">
+      <!-- VISITES PONCTUELLES -->
+      <Service prices={[{ label: 'La visite', price: '10€' }]}>
+        <Picture slot="picture" src={Leika} alt="Leika" width={800} />
+
+        <span slot="title">Visites <span class="text-secondary">ponctuelles</span></span>
+
+        <Fragment slot="description">
+          <p>
+            Je passe à domicile pour m'occuper de vos <strong>chiens</strong> et <strong
+              >chats</strong
+            >.
+          </p>
+          <p>Chaque passage inclut :</p>
+          <ul>
+            <li>
+              <UtensilsCrossedIcon class="mr-1 inline w-5" /> Remplissage des gamelles d'eau et de nourriture
+            </li>
+            <li><PawPrintIcon class="mr-1 inline w-5" /> Sortie dédiée aux besoins</li>
+            <li><BubblesIcon class="mr-1 inline w-5" /> Nettoyage ou remplacement de la litière</li>
+            <li>
+              <VolleyballIcon class="mr-1 inline w-5" /> Jeux et/ou câlins selon l'envie de votre animal
+            </li>
+          </ul>
+          <p>
+            <AsteriskIcon class="mr-1 inline w-5" />
+            Il est également possible de rester plus longtemps pour offrir à votre animal davantage de
+            compagnie et de présence. Durée et tarif sur devis, selon vos besoins.
+          </p>
+
+          <p>
+            <CameraIcon class="mr-1 inline w-5" /> Vous recevez des <strong
+              >nouvelles, photos et vidéos</strong
+            > régulièrement.
+          </p>
+        </Fragment>
+
+        <Accordion slot="append">
+          <AccordionItem>
+            <span slot="header" class="text-lg"
+              >Une <strong>pré-visite obligatoire</strong> est prévue avant toute première garde</span
+            >
+
+            <p class="mb-2">Elle permet de :</p>
+            <ul class="list-inside list-disc">
+              <li>vous rencontrer,</li>
+              <li>créer un premier contact avec votre compagnon,</li>
+              <li>collecter toutes les infos utiles pour des visites en toute confiance.</li>
+            </ul>
+          </AccordionItem>
+        </Accordion>
+      </Service>
+
+      <hr class="border-t border-dashed border-black/10" />
+
+      <!-- PROMENADE CANINE -->
+      <Service
+        class="lg:flex-row-reverse"
+        prices={[
+          { label: '30 minutes', price: '15€' },
+          { label: '1h', price: '20€' },
+          { label: '1h30', price: '25€' },
+          { label: '2h', price: '30€' },
+        ]}
+      >
+        <Picture slot="picture" src={Jazz} alt="Jazz" width={800} />
+
+        <span slot="title">
+          Promenade <span class="text-secondary">canine</span>
+        </span>
+
+        <Fragment slot="description">
+          <p>
+            Je propose des <strong>promenades personnalisées</strong> pour votre chien, sur des créneaux
+            de
+            <strong>30 minutes à 2 heures</strong> (ou plus selon vos besoins).
+          </p>
+
+          <p>Chaque balade inclut :</p>
+          <ul>
+            <li>
+              <FootprintsIcon class="mr-1 inline w-5" /> Une vraie sortie nécessaire à son bien-être
+            </li>
+            <li>
+              <BrainIcon class="mr-1 inline w-5" /> Un temps de jeu et de stimulation
+            </li>
+            <li>
+              <HeartIcon class="mr-1 inline w-5" /> Et bien sûr… des câlins à volonté !
+            </li>
+          </ul>
+
+          <p>
+            <CameraIcon class="mr-1 inline w-5" /> Vous recevez des <strong
+              >nouvelles, photos et vidéos</strong
+            > régulièrement.
+          </p>
+        </Fragment>
+
+        <Accordion slot="append">
+          <AccordionItem>
+            <span slot="header" class="text-lg">Besoin de balades régulières ?</span>
+            <p class="mb-2">
+              Pour les personnes qui ont un emploi du temps chargé, ou simplement pour offrir à leur
+              chien un rythme stable, une <strong>formule régulière</strong> est possible :
+            </p>
+            <ul class="list-inside list-disc">
+              <li>Balades par semaine ou par mois, selon vos besoins,</li>
+              <li
+                set:html={`À partir de 10 balades réservées, vous bénéficiez automatiquement d’une <strong>remise de 10% sur l’ensemble.</strong>`}
+              />
+            </ul>
+          </AccordionItem>
+
+          <AccordionItem>
+            <span slot="header" class="text-lg"
+              >Une <strong>pré-visite obligatoire</strong> est prévue avant la première sortie</span
+            >
+            <p class="mb-2">Elle permet de :</p>
+            <ul class="list-inside list-disc">
+              <li>faire connaissance,</li>
+              <li>rencontrer votre chien,</li>
+              <li>recueillir toutes les infos essentielles pour des balades adaptées.</li>
+            </ul>
+          </AccordionItem>
+        </Accordion>
+      </Service>
+    </div>
+  </div>
+</section>

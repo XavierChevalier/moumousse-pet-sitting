@@ -1,0 +1,26 @@
+---
+import { cn } from '../../core/tailwindcn'
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+
+const { class: className, ...props } = Astro.props
+const id = `accordionContainer-${Math.random().toString(36).slice(2)}`
+---
+
+<div id={id} {...props} class={cn('space-y-6', className)}>
+  <slot />
+</div>
+
+<script>
+  document.addEventListener('click', (e) => {
+    const header = (e.target as HTMLElement).closest('.accordion-header')
+    if (!header) return
+
+    const item = header.closest('.accordion-item')
+    const container = item?.closest('[id^="accordionContainer-"]')
+    if (!item || !container) return
+
+    const isOpen = item.classList.contains('open')
+    container.querySelectorAll('.accordion-item').forEach((item) => item.classList.remove('open'))
+    item.classList.toggle('open', !isOpen)
+  })
+</script>

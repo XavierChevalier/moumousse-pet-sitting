@@ -1,0 +1,41 @@
+---
+import { cn } from '../../core/tailwindcn'
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  prices: { label: string; price: string }[]
+}
+
+const { prices, class: className, ...props } = Astro.props
+---
+
+<div {...props} class={cn(`flex flex-col lg:flex-row gap-14`, className)}>
+  <div class="relative lg:w-2/5">
+    <div
+      class="pointer-events-none border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] select-none"
+    >
+      <slot name="picture" />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-10 lg:w-3/5">
+    <div class="flex flex-col gap-6">
+      <h3 class="text-primary text-4xl font-black tracking-tight uppercase">
+        <slot name="title" />
+      </h3>
+
+      <slot name="description" class="prose prose-lg prose-strong:font-bold prose-ul:space-y-1" />
+
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {
+          prices.map(({ label, price }) => (
+            <div class="rounded-2xl border-2 border-black bg-white p-4 text-center transition hover:scale-[1.03]">
+              <div class="text-muted text-sm">{label}</div>
+              <div class="text-xl font-black">{price}</div>
+            </div>
+          ))
+        }
+      </div>
+
+      <slot name="append" />
+    </div>
+  </div>
+</div>

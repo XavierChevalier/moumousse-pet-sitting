@@ -1,0 +1,71 @@
+---
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  isOpen?: boolean
+}
+
+const { isOpen = false, ...props } = Astro.props
+---
+
+<div
+  {...props}
+  class:list={[
+    'accordion-item bg-body hover:bg-secondary/5 border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] transition-all duration-300',
+    { open: isOpen },
+  ]}
+>
+  <div
+    class="accordion-header w-full cursor-pointer px-8 py-6 text-left transition-all duration-300"
+  >
+    <div class="flex items-center justify-between">
+      <h3 class="text-xl font-black lg:text-2xl">
+        <slot name="header" />
+      </h3>
+      <span
+        class="accordion-icon text-secondary text-3xl font-black transition-transform duration-300"
+      ></span>
+    </div>
+  </div>
+
+  <div class="accordion-content-container max-h-0 overflow-hidden transition-all duration-300">
+    <div class="accordion-content px-8 pb-6 text-lg leading-relaxed">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionItems = document.querySelectorAll<HTMLDivElement>('.accordion-item')
+    accordionItems.forEach((item) => {
+      const content = item.querySelector('.accordion-content') as HTMLDivElement
+      const contentHeight = content.scrollHeight
+      item.style.setProperty('--accordion-content-height', `${contentHeight}px`)
+    })
+  })
+</script>
+
+<style>
+  .accordion-content-container {
+    transition: max-height 0.3s ease-out;
+  }
+
+  .accordion-item:not(.open) .accordion-content-container {
+    max-height: 0;
+  }
+
+  .accordion-item.open .accordion-content-container {
+    max-height: var(--accordion-content-height, 200px);
+  }
+
+  .accordion-item .accordion-icon::before {
+    content: '+';
+  }
+
+  .accordion-item:not(.open) .accordion-icon {
+    transform: rotate(0deg);
+  }
+
+  .accordion-item.open .accordion-icon {
+    transform: rotate(45deg);
+  }
+</style>

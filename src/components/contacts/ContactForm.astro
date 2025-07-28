@@ -48,8 +48,8 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     data-netlify="true"
     data-netlify-recaptcha="true"
   >
-    <!-- Hidden field for Netlify form identification -->
     <input type="hidden" name="form-name" value="contact" />
+    <input type="hidden" name="subject" data-remove-prefix value="[%{siteName}] Nouveau message" />
 
     <!-- Email Field -->
     <div>
@@ -129,7 +129,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
       fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString(),
+        body: new URLSearchParams(formData as unknown as URLSearchParams).toString(),
       })
         .then(() => {
           // Hide spinner, show text

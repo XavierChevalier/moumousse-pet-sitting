@@ -41,7 +41,16 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
   </Alert>
 
   <!-- Contact Form -->
-  <form id="contact-form" class="space-y-6" data-netlify="true" data-netlify-recaptcha="true">
+  <form
+    id="contact-form"
+    name="contact"
+    class="space-y-6"
+    data-netlify="true"
+    data-netlify-recaptcha="true"
+  >
+    <!-- Hidden field for Netlify form identification -->
+    <input type="hidden" name="form-name" value="contact" />
+
     <!-- Email Field -->
     <div>
       <Label for="email">Email *</Label>
@@ -117,11 +126,10 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
       submitButton.disabled = true
 
       const formData = new FormData(event.target as HTMLFormElement)
-
       fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData.toString()),
+        body: new URLSearchParams(formData).toString(),
       })
         .then(() => {
           // Hide spinner, show text

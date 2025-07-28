@@ -1,0 +1,27 @@
+---
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '../../../core/tailwindcn'
+
+const labelVariants = cva('block font-bold uppercase tracking-wide', {
+  variants: {
+    size: {
+      small: 'mb-1 text-sm',
+      medium: 'mb-2 text-base',
+      large: 'mb-2 text-lg',
+    },
+  },
+  defaultVariants: {
+    size: 'large',
+  },
+})
+
+export interface Props
+  extends VariantProps<typeof labelVariants>,
+    astroHTML.JSX.LabelHTMLAttributes {}
+
+const { size, class: className = '', ...props } = Astro.props
+---
+
+<label class={cn(labelVariants({ size }), className)} {...props}>
+  <slot />
+</label>

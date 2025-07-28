@@ -1,0 +1,141 @@
+---
+import { Mail, Loader2 } from '@lucide/astro'
+import Button from '../ui/Button.astro'
+import Alert from '../ui/Alert.astro'
+import Input from '../ui/forms/Input.astro'
+import Select from '../ui/forms/Select.astro'
+import Textarea from '../ui/forms/Textarea.astro'
+import Label from '../ui/forms/Label.astro'
+import ProtectedContent from '../ui/ProtectedContent.astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+---
+
+<div {...Astro.props} class="mx-auto max-w-2xl">
+  <!-- Alert (hidden by default) -->
+  <Alert id="contact-success-alert" variant="primary" class="mb-6" hidden>
+    <Mail slot="icon" class="mr-2 h-5 w-5" />
+    <span slot="title" class="font-bold">Message envoyé avec succès !</span>
+    <p class="mt-1 text-sm">Je vous répondrai dans les plus brefs délais.</p>
+  </Alert>
+
+  <Alert id="contact-error-alert" variant="error" class="mb-6" hidden>
+    <Mail slot="icon" class="mr-2 h-5 w-5" />
+    <span slot="title" class="font-bold">Une erreur s’est produite</span>
+    <p class="mt-1 text-sm">
+      Veuillez contacter moi directement par mail ou par SMS.
+      <br />
+      <a
+        href="mailto:contact@moumousse-pet-sitting.fr"
+        class="hover:text-primary flex items-center gap-2 transition-colors"
+      >
+        <Mail width={18} />
+        contact@moumousse-pet-sitting.fr
+      </a>
+      <ProtectedContent
+        encodedContent="MDYgNDYgNDcgMzAgMTE="
+        placeholder="Cliquez pour voir le téléphone"
+        contentType="phone"
+      />
+    </p>
+  </Alert>
+
+  <!-- Contact Form -->
+  <form id="contact-form" class="space-y-6" data-netlify="true" data-netlify-recaptcha="true">
+    <!-- Email Field -->
+    <div>
+      <Label for="email">Email *</Label>
+      <Input
+        type="email"
+        id="email"
+        name="email"
+        required
+        placeholder="votre@email.com"
+        autofocus
+      />
+    </div>
+
+    <!-- Topic Dropdown -->
+    <div>
+      <Label for="topic">Sujet *</Label>
+      <Select id="topic" name="topic" required>
+        <option value="">Choisissez un sujet</option>
+        <option value="garde-domicile">Garde à domicile</option>
+        <option value="visite-quotidienne">Visite quotidienne</option>
+        <option value="promenade">Promenade</option>
+        <option value="urgence">Urgence vétérinaire</option>
+        <option value="tarifs">Tarifs et disponibilités</option>
+        <option value="autre">Autre demande</option>
+      </Select>
+    </div>
+
+    <!-- Content Textarea -->
+    <div>
+      <Label for="content">Message *</Label>
+      <Textarea
+        id="content"
+        name="content"
+        required
+        rows={6}
+        placeholder="Décrivez votre demande..."
+      />
+    </div>
+
+    <!-- Recaptcha (hidden by default) -->
+    <div data-netlify-recaptcha="true"></div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <Button variant="filled" size="large" type="submit" id="contact-submit-btn">
+        <span id="contact-submit-text">Envoyer le message</span>
+        <Loader2 id="contact-submit-spinner" class="hidden h-6 w-6 animate-spin" />
+      </Button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function showAlert(alert: HTMLElement) {
+    alert.classList.remove('hidden')
+    alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('contact-form') as HTMLFormElement
+    form.addEventListener('submit', function (event) {
+      event.preventDefault()
+
+      const submitButton = document.getElementById('contact-submit-btn') as HTMLButtonElement
+      const submitText = document.getElementById('contact-submit-text') as HTMLSpanElement
+      const submitSpinner = document.getElementById('contact-submit-spinner') as HTMLElement
+      const successAlert = document.getElementById('contact-success-alert') as HTMLElement
+      const errorAlert = document.getElementById('contact-error-alert') as HTMLElement
+
+      // Show spinner, hide text
+      submitText.classList.add('hidden')
+      submitSpinner.classList.remove('hidden')
+      submitButton.disabled = true
+
+      const formData = new FormData(event.target as HTMLFormElement)
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData.toString()),
+      })
+        .then(() => {
+          // Hide spinner, show text
+          submitText.classList.remove('hidden')
+          submitSpinner.classList.add('hidden')
+          submitButton.disabled = false
+
+          showAlert(successAlert)
+          form.reset()
+        })
+        .catch((error) => {
+          console.error('Error submitting form:', error)
+          showAlert(errorAlert)
+        })
+    })
+  })
+</script>

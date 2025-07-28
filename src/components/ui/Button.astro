@@ -24,7 +24,9 @@ const buttonVariants = cva(
   }
 )
 
-export interface Props extends VariantProps<typeof buttonVariants> {
+export interface Props
+  extends VariantProps<typeof buttonVariants>,
+    astroHTML.JSX.ButtonHTMLAttributes {
   class?: string
   href?: string
 }

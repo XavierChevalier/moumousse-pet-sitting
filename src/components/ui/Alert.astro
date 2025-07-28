@@ -1,0 +1,41 @@
+---
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '../../core/tailwindcn'
+
+const alertVariants = cva('rounded-lg border-4 p-4 font-bold', {
+  variants: {
+    variant: {
+      primary: 'border-primary bg-primary/10 text-primary',
+      secondary: 'border-secondary bg-secondary/10 text-secondary',
+      tertiary: 'border-tertiary bg-tertiary/10 text-tertiary',
+      success: 'border-green-600 bg-green-50 text-green-800',
+      warning: 'border-yellow-600 bg-yellow-50 text-yellow-800',
+      error: 'border-red-600 bg-red-50 text-red-800',
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+  },
+})
+
+export interface Props extends VariantProps<typeof alertVariants>, astroHTML.JSX.HTMLAttributes {
+  hidden?: boolean
+}
+
+const { variant, class: className = '', id, hidden = false, role = 'alert', ...props } = Astro.props
+---
+
+<div
+  class={cn(alertVariants({ variant }), hidden && 'hidden', className)}
+  id={id}
+  role={role}
+  {...props}
+>
+  <div class="flex items-center">
+    <slot name="icon" />
+    <div class="flex-1">
+      <slot name="title" />
+      <slot />
+    </div>
+  </div>
+</div>

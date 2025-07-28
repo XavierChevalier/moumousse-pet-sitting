@@ -1,0 +1,20 @@
+---
+import ContactForm from '../contacts/ContactForm.astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+---
+
+<section {...Astro.props} class="px-4 py-20">
+  <div class="container mx-auto max-w-7xl">
+    <div class="text-center">
+      <h2
+        class="text-outline text-secondary mb-16 text-center text-4xl font-black uppercase lg:text-6xl"
+        data-text="Contact"
+      >
+        Contact
+      </h2>
+    </div>
+
+    <ContactForm />
+  </div>
+</section>

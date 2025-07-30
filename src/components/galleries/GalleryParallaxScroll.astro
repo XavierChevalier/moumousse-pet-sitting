@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
 import { cn } from '../../core/tailwindcn'
-import Button from './Button.astro'
+import Button from '../ui/Button.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   images: { img: ImageMetadata; title: string; subtitle?: string }[]

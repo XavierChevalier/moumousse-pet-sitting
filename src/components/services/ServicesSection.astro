@@ -24,14 +24,14 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
   <div class="relative z-10 container mx-auto max-w-7xl">
     <div class="text-center">
       <h2
-        class="text-outline text-secondary mb-20 text-center text-5xl font-black tracking-tight uppercase lg:text-7xl"
+        class="text-outline text-secondary mb-12 text-center text-3xl font-black tracking-tight uppercase sm:mb-16 sm:text-4xl lg:mb-20 lg:text-7xl"
         data-text="Mes services"
       >
         Mes services
       </h2>
     </div>
 
-    <div class="flex flex-col gap-28">
+    <div class="flex flex-col gap-16 sm:gap-20 lg:gap-28">
       <!-- VISITES PONCTUELLES -->
       <Service prices={[{ label: 'La visite', price: '10€' }]}>
         <Picture slot="picture" src={Leika} alt="Leika" width={800} />

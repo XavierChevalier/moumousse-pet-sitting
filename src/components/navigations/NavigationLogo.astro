@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets'
+import MoumousseDog from '../../assets/moumousse-dog.webp'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+---
+
+<div {...Astro.props} class="flex-shrink-0">
+  <a href="/#" class="group flex items-center gap-3">
+    <Image
+      src={MoumousseDog}
+      alt="Moumousse Pet Sitting Logo"
+      height={55}
+      class="place-items-start justify-start self-end justify-self-start align-bottom"
+      loading="lazy"
+    />
+
+    <div
+      class="group-hover:text-primary flex flex-col text-xl leading-5 font-black uppercase transition duration-150 group-hover:translate-x-1"
+    >
+      <span> Moumousse </span>
+      <span> Pet Sitting </span>
+    </div>
+  </a>
+</div>

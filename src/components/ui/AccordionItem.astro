@@ -16,7 +16,7 @@ const { isOpen = false, ...props } = Astro.props
   <div
     class="accordion-header w-full cursor-pointer px-8 py-6 text-left transition-all duration-300"
   >
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-2 text-balance">
       <h3 class="text-xl font-black lg:text-2xl">
         <slot name="header" />
       </h3>
@@ -34,14 +34,17 @@ const { isOpen = false, ...props } = Astro.props
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  function updateAccordionContentHeight() {
     const accordionItems = document.querySelectorAll<HTMLDivElement>('.accordion-item')
     accordionItems.forEach((item) => {
       const content = item.querySelector('.accordion-content') as HTMLDivElement
       const contentHeight = content.scrollHeight
       item.style.setProperty('--accordion-content-height', `${contentHeight}px`)
     })
-  })
+  }
+
+  document.addEventListener('DOMContentLoaded', () => updateAccordionContentHeight())
+  window.addEventListener('resize', () => updateAccordionContentHeight())
 </script>
 
 <style>

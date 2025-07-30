@@ -22,7 +22,7 @@ const {
   data-content-type={contentType}
 >
   <button
-    class="protected-trigger hover:text-primary flex cursor-pointer items-center gap-2 transition-colors"
+    class="protected-trigger hover:text-primary flex cursor-pointer items-center gap-2 text-left transition-colors"
   >
     <slot name="prepend" />
     <span class="protected-placeholder">{placeholder}</span>
@@ -54,7 +54,8 @@ const {
           if (contentType === 'phone') {
             const phoneLink = document.createElement('a')
             phoneLink.href = `tel:${decodedContent.replaceAll(/ /g, '')}`
-            phoneLink.className = 'hover:text-primary flex items-center gap-2 transition-colors'
+            phoneLink.className =
+              'hover:text-primary flex items-center text-left gap-2 transition-colors'
             phoneLink.innerHTML = revealed.innerHTML.replace(
               '<span class="protected-content-text"></span>',
               `<span>${decodedContent}</span>`

@@ -7,8 +7,17 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
 const { prices, class: className, ...props } = Astro.props
 ---
 
-<div {...props} class={cn(`flex flex-col lg:flex-row gap-14`, className)}>
-  <div class="relative lg:w-2/5">
+<div
+  {...props}
+  class={cn(`flex items-center lg:items-start flex-col gap-8 lg:flex-row lg:gap-14`, className)}
+>
+  <div class="relative flex w-1/2 flex-col items-center gap-4 lg:w-2/5">
+    <h3
+      class="text-primary text-2xl font-black tracking-tight whitespace-nowrap uppercase sm:text-3xl lg:hidden"
+    >
+      <slot name="title" />
+    </h3>
+
     <div
       class="pointer-events-none border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] select-none"
     >
@@ -16,18 +25,25 @@ const { prices, class: className, ...props } = Astro.props
     </div>
   </div>
 
-  <div class="flex flex-col gap-10 lg:w-3/5">
-    <div class="flex flex-col gap-6">
-      <h3 class="text-primary text-4xl font-black tracking-tight uppercase">
+  <div class="flex flex-col gap-6 lg:w-3/5 lg:gap-10">
+    <div class="flex flex-col gap-4 lg:gap-6">
+      <h3
+        class="text-primary hidden text-2xl font-black tracking-tight uppercase sm:text-3xl lg:block lg:text-4xl"
+      >
         <slot name="title" />
       </h3>
 
       <slot name="description" class="prose prose-lg prose-strong:font-bold prose-ul:space-y-1" />
 
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div
+        class:list={[
+          `grid gap-3 lg:grid-cols-4 lg:gap-4`,
+          prices.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
+        ]}
+      >
         {
           prices.map(({ label, price }) => (
-            <div class="rounded-2xl border-2 border-black bg-white p-4 text-center transition hover:scale-[1.03]">
+            <div class="rounded-2xl border-2 border-black bg-white p-3 text-center transition hover:scale-[1.03] lg:p-4">
               <div class="text-muted text-sm">{label}</div>
               <div class="text-xl font-black">{price}</div>
             </div>

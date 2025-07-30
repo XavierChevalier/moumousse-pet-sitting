@@ -5,30 +5,43 @@ import { Picture } from 'astro:assets'
 import Button from '../ui/Button.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
-
-const props = Astro.props
 ---
 
-<section {...props} class="relative flex min-h-[80vh] flex-col justify-center gap-24 px-4 py-20">
+<section
+  {...Astro.props}
+  class="relative flex min-h-[80vh] flex-col justify-center gap-12 px-4 py-20 sm:gap-16 lg:gap-24"
+>
   <PunkBackground />
 
   <div class="relative z-10 container mx-auto max-w-7xl">
-    <div class="grid justify-items-center gap-24 lg:grid-cols-2">
+    <div class="grid gap-12 sm:gap-16 lg:grid-cols-2 lg:gap-24">
       <div class="space-y-4 text-center lg:text-left">
         <!-- Main Headline -->
-        <h1 class="text-5xl leading-tight font-black tracking-wide uppercase lg:text-7xl">
-          <span class="text-outline text-tertiary transform" data-text="Faite garder">
+        <h1
+          class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl md:text-5xl lg:text-7xl"
+        >
+          <span
+            class="text-outline text-tertiary transform whitespace-nowrap"
+            data-text="Faite garder"
+          >
             Faite garder
           </span>
-          <span class="text-outline text-secondary transform" data-text="vos animaux">
+          <span
+            class="text-outline text-secondary transform whitespace-nowrap"
+            data-text="vos animaux"
+          >
             vos animaux
           </span>
-          <span class="text-outline text-primary transform" data-text="en bonne"> en bonne </span>
-          <span class="transform text-black" data-text="compagnie"> compagnie </span>
+          <span class="text-outline text-primary transform whitespace-nowrap" data-text="en bonne">
+            en bonne
+          </span>
+          <span class="transform whitespace-nowrap text-black" data-text="compagnie">
+            compagnie
+          </span>
         </h1>
 
         <!-- Sub Headline -->
-        <p class="text-xl font-bold text-black">À Pélussin et ses alentours</p>
+        <p class="text-lg font-bold text-black sm:text-xl">À Pélussin et ses alentours</p>
 
         <!-- CTA Buttons -->
         <div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
@@ -40,8 +53,8 @@ const props = Astro.props
       <Picture
         src={MoumousseMalisse}
         formats={['avif', 'webp']}
-        alt="Moumousse Pet Sitting logo"
-        class="pointer-events-none w-48 select-none md:w-80 lg:w-auto"
+        alt="Chat malissieux"
+        class="pointer-events-none mx-auto w-40 select-none sm:w-48 md:w-80 lg:w-auto"
       />
     </div>
   </div>

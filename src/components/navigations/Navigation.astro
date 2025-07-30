@@ -1,0 +1,85 @@
+---
+import Button from '../ui/Button.astro'
+import { MenuIcon } from '@lucide/astro'
+import NavigationLogo from './NavigationLogo.astro'
+
+const links = [
+  { href: '#services', label: 'Prestations & Tarifs' },
+  { href: '#galerie', label: 'Galerie' },
+  { href: '#faq', label: 'FAQ' },
+]
+---
+
+<nav class="bg-body fixed top-0 right-0 left-0 z-50 w-full transform overflow-hidden text-black">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-4">
+    <!-- Desktop menu -->
+    <div class="relative flex h-16 items-center justify-center lg:justify-between">
+      <NavigationLogo id="navigation-logo" />
+
+      <!-- Navigation Links -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-center break-keep">
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="hover:text-primary p-4 text-sm font-bold tracking-wide uppercase transition-colors duration-150"
+              >
+                {link.label}
+              </a>
+            ))
+          }
+
+          <!-- Contact Button -->
+          <Button href="#contact" size="small" class="ml-4"> Contactez-moi </Button>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="absolute right-0 md:hidden">
+        <button
+          type="button"
+          id="mobile-menu-button"
+          class="hover:text-primary focus:text-primary transition-colors duration-200 focus:outline-none"
+          aria-label="Menu mobile"
+        >
+          <MenuIcon class="h-6 w-6" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden h-[calc(100vh-4rem)] text-xl md:hidden">
+      <div class="flex h-full flex-col py-8">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="hover:text-primary focus:text-primary block p-8 font-bold tracking-wide uppercase transition-colors duration-150"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+
+        <!-- Contact Button -->
+        <Button href="#contact" size="large" class="mt-8 text-center"> Contactez-moi </Button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenu = document.getElementById('mobile-menu') as HTMLDivElement
+    document
+      .getElementById('mobile-menu-button')!
+      .addEventListener('click', () => mobileMenu.classList.toggle('hidden'))
+    ;[
+      ...document.querySelectorAll('#mobile-menu a, #mobile-menu button'),
+      document.getElementById('navigation-logo') as HTMLButtonElement,
+    ].forEach((element) =>
+      element.addEventListener('click', () => mobileMenu.classList.add('hidden'))
+    )
+  })
+</script>

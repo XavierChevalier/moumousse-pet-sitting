@@ -11,7 +11,7 @@ const props = Astro.props
   <div class="container mx-auto max-w-7xl">
     <div class="text-center">
       <h2
-        class="text-outline text-secondary mb-16 text-center text-4xl font-black uppercase lg:text-6xl"
+        class="text-outline text-secondary mb-8 text-center text-3xl font-black uppercase sm:mb-12 sm:text-4xl lg:mb-16 lg:text-6xl"
         data-text="Faisons connaissance"
       >
         Faisons connaissance
@@ -19,40 +19,41 @@ const props = Astro.props
     </div>
 
     <div
-      class="bg-body flex gap-8 border-4 border-black p-8 text-xl leading-loose shadow-[10px_10px_0px_0px_theme(colors.black)]"
+      class="bg-body border-4 border-black p-4 text-lg leading-loose shadow-[10px_10px_0px_0px_theme(colors.black)] sm:p-6 lg:gap-8 lg:p-8 lg:text-xl"
     >
-      <div class="h-full">
+      <div class="flex flex-col items-center gap-8 md:inline">
         <Picture
           src={SteffieOttawa}
           alt="Steffie et Ottawa"
-          width={900}
-          class="pointer-events-none select-none"
+          width={350}
+          class="pointer-events-none float-left mr-8 select-none"
         />
-      </div>
 
-      <div class="flex flex-col justify-between">
-        <div class="flex flex-col gap-8">
-          <h3 class="text-2xl font-bold">Pourquoi « Moumousse » ?</h3>
+        <div class="min-h-[520px]">
+          <h3 class="text-xl font-bold sm:text-2xl">Pourquoi « Moumousse » ?</h3>
 
-          <p>
+          <p class="mt-4">
             Moumousse a été le <strong>premier chat dont je me suis occupée</strong>, qui en réalité
             était celui de ma voisine. D’aussi loin que je me souvienne, elle me laissait m’en
             occuper comme mon propre chat. Moumousse m'a apporté 17 ans d’amour et de câlins poilus.
           </p>
-          <p>
+          <p class="mt-4">
             Une passion et une sensibilité envers les animaux s'est développée tout au long de ma
             vie pour qu’à l’aube de mes 30 ans, je plaque un super travail, décision dur mais
             nécessaire, pour <strong>me consacrer à la cause animale</strong> et le bien-être de nos
             boules de poils.
           </p>
-          <p>
+          <p class="mt-4">
             Une expérience en refuge et <strong>la garde d’animaux</strong> dans mon entourage aura donné
             naissance à <strong>Moumousse Pet Sitting</strong> qui un jour, je l'espère, deviendra un
             refuge à son tour et un havre de paix pour tous les animaux dans le besoin.
           </p>
         </div>
 
-        <span class="text-right text-xl tracking-tight text-black/40">Steffie Thollot</span>
+        <span
+          class="mt-4 block w-full text-right text-lg tracking-tight text-black/40 sm:text-xl lg:mt-2"
+          >Steffie Thollot</span
+        >
       </div>
     </div>
   </div>

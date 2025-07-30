@@ -11,19 +11,19 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 const props = Astro.props
 ---
 
-<section {...props} class="px-4 py-20">
+<section {...props} class="px-4 py-12 sm:py-16 lg:py-20">
   <div class="container mx-auto max-w-7xl">
     <div class="text-center">
       <h2
-        class="text-outline text-secondary mb-16 text-center text-4xl font-black uppercase lg:text-6xl"
+        class="text-outline text-secondary mb-8 text-center text-3xl font-black uppercase sm:mb-12 sm:text-4xl lg:mb-16 lg:text-6xl"
         data-text="FAQ"
       >
         FAQ
       </h2>
     </div>
 
-    <div class="flex items-end">
-      <Accordion class="w-3/5">
+    <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-end lg:gap-0">
+      <Accordion class="w-full lg:w-3/5">
         <AccordionItem isOpen={true}>
           <span slot="header">Quels animaux je garde ?</span>
           <p class="mb-4">
@@ -146,13 +146,13 @@ const props = Astro.props
         </AccordionItem>
       </Accordion>
 
-      <div class="flex w-2/5 justify-end">
+      <div class="flex w-full justify-center lg:w-2/5 lg:justify-end">
         <Picture
           src={MoumousseDog}
           formats={['avif', 'webp']}
           alt="Moumousse Pet Sitting logo"
           width={300}
-          class="pointer-events-none w-48 select-none md:w-80 lg:w-auto"
+          class="pointer-events-none w-32 select-none sm:w-40 lg:w-auto"
         />
       </div>
     </div>

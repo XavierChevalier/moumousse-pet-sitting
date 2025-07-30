@@ -16,11 +16,18 @@ import {
 import Accordion from '../ui/Accordion.astro'
 import AccordionItem from '../ui/AccordionItem.astro'
 import Service from './Service.astro'
+import SectionAnchor from '../ui/SectionAnchor.astro'
 
-export interface Props extends astroHTML.JSX.HTMLAttributes {}
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  id: string
+}
+
+const { id, ...props } = Astro.props
 ---
 
-<section {...Astro.props} class="relative overflow-hidden px-4 py-24 text-lg">
+<section {...props} class="relative overflow-hidden px-4 py-24 text-lg">
+  <SectionAnchor id={id} />
+
   <div class="relative z-10 container mx-auto max-w-7xl">
     <div class="text-center">
       <h2

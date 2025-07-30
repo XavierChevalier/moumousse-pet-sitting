@@ -5,13 +5,18 @@ import AccordionItem from '../ui/AccordionItem.astro'
 import ProtectedContent from '../ui/ProtectedContent.astro'
 import MoumousseDog from '../../assets/moumousse-dog.webp'
 import Accordion from '../ui/Accordion.astro'
+import SectionAnchor from '../ui/SectionAnchor.astro'
 
-export interface Props extends astroHTML.JSX.HTMLAttributes {}
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  id: string
+}
 
-const props = Astro.props
+const { id, ...props } = Astro.props
 ---
 
-<section {...props} class="px-4 py-12 sm:py-16 lg:py-20">
+<section {...props} class="relative px-4 py-12 sm:py-16 lg:py-20">
+  <SectionAnchor id={id} />
+
   <div class="container mx-auto max-w-7xl">
     <div class="text-center">
       <h2
@@ -124,7 +129,7 @@ const props = Astro.props
           </ul>
         </AccordionItem>
 
-        <AccordionItem id="faqListItemContact">
+        <AccordionItem>
           <span slot="header">Une question ? Un souci ?</span>
           <p class="mb-4">Contactez-moi sans hésiter :</p>
           <div class="space-y-2">

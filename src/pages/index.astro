@@ -7,6 +7,7 @@ import MeSection from '../components/about-me/MeSection.astro'
 import GallerySection from '../components/galleries/GallerySection.astro'
 import FAQSection from '../components/faqs/FAQSection.astro'
 import ContactSection from '../components/contacts/ContactSection.astro'
+import Footer from '../components/ui/Footer.astro'
 ---
 
 <Layout>
@@ -15,7 +16,7 @@ import ContactSection from '../components/contacts/ContactSection.astro'
   <main class="min-h-screen overflow-hidden pt-20">
     <HeroSection />
 
-    <MeSection />
+    <MeSection id="qui-suis-je" />
 
     <ServicesSection id="services" />
 
@@ -25,4 +26,6 @@ import ContactSection from '../components/contacts/ContactSection.astro'
 
     <ContactSection id="contact" />
   </main>
+
+  <Footer />
 </Layout>

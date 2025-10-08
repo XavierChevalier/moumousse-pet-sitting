@@ -112,11 +112,16 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
       class="absolute inset-0 z-[61] flex items-center justify-center overflow-hidden"
     >
       <div id="lightbox-image-wrapper" class="relative h-full w-full">
-        <img
-          id="lightbox-image"
-          alt="image"
-          class="pointer-events-none absolute left-1/2 top-1/2 max-h-[80vh] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 select-none rounded-md object-contain opacity-0 shadow-xl transition-opacity duration-200 will-change-transform"
-        />
+        <div
+          id="lightbox-frame"
+          class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-md shadow-xl"
+        >
+          <img
+            id="lightbox-image"
+            alt="image"
+            class="block max-h-[80vh] max-w-[90vw] select-none object-contain opacity-0 transition-opacity duration-200 will-change-transform"
+          />
+        </div>
       </div>
     </div>
 

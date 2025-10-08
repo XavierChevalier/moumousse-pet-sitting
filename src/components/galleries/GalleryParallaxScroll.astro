@@ -56,10 +56,10 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
                 data-preview={lqipSources[globalIndex]}
                 data-title={title}
               >
-                <div class="group relative overflow-hidden rounded-lg">
+                <div class="group relative overflow-hidden rounded-lg cursor-zoom-in">
                   <Image
                     src={img}
-                    class="w-full gap-10 object-cover object-left-top sm:h-72 lg:h-80"
+                    class="w-full gap-10 object-cover object-left-top sm:h-72 lg:h-80 pointer-events-none"
                     height="400"
                     width="400"
                     alt="thumbnail"
@@ -322,6 +322,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
     }
 
     function showOverlay(index: number) {
+      console.log('showOverlay called with index:', index)
       currentIndex = index
       updateImage()
       preloadNext()
@@ -423,10 +424,14 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
 
     // Click bindings on grid images
     imageItems.forEach((item) => {
-      item.style.cursor = 'zoom-in'
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
         const idx = Number(item.getAttribute('data-index'))
-        if (!Number.isNaN(idx)) showOverlay(idx)
+        console.log('Image clicked, index:', idx, 'overlay:', overlay)
+        if (!Number.isNaN(idx)) {
+          showOverlay(idx)
+        }
       })
     })
 

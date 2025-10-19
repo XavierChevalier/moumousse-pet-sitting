@@ -12,13 +12,13 @@ const { images, class: className, ...props } = Astro.props
 
 // Generate low-quality preview images (LQIP) for the lightbox stage only
 const previewResults = await Promise.all(
-  images.map(({ img }) => getImage({ src: img, width: 400, format: 'webp', quality: 30 }))
+  images.map(({ img }) => getImage({ src: img, width: 200, format: 'webp', quality: 30 }))
 )
 const lqipSources = previewResults.map((r) => r.src)
 
 // Generate high-resolution images for lightbox (desktop quality)
 const highResResults = await Promise.all(
-  images.map(({ img }) => getImage({ src: img, width: 1920, format: 'webp', quality: 90 }))
+  images.map(({ img }) => getImage({ src: img, width: 1920, format: 'webp', quality: 100 }))
 )
 const highResSources = highResResults.map((r) => r.src)
 

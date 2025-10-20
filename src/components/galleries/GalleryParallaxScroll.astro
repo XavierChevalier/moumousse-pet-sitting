@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+import { Image, getImage } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
 import { cn } from '../../core/tailwindcn'
 import Button from '../ui/Button.astro'
@@ -9,6 +9,18 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
 }
 
 const { images, class: className, ...props } = Astro.props
+
+// Generate low-quality preview images (LQIP) for the lightbox stage only
+const previewResults = await Promise.all(
+  images.map(({ img }) => getImage({ src: img, width: 200, format: 'webp', quality: 30 }))
+)
+const lqipSources = previewResults.map((r) => r.src)
+
+// Generate high-resolution images for lightbox (desktop quality)
+const highResResults = await Promise.all(
+  images.map(({ img }) => getImage({ src: img, width: 1920, format: 'webp', quality: 100 }))
+)
+const highResSources = highResResults.map((r) => r.src)
 
 const third = Math.ceil(images.length / 3)
 const columns = [images.slice(0, third), images.slice(third, 2 * third), images.slice(2 * third)]
@@ -31,11 +43,15 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
                   'parallax-item-on-third-column': columnIndex === 2,
                   'hidden md:block': globalIndex >= 4,
                 }}
+                data-index={globalIndex}
+                data-preview={lqipSources[globalIndex]}
+                data-highres={highResSources[globalIndex]}
+                data-title={title}
               >
-                <div class="group relative overflow-hidden rounded-lg">
+                <div class="group relative overflow-hidden rounded-lg cursor-zoom-in">
                   <Image
                     src={img}
-                    class="w-full gap-10 object-cover object-left-top sm:h-72 lg:h-80"
+                    class="w-full gap-10 object-cover object-left-top sm:h-72 lg:h-80 pointer-events-none"
                     height="400"
                     width="400"
                     alt="thumbnail"
@@ -61,6 +77,77 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
   <!-- Show More Button -->
   <div class="flex justify-center pb-8 md:hidden">
     <Button id="gallery-show-more-btn" size="large"> Afficher plus </Button>
+  </div>
+
+  <!-- Fullscreen Lightbox -->
+  <div id="lightbox-overlay" class="fixed inset-0 z-[60] hidden touch-pan-y">
+    <div
+      id="lightbox-backdrop"
+      class="absolute inset-0 bg-black/90 opacity-0 transition-opacity duration-200 will-change-opacity"
+    ></div>
+
+    <!-- Close button -->
+    <button
+      id="lightbox-close"
+      aria-label="Fermer"
+      class="absolute top-4 right-4 z-[62] h-10 w-10 rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200"
+    >
+      ✕
+    </button>
+
+    <!-- Prev/Next controls -->
+    <button
+      id="lightbox-prev"
+      aria-label="Précédent"
+      class="absolute left-4 top-1/2 z-[62] -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200"
+    >
+      ‹
+    </button>
+    <button
+      id="lightbox-next"
+      aria-label="Suivant"
+      class="absolute right-4 top-1/2 z-[62] -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity duration-200"
+    >
+      ›
+    </button>
+
+    <!-- Stage -->
+    <div
+      id="lightbox-stage"
+      class="absolute inset-0 z-[61] flex items-center justify-center overflow-hidden"
+    >
+      <div id="lightbox-image-wrapper" class="relative h-full w-full">
+        <div
+          id="lightbox-frame"
+          class="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-md shadow-xl"
+        >
+          <img
+            id="lightbox-image"
+            alt="image"
+            class="block h-auto w-auto max-h-[80vh] max-w-[90vw] md:max-h-[90vh] md:max-w-[85vw] lg:max-h-[95vh] lg:max-w-[90vw] select-none object-contain opacity-0 transition-opacity duration-200 will-change-transform"
+            style="transition: opacity .2s ease-out, filter .15s ease-out;"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Thumbnails strip -->
+    <div
+      id="lightbox-thumbs"
+      class="absolute inset-x-0 bottom-0 z-[62] max-h-[30vh] translate-y-0 bg-black/40 backdrop-blur-sm transition-transform duration-300 will-change-transform"
+    >
+      <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto p-3">
+        {images.map(({ img }, idx) => (
+          <img
+            src={(img as any).src}
+            data-thumb-index={idx}
+            class="h-16 w-16 shrink-0 cursor-pointer rounded object-cover opacity-75 ring-2 ring-transparent transition-all duration-150"
+            alt="miniature"
+            loading="lazy"
+          />
+        ))}
+      </div>
+    </div>
   </div>
 </div>
 
@@ -145,6 +232,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
   })
 </script>
 
+
 <script>
   // Show more button
   document.addEventListener('DOMContentLoaded', () => {
@@ -159,6 +247,232 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
   })
 </script>
 
+<script>
+  // Fullscreen Lightbox (mobile-first, works on desktop too)
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('lightbox-overlay') as HTMLDivElement
+    const backdrop = document.getElementById('lightbox-backdrop') as HTMLDivElement
+    const imgEl = document.getElementById('lightbox-image') as HTMLImageElement
+    const prevBtn = document.getElementById('lightbox-prev') as HTMLButtonElement
+    const nextBtn = document.getElementById('lightbox-next') as HTMLButtonElement
+    const closeBtn = document.getElementById('lightbox-close') as HTMLButtonElement
+    const thumbs = document.getElementById('lightbox-thumbs') as HTMLDivElement
+    const container = document.getElementById('gallery-parallax-container') as HTMLDivElement
+
+    if (!overlay || !container) return
+
+    const imageItems = Array.from(
+      container.querySelectorAll('.parallax-item')
+    ) as HTMLDivElement[]
+
+
+    // Build ordered image src list based on props order (globalIndex)
+    const total = imageItems.length
+    const sources: string[] = new Array(total).fill('')
+    const previewSources: string[] = new Array(total).fill('')
+    imageItems.forEach((item) => {
+      const index = Number(item.getAttribute('data-index'))
+      const highres = item.getAttribute('data-highres') || ''
+      const preview = item.getAttribute('data-preview') || ''
+      if (!Number.isNaN(index) && highres) sources[index] = highres
+      if (!Number.isNaN(index)) previewSources[index] = preview
+    })
+
+    let currentIndex = 0
+    let scrollLocked = false
+
+    function lockScroll() {
+      if (scrollLocked) return
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+      scrollLocked = true
+    }
+
+    function unlockScroll() {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+      scrollLocked = false
+    }
+
+    function showOverlay(index: number) {
+      currentIndex = index
+      updateImage()
+      preloadNext()
+      overlay.classList.remove('hidden')
+      requestAnimationFrame(() => {
+        backdrop.style.opacity = '1'
+        imgEl.style.opacity = '1'
+        prevBtn && (prevBtn.style.opacity = '1')
+        nextBtn && (nextBtn.style.opacity = '1')
+        closeBtn && (closeBtn.style.opacity = '1')
+      })
+      highlightThumb()
+      lockScroll()
+    }
+
+    function hideOverlay() {
+      backdrop.style.opacity = '0'
+      imgEl.style.opacity = '0'
+      prevBtn && (prevBtn.style.opacity = '0')
+      nextBtn && (nextBtn.style.opacity = '0')
+      closeBtn && (closeBtn.style.opacity = '0')
+      // Hide thumbnails with smooth transition
+      if (thumbs) {
+        thumbs.style.transform = 'translateY(100%)'
+      }
+      setTimeout(() => {
+        overlay.classList.add('hidden')
+        // Reset thumbnails position for next opening
+        if (thumbs) {
+          thumbs.style.transform = 'translateY(0)'
+        }
+      }, 300)
+      unlockScroll()
+    }
+
+    function updateImage() {
+      const full = sources[currentIndex]
+      const preview = previewSources[currentIndex]
+      if (!full && !preview) return
+
+      // Start with preview blurred
+      if (preview) {
+        imgEl.src = preview
+        imgEl.style.filter = 'blur(12px)'
+        imgEl.style.opacity = '1'
+      } else {
+        imgEl.style.opacity = '0'
+      }
+
+      if (full) {
+        const tmp = new Image()
+        tmp.onload = () => {
+          imgEl.src = tmp.src
+          imgEl.style.filter = 'none'
+          requestAnimationFrame(() => (imgEl.style.opacity = '1'))
+        }
+        tmp.src = full
+      }
+
+      highlightThumb()
+    }
+
+    // Preload next image for smoother navigation
+    function preloadNext() {
+      const nextIndex = (currentIndex + 1 + total) % total
+      const pre = new Image()
+      pre.src = sources[nextIndex]
+    }
+
+    function next() {
+      currentIndex = (currentIndex + 1 + total) % total
+      updateImage()
+      preloadNext()
+    }
+    function prev() {
+      currentIndex = (currentIndex - 1 + total) % total
+      updateImage()
+      preloadNext()
+    }
+
+    function highlightThumb() {
+      if (!thumbs) return
+      const items = thumbs.querySelectorAll('img[data-thumb-index]') as NodeListOf<HTMLImageElement>
+      items.forEach((t) => {
+        const idx = Number(t.getAttribute('data-thumb-index'))
+        if (idx === currentIndex) {
+          t.style.opacity = '1'
+          t.style.ringColor = ''
+          t.classList.add('ring-primary')
+        } else {
+          t.style.opacity = '0.7'
+          t.classList.remove('ring-primary')
+        }
+      })
+      // Ensure active thumb is visible
+      const active = thumbs.querySelector(`img[data-thumb-index="${currentIndex}"]`) as HTMLImageElement
+      active && active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
+    }
+
+    // Click bindings on grid images
+    imageItems.forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const idx = Number(item.getAttribute('data-index'))
+        if (!Number.isNaN(idx)) {
+          showOverlay(idx)
+        }
+      })
+    })
+
+    // Controls
+    nextBtn && nextBtn.addEventListener('click', next)
+    prevBtn && prevBtn.addEventListener('click', prev)
+    closeBtn && closeBtn.addEventListener('click', hideOverlay)
+    backdrop && backdrop.addEventListener('click', hideOverlay)
+
+    // ESC to close
+    document.addEventListener('keydown', (e) => {
+      if (overlay.classList.contains('hidden')) return
+      if (e.key === 'Escape') hideOverlay()
+      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft') prev()
+    })
+
+    // Thumbs click
+    if (thumbs) {
+      thumbs.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement
+        if (target && target.matches('img[data-thumb-index]')) {
+          const idx = Number(target.getAttribute('data-thumb-index'))
+          if (!Number.isNaN(idx)) {
+            currentIndex = idx
+            updateImage()
+          }
+        }
+      })
+    }
+
+    // Touch gestures for stage (swipe left/right to navigate, swipe down on thumbs to hide)
+    let startX = 0
+    let startY = 0
+    let deltaX = 0
+    let deltaY = 0
+    const stage = document.getElementById('lightbox-stage') as HTMLDivElement
+
+    function onTouchStart(e: TouchEvent) {
+      const t = e.touches[0]
+      startX = t.clientX
+      startY = t.clientY
+      deltaX = 0
+      deltaY = 0
+    }
+    function onTouchMove(e: TouchEvent) {
+      const t = e.touches[0]
+      deltaX = t.clientX - startX
+      deltaY = t.clientY - startY
+    }
+    function onTouchEnd() {
+      const absX = Math.abs(deltaX)
+      const absY = Math.abs(deltaY)
+      const SWIPE_THRESHOLD = 40
+      if (absX > absY && absX > SWIPE_THRESHOLD) {
+        if (deltaX < 0) next()
+        else prev()
+      }
+      if (deltaY > SWIPE_THRESHOLD) {
+        // Swipe down closes the lightbox
+        hideOverlay()
+      }
+    }
+
+    stage && stage.addEventListener('touchstart', onTouchStart, { passive: true })
+    stage && stage.addEventListener('touchmove', onTouchMove, { passive: true })
+    stage && stage.addEventListener('touchend', onTouchEnd)
+  })
+</script>
+
 <style>
   .parallax-item-on-first-column,
   .parallax-item-on-third-column {
@@ -169,6 +483,12 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
   /* Optimize for performance */
   .parallax-item-on-first-column img,
   .parallax-item-on-third-column img {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  /* Lightbox performance hints */
+  #lightbox-overlay img {
     backface-visibility: hidden;
     transform: translateZ(0);
   }

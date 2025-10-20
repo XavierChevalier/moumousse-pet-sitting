@@ -9,13 +9,13 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
 <section
   {...Astro.props}
-  class="relative flex min-h-[80vh] flex-col justify-center gap-12 px-4 py-20 sm:gap-16 lg:gap-24"
+  class="relative flex min-h-[calc(100dvh-5rem)] flex-col justify-between gap-8 px-4 py-12 sm:min-h-[80dvh] sm:gap-16 sm:py-20 lg:justify-center lg:gap-24"
 >
   <PunkBackground />
 
   <div class="relative z-10 container mx-auto max-w-7xl">
-    <div class="grid gap-12 sm:gap-16 lg:grid-cols-2 lg:gap-24">
-      <div class="space-y-4 text-center lg:text-left">
+    <div class="grid gap-8 sm:gap-16 lg:grid-cols-2 lg:gap-24">
+      <div class="space-y-2 sm:space-y-4 text-center lg:text-left">
         <!-- Main Headline -->
         <h1
           class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl md:text-5xl lg:text-7xl"
@@ -44,9 +44,9 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         <p class="text-lg font-bold text-black sm:text-xl">À Pélussin et ses alentours</p>
 
         <!-- CTA Buttons -->
-        <div class="mt-8 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
-          <Button href="#services">Tarifs</Button>
-          <Button href="#contact" variant="filled">Contactez-moi</Button>
+        <div class="mt-6 flex flex-col justify-center gap-3 sm:mt-8 sm:flex-row lg:justify-start">
+          <Button href="#services" size="small" class="sm:px-8 sm:py-4 sm:text-base">Tarifs</Button>
+          <Button href="#contact" variant="filled" size="small" class="sm:px-8 sm:py-4 sm:text-base">Contactez-moi</Button>
         </div>
       </div>
 
@@ -54,7 +54,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         src={MoumousseMalisse}
         formats={['avif', 'webp']}
         alt="Chat malissieux"
-        class="pointer-events-none mx-auto w-40 select-none sm:w-48 md:w-80 lg:w-auto"
+        class="pointer-events-none mx-auto w-40 max-h-[35dvh] select-none object-contain sm:w-48 sm:max-h-none md:w-80 lg:w-auto"
       />
     </div>
   </div>

@@ -1,22 +1,24 @@
 ---
+import {
+  AsteriskIcon,
+  BrainIcon,
+  BubblesIcon,
+  CameraIcon,
+  FootprintsIcon,
+  HeartIcon,
+  PawPrintIcon,
+  UtensilsCrossedIcon,
+  VolleyballIcon,
+} from '@lucide/astro'
 import { Picture } from 'astro:assets'
 import Jazz from '../../assets/jazz.jpeg'
 import Leika from '../../assets/leika.jpeg'
-import {
-  UtensilsCrossedIcon,
-  PawPrintIcon,
-  BubblesIcon,
-  VolleyballIcon,
-  CameraIcon,
-  FootprintsIcon,
-  BrainIcon,
-  HeartIcon,
-  AsteriskIcon,
-} from '@lucide/astro'
 import Accordion from '../ui/Accordion.astro'
 import AccordionItem from '../ui/AccordionItem.astro'
-import Service from './Service.astro'
 import SectionAnchor from '../ui/SectionAnchor.astro'
+import Service from './Service.astro'
+import VisitPricing from './pricing/VisitPricing.astro'
+import WalkingPricing from './pricing/WalkingPricing.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
@@ -40,7 +42,7 @@ const { id, ...props } = Astro.props
 
     <div class="flex flex-col gap-16 sm:gap-20 lg:gap-28">
       <!-- VISITES PONCTUELLES -->
-      <Service prices={[{ label: 'La visite', price: '10€' }]}>
+      <Service>
         <Picture slot="picture" src={Leika} alt="Leika" width={800} />
 
         <span slot="title">Visites <span class="text-secondary">ponctuelles</span></span>
@@ -73,6 +75,14 @@ const { id, ...props } = Astro.props
               >nouvelles, photos et vidéos</strong
             > régulièrement.
           </p>
+
+          <p>
+            <AsteriskIcon class="mr-1 inline w-5" />
+            <strong>Tarification multiple :</strong> À partir de 3 chats ou 2 chiens, une visite supplémentaire
+            est facturée en plus du tarif de base.
+          </p>
+
+          <VisitPricing />
         </Fragment>
 
         <Accordion slot="append">
@@ -94,15 +104,7 @@ const { id, ...props } = Astro.props
       <hr class="border-t border-dashed border-black/10" />
 
       <!-- PROMENADE CANINE -->
-      <Service
-        class="lg:flex-row-reverse"
-        prices={[
-          { label: '30 minutes', price: '15€' },
-          { label: '1h', price: '20€' },
-          { label: '1h30', price: '25€' },
-          { label: '2h', price: '30€' },
-        ]}
-      >
+      <Service class="lg:flex-row-reverse">
         <Picture slot="picture" src={Jazz} alt="Jazz" width={800} />
 
         <span slot="title">
@@ -113,7 +115,7 @@ const { id, ...props } = Astro.props
           <p>
             Je propose des <strong>promenades personnalisées</strong> pour votre chien, sur des créneaux
             de
-            <strong>30 minutes à 2 heures</strong> (ou plus selon vos besoins).
+            <strong>1 heure à 2 heures</strong> (ou plus selon vos besoins).
           </p>
 
           <p>Chaque balade inclut :</p>
@@ -134,6 +136,8 @@ const { id, ...props } = Astro.props
               >nouvelles, photos et vidéos</strong
             > régulièrement.
           </p>
+
+          <WalkingPricing />
         </Fragment>
 
         <Accordion slot="append">

@@ -1,5 +1,5 @@
 ---
-import { AlertTriangle, ArrowRight, Mail, Phone } from '@lucide/astro'
+import { AlertTriangle, Mail, Phone } from '@lucide/astro'
 import { Picture } from 'astro:assets'
 import MoumousseDog from '../../assets/moumousse-dog.webp'
 import Accordion from '../ui/Accordion.astro'
@@ -62,12 +62,16 @@ const { id, ...props } = Astro.props
           <p class="mb-4">
             Les tarifs varient selon la formule choisie, le temps passé et la distance.
           </p>
-          <p class="flex items-center gap-4">
-            <ArrowRight width={18} />
-            <span>
-              Retrouvez tous les détails sur la page <strong>Tarifs</strong>. <br />Pour un devis
-              personnalisé, contactez-moi directement.
-            </span>
+          <p class="mb-4">
+            Retrouvez tous les détails dans la section <a
+              href="/#services"
+              class="text-primary hover:underline">Services</a
+            >.
+          </p>
+          <p>
+            Pour un devis personnalisé, <a href="/#contact" class="text-primary hover:underline"
+              >contactez-moi</a
+            > directement.
           </p>
         </AccordionItem>
 
@@ -76,7 +80,7 @@ const { id, ...props } = Astro.props
           <p class="mb-4">
             Par <strong>mail</strong>, <strong>SMS</strong> ou <strong>appel téléphonique</strong>.
           </p>
-          <p class="flex items-center gap-2">
+          <p class="flex items-center gap-4 leading-tight">
             <AlertTriangle class="h-5 w-5 text-yellow-400" />
             Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.
           </p>

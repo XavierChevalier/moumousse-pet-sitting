@@ -1,0 +1,70 @@
+---
+import { AsteriskIcon } from '@lucide/astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+
+const prices = [
+  {
+    duration: '1h',
+    zone1: '18€',
+    zone2: '20€',
+    zone3: '22€',
+  },
+  {
+    duration: '1h30',
+    zone1: '23€',
+    zone2: '25€',
+    zone3: '27€',
+  },
+  {
+    duration: '2h',
+    zone1: '28€',
+    zone2: '30€',
+    zone3: '32€',
+  },
+]
+---
+
+<div {...Astro.props}>
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse border-4 border-black bg-white">
+      <thead>
+        <tr class="bg-secondary/10 text-black">
+          <th class="border-2 border-black p-3 text-left font-bold">Durée</th>
+          <th class="border-2 border-black p-3 text-center font-bold"
+            >Zone 1<br /><span class="text-sm font-normal">(0-10km)</span></th
+          >
+          <th class="border-2 border-black p-3 text-center font-bold"
+            >Zone 2<br /><span class="text-sm font-normal">(10-15km)</span></th
+          >
+          <th class="border-2 border-black p-3 text-center font-bold"
+            >Zone 3<br /><span class="text-sm font-normal">(15-20km)</span></th
+          >
+        </tr>
+      </thead>
+      <tbody>
+        {
+          prices.map((price) => (
+            <tr class="hover:bg-gray-50">
+              <td class="border-2 border-black p-3 font-semibold">{price.duration}</td>
+              <td class="border-2 border-black p-3 text-center text-lg font-black">
+                {price.zone1}
+              </td>
+              <td class="border-2 border-black p-3 text-center text-lg font-black">
+                {price.zone2}
+              </td>
+              <td class="border-2 border-black p-3 text-center text-lg font-black">
+                {price.zone3}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="mt-3 text-sm text-gray-600">
+    <AsteriskIcon class="mr-1 inline w-4" />
+    Au-delà de 20km, <a href="/#contact" class="text-primary hover:underline">me contacter</a> pour un
+    devis personnalisé.
+  </p>
+</div>

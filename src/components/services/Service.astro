@@ -1,10 +1,9 @@
 ---
 import { cn } from '../../core/tailwindcn'
-export interface Props extends astroHTML.JSX.HTMLAttributes {
-  prices: { label: string; price: string }[]
-}
 
-const { prices, class: className, ...props } = Astro.props
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+
+const { class: className, ...props } = Astro.props
 ---
 
 <div
@@ -34,22 +33,6 @@ const { prices, class: className, ...props } = Astro.props
       </h3>
 
       <slot name="description" class="prose prose-lg prose-strong:font-bold prose-ul:space-y-1" />
-
-      <div
-        class:list={[
-          `grid gap-3 lg:grid-cols-4 lg:gap-4`,
-          prices.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
-        ]}
-      >
-        {
-          prices.map(({ label, price }) => (
-            <div class="rounded-2xl border-2 border-black bg-white p-3 text-center transition hover:scale-[1.03] lg:p-4">
-              <div class="text-muted text-sm">{label}</div>
-              <div class="text-xl font-black">{price}</div>
-            </div>
-          ))
-        }
-      </div>
 
       <slot name="append" />
     </div>

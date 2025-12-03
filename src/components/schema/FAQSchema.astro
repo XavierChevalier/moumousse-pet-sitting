@@ -1,0 +1,68 @@
+---
+import { siteMeta } from '../../config/seo'
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Quels animaux gardez-vous ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Je m'occupe des chats, chiens et NAC (nouveaux animaux de compagnie). Cela inclut les lapins, cochons d'Inde, furets, rongeurs, oiseaux et les poissons.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Quels sont les services proposés par Moumousse Pet Sitting ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nous proposons : Visites à domicile (soins, nourriture, nettoyage, câlins, jeux), Promenades canines (sorties individuelles ou personnalisées), et Présence/compagnie pour éviter l\'ennui ou l\'anxiété de l\'animal.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Quels sont les tarifs de garde à Pélussin ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Les tarifs varient selon la formule choisie, le temps passé et la distance. Visite ponctuelle à partir de 15€, promenade canine à partir de 15€/heure. Contactez-nous pour un devis personnalisé.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Comment réserver une garde d\'animaux ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "Vous pouvez réserver par mail, SMS ou appel téléphonique à contact@moumousse-pet-sitting.fr. Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Comment se passe le règlement ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Le paiement se fait en amont ou le jour-même de la prestation. Modes de paiement acceptés : espèces et virement bancaire. Une facture peut être fournie sur demande.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Avez-vous une formation pour la garde d\'animaux ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Oui, je suis titulaire de l\'ACACED (Attestation de Connaissances pour les Animaux de Compagnie d\'Espèces Domestiques) pour Chien, Chat & NAC, ainsi que d\'une formation de premiers secours canin/félin.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Que se passe-t-il si mon animal tombe malade pendant la garde ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Je contacte votre vétérinaire habituel en priorité. En cas d\'urgence, j\'appelle le vétérinaire le plus proche. Vous êtes informé en temps réel de la situation.',
+      },
+    },
+  ],
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />

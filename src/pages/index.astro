@@ -5,10 +5,18 @@ import FAQSection from '../components/faqs/FAQSection.astro'
 import GallerySection from '../components/galleries/GallerySection.astro'
 import HeroSection from '../components/home/HeroSection.astro'
 import ServicesSection from '../components/services/ServicesSection.astro'
+import LocalBusinessSchema from '../components/schema/LocalBusinessSchema.astro'
+import ServiceSchema from '../components/schema/ServiceSchema.astro'
+import FAQSchema from '../components/schema/FAQSchema.astro'
 import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout>
+  <!-- Structured Data -->
+  <LocalBusinessSchema />
+  <ServiceSchema />
+  <FAQSchema />
+
   <HeroSection />
 
   <MeSection id="qui-suis-je" />

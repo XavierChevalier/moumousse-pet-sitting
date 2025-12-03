@@ -1,0 +1,70 @@
+---
+import { siteMeta } from '../../config/seo'
+
+const services = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Visite ponctuelle',
+    provider: {
+      '@type': 'LocalBusiness',
+      name: siteMeta.businessName,
+      url: siteMeta.url,
+    },
+    areaServed: {
+      '@type': 'City',
+      name: 'Pélussin',
+    },
+    description:
+      'Visites à domicile pour chiens, chats et NAC. Nourrissage, sortie, nettoyage litière, jeux et câlins.',
+    offers: {
+      '@type': 'Offer',
+      price: '15',
+      priceCurrency: 'EUR',
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: '15',
+        priceCurrency: 'EUR',
+        referenceQuantity: {
+          '@type': 'QuantitativeValue',
+          value: '1',
+          unitText: 'visite',
+        },
+      },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Promenade canine',
+    provider: {
+      '@type': 'LocalBusiness',
+      name: siteMeta.businessName,
+      url: siteMeta.url,
+    },
+    areaServed: {
+      '@type': 'City',
+      name: 'Pélussin',
+    },
+    description:
+      'Promenades personnalisées pour chiens de 1h à 2h. Sortie, jeux, stimulation et câlins.',
+    offers: {
+      '@type': 'Offer',
+      price: '15',
+      priceCurrency: 'EUR',
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: '15',
+        priceCurrency: 'EUR',
+        referenceQuantity: {
+          '@type': 'QuantitativeValue',
+          value: '1',
+          unitText: 'heure',
+        },
+      },
+    },
+  },
+]
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(services)} />

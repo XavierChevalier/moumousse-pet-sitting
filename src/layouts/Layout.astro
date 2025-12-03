@@ -1,8 +1,13 @@
 ---
 import Navigation from '../components/navigations/Navigation.astro'
 import Footer from '../components/ui/Footer.astro'
-import { siteConfig } from '../config/SiteConfig'
+import SEO from '../components/SEO.astro'
+import { siteConfig, type SEOConfig } from '../config/SiteConfig'
 import '../styles/global.css'
+
+interface Props extends Partial<SEOConfig> {}
+
+const seoProps = Astro.props
 ---
 
 <!doctype html>
@@ -16,16 +21,9 @@ import '../styles/global.css'
       name="copyright"
       content={`© 2025 ${siteConfig.business.name} & Jeeves Studio. Tous droits réservés.`}
     />
-    <meta
-      name="description"
-      content={`${siteConfig.business.name} - Garde d'animaux de compagnie à domicile par ${siteConfig.business.ownerName}. Service professionnel et passionné.`}
-    />
-    <meta
-      name="keywords"
-      content="pet sitting, garde animaux, domicile, Pélussin, chien, chat, NAC, professionnel"
-    />
 
-    <title>{siteConfig.business.name} - Garde d'animaux de compagnie à domicile</title>
+    <!-- SEO Meta Tags -->
+    <SEO {...seoProps} />
 
     <!-- Google Fonts - Punk/Bold Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

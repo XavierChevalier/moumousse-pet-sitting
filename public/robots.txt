@@ -1,0 +1,7 @@
+# Moumousse Pet Sitting - Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://moumousse-pet-sitting.fr/sitemap-index.xml
+Sitemap: https://moumousse-pet-sitting.fr/sitemap-0.xml

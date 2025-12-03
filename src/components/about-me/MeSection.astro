@@ -1,8 +1,8 @@
 ---
 import { Picture } from 'astro:assets'
 import SteffieOttawa from '../../assets/steffie-ottawa.jpg'
-import SectionAnchor from '../ui/SectionAnchor.astro'
 import { siteConfig } from '../../config/SiteConfig'
+import SectionAnchor from '../ui/SectionAnchor.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
@@ -30,7 +30,7 @@ const { id, ...props } = Astro.props
       <div class="flex flex-col items-center gap-8 md:inline">
         <Picture
           src={SteffieOttawa}
-          alt="Steffie Thollot, pet sitter professionnelle diplômée ACACED avec son chien Ottawa - Moumousse Pet Sitting Pélussin"
+          alt="Steffie Thollot, pet sitter professionnelle diplômée ACACED avec sa chatte Ottawa - Moumousse Pet Sitting Pélussin"
           width={350}
           class="pointer-events-none float-left mr-8 select-none"
         />
@@ -51,8 +51,8 @@ const { id, ...props } = Astro.props
           </p>
           <p class="mt-4">
             Une expérience en refuge et <strong>la garde d’animaux</strong> dans mon entourage aura donné
-            naissance à <strong>{siteConfig.business.name}</strong> qui un jour, je l'espère, deviendra un
-            refuge à son tour et un havre de paix pour tous les animaux dans le besoin.
+            naissance à <strong>{siteConfig.business.name}</strong> qui un jour, je l'espère, deviendra
+            un refuge à son tour et un havre de paix pour tous les animaux dans le besoin.
           </p>
         </div>
 

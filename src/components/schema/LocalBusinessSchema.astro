@@ -1,47 +1,32 @@
 ---
-import { siteMeta } from '../../config/seo'
+import { siteConfig } from '../../config/SiteConfig'
 
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': `${siteMeta.url}#business`,
-  name: siteMeta.businessName,
-  image: `${siteMeta.url}/og-image.png`,
-  url: siteMeta.url,
-  telephone: siteMeta.phone,
-  email: siteMeta.email,
-  priceRange: '€€',
+  '@id': `${siteConfig.seo.url}#business`,
+  name: siteConfig.business.name,
+  image: `${siteConfig.seo.url}/og-image.png`,
+  url: siteConfig.seo.url,
+  email: siteConfig.contact.email,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: siteMeta.location.city,
-    addressRegion: siteMeta.location.region,
-    postalCode: siteMeta.location.postalCode,
-    addressCountry: siteMeta.location.country,
+    addressLocality: siteConfig.seo.location.city,
+    addressRegion: siteConfig.seo.location.region,
+    postalCode: siteConfig.seo.location.postalCode,
+    addressCountry: siteConfig.seo.location.country,
   },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: siteMeta.location.coordinates.latitude,
-    longitude: siteMeta.location.coordinates.longitude,
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-      opens: '08:00',
-      closes: '20:00',
-    },
-  ],
   areaServed: {
     '@type': 'City',
     name: 'Pélussin et alentours',
     containedIn: {
       '@type': 'AdministrativeArea',
-      name: 'Loire',
+      name: siteConfig.seo.location.region,
     },
   },
   founder: {
     '@type': 'Person',
-    name: siteMeta.ownerName,
+    name: siteConfig.business.ownerName,
   },
   serviceType: ['Pet Sitting', 'Dog Walking', 'Cat Sitting', 'Pet Care'],
 }

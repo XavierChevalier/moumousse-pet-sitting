@@ -1,70 +1,61 @@
 ---
-import { siteMeta } from '../../config/seo'
+import { siteConfig } from '../../config/SiteConfig'
 
-const services = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    serviceType: 'Visite ponctuelle',
-    provider: {
-      '@type': 'LocalBusiness',
-      name: siteMeta.businessName,
-      url: siteMeta.url,
-    },
-    areaServed: {
-      '@type': 'City',
-      name: 'Pélussin',
-    },
-    description:
-      'Visites à domicile pour chiens, chats et NAC. Nourrissage, sortie, nettoyage litière, jeux et câlins.',
-    offers: {
-      '@type': 'Offer',
-      price: '15',
-      priceCurrency: 'EUR',
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: '15',
-        priceCurrency: 'EUR',
-        referenceQuantity: {
-          '@type': 'QuantitativeValue',
-          value: '1',
-          unitText: 'visite',
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${siteConfig.seo.url}#services`,
+  name: 'Garde d’animaux à domicile - Moumousse Pet Sitting',
+  provider: {
+    '@type': 'LocalBusiness',
+    name: siteConfig.business.name,
+    url: siteConfig.seo.url,
+  },
+  areaServed: {
+    '@type': 'City',
+    name: 'Pélussin et alentours',
+  },
+  serviceType: ['Pet Sitting', 'Dog Walking', 'Cat Sitting', 'Visites à domicile'],
+  description:
+    "Services de garde d'animaux à domicile, visites, soins et promenades pour chiens, chats et NAC à Pélussin et dans les environs.",
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Formules de garde et promenades',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        name: 'Visite ponctuelle à domicile',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Visite à domicile',
+          description:
+            'Visite pour nourrir, nettoyer, jouer et câliner votre animal, avec envoi de nouvelles et photos.',
+        },
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          priceCurrency: 'EUR',
+          price: 15,
+          unitText: 'Par visite (à partir de)',
         },
       },
-    },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    serviceType: 'Promenade canine',
-    provider: {
-      '@type': 'LocalBusiness',
-      name: siteMeta.businessName,
-      url: siteMeta.url,
-    },
-    areaServed: {
-      '@type': 'City',
-      name: 'Pélussin',
-    },
-    description:
-      'Promenades personnalisées pour chiens de 1h à 2h. Sortie, jeux, stimulation et câlins.',
-    offers: {
-      '@type': 'Offer',
-      price: '15',
-      priceCurrency: 'EUR',
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: '15',
-        priceCurrency: 'EUR',
-        referenceQuantity: {
-          '@type': 'QuantitativeValue',
-          value: '1',
-          unitText: 'heure',
+      {
+        '@type': 'Offer',
+        name: 'Promenade canine',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Promenade de chien',
+          description: 'Promenade individuelle ou personnalisée pour votre chien.',
+        },
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          priceCurrency: 'EUR',
+          price: 15,
+          unitText: 'Par heure (à partir de)',
         },
       },
-    },
+    ],
   },
-]
+}
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(services)} />
+<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />

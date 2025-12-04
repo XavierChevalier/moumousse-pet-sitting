@@ -54,6 +54,10 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         src={MoumousseMalisse}
         formats={['avif', 'webp']}
         alt="Chat malicieux"
+        loading="eager"
+        fetchpriority="high"
+        widths={[320, 400, 600, 800]}
+        sizes="(max-width: 640px) 160px, (max-width: 768px) 192px, (max-width: 1024px) 320px, 504px"
         class="pointer-events-none mx-auto w-40 max-h-[35dvh] select-none object-contain sm:w-48 sm:max-h-none md:w-80 lg:w-auto"
       />
     </div>

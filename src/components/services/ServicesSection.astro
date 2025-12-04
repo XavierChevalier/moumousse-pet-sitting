@@ -43,7 +43,13 @@ const { id, ...props } = Astro.props
     <div class="flex flex-col gap-16 sm:gap-20 lg:gap-28">
       <!-- VISITES PONCTUELLES -->
       <Service>
-        <Picture slot="picture" src={Leika} alt="Leika" width={800} />
+        <Picture 
+          slot="picture" 
+          src={Leika} 
+          alt="Leika" 
+          widths={[350, 400, 500, 600]}
+          sizes="(max-width: 640px) 350px, (max-width: 1024px) 400px, 500px"
+        />
 
         <span slot="title">Visites <span class="text-secondary">ponctuelles</span></span>
 
@@ -105,7 +111,13 @@ const { id, ...props } = Astro.props
 
       <!-- PROMENADE CANINE -->
       <Service class="lg:flex-row-reverse">
-        <Picture slot="picture" src={Jazz} alt="Jazz" width={800} />
+        <Picture 
+          slot="picture" 
+          src={Jazz} 
+          alt="Jazz" 
+          widths={[350, 400, 500, 600]}
+          sizes="(max-width: 640px) 350px, (max-width: 1024px) 400px, 500px"
+        />
 
         <span slot="title">
           Promenade <span class="text-secondary">canine</span>

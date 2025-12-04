@@ -1,0 +1,10 @@
+# robots.txt for moumousse-pet-sitting.fr
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://moumousse-pet-sitting.fr/sitemap.xml
+
+# Prevent AI training on content (non-standard but informative)
+# Note: This is not an official directive but a recommendation

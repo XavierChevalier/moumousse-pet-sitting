@@ -4,9 +4,10 @@
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --color-body: #faf8f6;
-  --color-primary: var(--color-teal-400);
-  --color-secondary: var(--color-yellow-400);
-  --color-tertiary: var(--color-purple-400);
+  /* Improved color contrast for accessibility (WCAG AA compliant) */
+  --color-primary: #00a89e; /* Darker teal for better contrast (was #00d5be) */
+  --color-secondary: #d6a700; /* Darker yellow for better contrast (was #fdc700) */
+  --color-tertiary: #9747d6; /* Darker purple for better contrast (was #c27aff) */
   --color-accent: var(--color-pink-400);
 }
 

@@ -29,18 +29,18 @@ const { id, ...props } = Astro.props
 
     <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-end lg:gap-0">
       <Accordion class="w-full lg:w-3/5">
-        <AccordionItem isOpen={true}>
+        <AccordionItem isOpen={true} data-umami-event="faq:open-accordion:quels-animaux-je-garde">
           <span slot="header">Quels animaux je garde ?</span>
           <p class="mb-4">
             Je m'occupe des <strong>chats, chiens et NAC</strong> (nouveaux animaux de compagnie).
           </p>
           <p>
-            Cela inclut les lapins, cochons d'Inde, furets, rongeurs, oiseaux et les poissons. N'hésitez pas à me contacter pour
-            discuter des besoins spécifiques de votre animal.
+            Cela inclut les lapins, cochons d'Inde, furets, rongeurs, oiseaux et les poissons.
+            N'hésitez pas à me contacter pour discuter des besoins spécifiques de votre animal.
           </p>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem data-umami-event="faq:open-accordion:quels-sont-mes-services">
           <span slot="header">Quels sont mes services ?</span>
           <ul class="space-y-4">
             <li>
@@ -57,7 +57,7 @@ const { id, ...props } = Astro.props
           </ul>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem data-umami-event="faq:open-accordion:quels-sont-les-tarifs">
           <span slot="header">Quels sont les tarifs ?</span>
           <p class="mb-4">
             Les tarifs varient selon la formule choisie, le temps passé et la distance.
@@ -65,17 +65,20 @@ const { id, ...props } = Astro.props
           <p class="mb-4">
             Retrouvez tous les détails dans la section <a
               href="/#services"
-              class="text-primary hover:underline">Services</a
+              class="text-primary hover:underline"
+              data-umami-event="faq:click-services">Services</a
             >.
           </p>
           <p>
-            Pour un devis personnalisé, <a href="/#contact" class="text-primary hover:underline"
-              >contactez-moi</a
+            Pour un devis personnalisé, <a
+              href="/#contact"
+              class="text-primary hover:underline"
+              data-umami-event="faq:click-contact">contactez-moi</a
             > directement.
           </p>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem data-umami-event="faq:open-accordion:comment-reserver">
           <span slot="header">Comment réserver ?</span>
           <p class="mb-4">
             Par <strong>mail</strong>, <strong>SMS</strong> ou <strong>appel téléphonique</strong>.
@@ -86,7 +89,7 @@ const { id, ...props } = Astro.props
           </p>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem data-umami-event="faq:open-accordion:comment-se-passe-le-reglement">
           <span slot="header">Comment se passe le règlement ?</span>
           <p class="mb-4">
             Le paiement se fait en amont ou le jour-même de la prestation, selon la formule. Modes
@@ -104,7 +107,7 @@ const { id, ...props } = Astro.props
           </p>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem data-umami-event="faq:open-accordion:ai-je-une-formation">
           <span slot="header">Ai-je une formation ?</span>
           <p class="mb-4">Oui, je suis titulaire de :</p>
           <ul class="space-y-3">
@@ -118,7 +121,9 @@ const { id, ...props } = Astro.props
           </ul>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem
+          data-umami-event="faq:open-accordion:et-si-mon-animal-tombe-malade-ou-se-blesse"
+        >
           <span slot="header">Et si mon animal tombe malade ou se blesse ?</span>
           <ul class="space-y-3">
             <li>
@@ -133,13 +138,14 @@ const { id, ...props } = Astro.props
           </ul>
         </AccordionItem>
 
-        <AccordionItem>
+        <AccordionItem data-umami-event="faq:open-accordion:une-question-un-souci">
           <span slot="header">Une question ? Un souci ?</span>
           <p class="mb-4">Contactez-moi sans hésiter :</p>
           <div class="space-y-2">
             <a
               href="mailto:contact@moumousse-pet-sitting.fr"
               class="hover:text-primary flex items-center gap-2 transition-colors"
+              data-umami-event="faq:click-email"
             >
               <Mail width={18} />
               contact@moumousse-pet-sitting.fr

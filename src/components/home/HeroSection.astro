@@ -1,8 +1,8 @@
 ---
-import MoumousseMalisse from '../../assets/moumousse-malisse.webp'
-import PunkBackground from '../ui/PunkBackground.astro'
 import { Picture } from 'astro:assets'
+import MoumousseMalisse from '../../assets/moumousse-malisse.webp'
 import Button from '../ui/Button.astro'
+import PunkBackground from '../ui/PunkBackground.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
 ---
@@ -15,7 +15,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
   <div class="relative z-10 container mx-auto max-w-7xl">
     <div class="grid gap-8 sm:gap-16 lg:grid-cols-2 lg:gap-24">
-      <div class="space-y-2 sm:space-y-4 text-center lg:text-left">
+      <div class="space-y-2 text-center sm:space-y-4 lg:text-left">
         <!-- Main Headline -->
         <h1
           class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl md:text-5xl lg:text-7xl"
@@ -45,8 +45,19 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
         <!-- CTA Buttons -->
         <div class="mt-6 flex flex-col justify-center gap-3 sm:mt-8 sm:flex-row lg:justify-start">
-          <Button href="#services" size="small" class="sm:px-8 sm:py-4 sm:text-base">Tarifs</Button>
-          <Button href="#contact" variant="filled" size="small" class="sm:px-8 sm:py-4 sm:text-base">Contactez-moi</Button>
+          <Button
+            href="#services"
+            size="small"
+            class="sm:px-8 sm:py-4 sm:text-base"
+            data-umami-event="home:click-tarifs">Tarifs</Button
+          >
+          <Button
+            href="#contact"
+            variant="filled"
+            size="small"
+            class="sm:px-8 sm:py-4 sm:text-base"
+            data-umami-event="home:click-contact">Contactez-moi</Button
+          >
         </div>
       </div>
 
@@ -54,7 +65,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         src={MoumousseMalisse}
         formats={['avif', 'webp']}
         alt="Chat malicieux"
-        class="pointer-events-none mx-auto w-40 max-h-[35dvh] select-none object-contain sm:w-48 sm:max-h-none md:w-80 lg:w-auto"
+        class="pointer-events-none mx-auto max-h-[35dvh] w-40 object-contain select-none sm:max-h-none sm:w-48 md:w-80 lg:w-auto"
       />
     </div>
   </div>

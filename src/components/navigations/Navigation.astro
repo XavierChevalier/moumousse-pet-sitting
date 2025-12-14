@@ -24,6 +24,7 @@ const links = [
               <a
                 href={link.href}
                 class="hover:text-primary p-4 text-sm font-bold tracking-wide uppercase transition-colors duration-150"
+                data-umami-event={`navigation:click-${link.href.replace('#', '')}`}
               >
                 {link.label}
               </a>
@@ -31,7 +32,14 @@ const links = [
           }
 
           <!-- Contact Button -->
-          <Button href="#contact" size="small" class="ml-4"> Contactez-moi </Button>
+          <Button
+            href="#contact"
+            size="small"
+            class="ml-4"
+            data-umami-event="navigation:click-contact"
+          >
+            Contactez-moi
+          </Button>
         </div>
       </div>
 
@@ -42,6 +50,7 @@ const links = [
           id="mobile-menu-button"
           class="hover:text-primary focus:text-primary transition-colors duration-200 focus:outline-none"
           aria-label="Menu mobile"
+          data-umami-event="navigation:toggle-mobile-menu"
         >
           <MenuIcon class="h-6 w-6" />
         </button>
@@ -56,6 +65,7 @@ const links = [
             <a
               href={link.href}
               class="hover:text-primary focus:text-primary block p-8 font-bold tracking-wide uppercase transition-colors duration-150"
+              data-umami-event={`navigation:click-${link.href.replace('#', '')}-mobile`}
             >
               {link.label}
             </a>
@@ -63,7 +73,14 @@ const links = [
         }
 
         <!-- Contact Button -->
-        <Button href="#contact" size="large" class="mt-8 text-center"> Contactez-moi </Button>
+        <Button
+          href="#contact"
+          size="large"
+          class="mt-8 text-center"
+          data-umami-event="navigation:click-contact-mobile"
+        >
+          Contactez-moi
+        </Button>
       </div>
     </div>
   </div>

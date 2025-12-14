@@ -19,7 +19,7 @@ const navLinks = [
     <div class="flex flex-col flex-wrap items-center gap-8 md:flex-row">
       <!-- Logo Section -->
       <div class="flex min-w-[230px] justify-center lg:justify-start">
-        <a href="/#" class="group flex items-center gap-3">
+        <a href="/#" class="group flex items-center gap-3" data-umami-event="footer:click-logo">
           <Image
             src={MoumousseMalisse}
             alt="Moumousse Pet Sitting Logo"
@@ -43,6 +43,7 @@ const navLinks = [
             <a
               href={link.href}
               class="hover:text-primary p-2 text-sm font-semibold tracking-wide text-white uppercase transition-colors duration-200"
+              data-umami-event={`footer:click-${link.href.replace('#', '').replace('/', '') || 'home'}`}
             >
               {link.label}
             </a>
@@ -60,7 +61,10 @@ const navLinks = [
             <p class="text-xs text-gray-400">
               Développé par <a
                 href="https://www.linkedin.com/in/chevalier-xavier/"
-                class="text-primary font-semibold">Xavier Chevalier</a
+                class="text-primary font-semibold"
+                data-umami-event="footer:click-developer-linkedin"
+                target="_blank"
+                rel="noopener noreferrer">Xavier Chevalier</a
               >
             </p>
           </div>

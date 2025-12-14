@@ -28,6 +28,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
       <a
         href="mailto:contact@moumousse-pet-sitting.fr"
         class="hover:text-primary flex items-center gap-2 transition-colors"
+        data-umami-event="contact:click-email-error"
       >
         <Mail width={18} />
         contact@moumousse-pet-sitting.fr
@@ -87,7 +88,13 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
     <!-- Submit Button -->
     <div class="text-center">
-      <Button variant="filled" size="large" type="submit" id="contact-submit-btn">
+      <Button
+        variant="filled"
+        size="large"
+        type="submit"
+        id="contact-submit-btn"
+        data-umami-event="contact:submit-form"
+      >
         <span id="contact-submit-text">Envoyer le message</span>
         <Loader2 id="contact-submit-spinner" class="hidden h-6 w-6 animate-spin" />
       </Button>

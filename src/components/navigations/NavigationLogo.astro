@@ -6,7 +6,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 ---
 
 <div {...Astro.props} class="flex-shrink-0">
-  <a href="/#" class="group flex items-center gap-3">
+  <a href="/#" class="group flex items-center gap-3" data-umami-event="navigation:click-logo">
     <Image
       src={MoumousseDog}
       alt="Moumousse Pet Sitting Logo"

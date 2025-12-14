@@ -86,7 +86,7 @@ const { id, ...props } = Astro.props
         </Fragment>
 
         <Accordion slot="append">
-          <AccordionItem>
+          <AccordionItem data-umami-event="services:open-accordion-previsite-visites">
             <span slot="header" class="text-lg"
               >Une <strong>pré-visite obligatoire</strong> est prévue avant toute première garde</span
             >
@@ -141,7 +141,7 @@ const { id, ...props } = Astro.props
         </Fragment>
 
         <Accordion slot="append">
-          <AccordionItem>
+          <AccordionItem data-umami-event="services:open-accordion-balades-regulieres">
             <span slot="header" class="text-lg">Besoin de balades régulières ?</span>
             <p class="mb-2">
               Pour les personnes qui ont un emploi du temps chargé, ou simplement pour offrir à leur
@@ -155,7 +155,7 @@ const { id, ...props } = Astro.props
             </ul>
           </AccordionItem>
 
-          <AccordionItem>
+          <AccordionItem data-umami-event="services:open-accordion-previsite-promenades">
             <span slot="header" class="text-lg"
               >Une <strong>pré-visite obligatoire</strong> est prévue avant la première sortie</span
             >

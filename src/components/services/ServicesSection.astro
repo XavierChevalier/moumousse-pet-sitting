@@ -49,6 +49,9 @@ const { id, ...props } = Astro.props
           src={Leika}
           alt="Leika - Garde à domicile avec visites ponctuelles à Pélussin"
           width={800}
+          decoding="async"
+          loading="lazy"
+          sizes="(max-width: 1024px) 100vw, 364px"
         />
 
         <span slot="title">Visites <span class="text-secondary">ponctuelles</span></span>
@@ -118,6 +121,9 @@ const { id, ...props } = Astro.props
           src={Jazz}
           alt="Chien Jazz en promenade - Service de promenade canine professionnelle à Pélussin et alentours"
           width={800}
+          decoding="async"
+          loading="lazy"
+          sizes="(max-width: 1024px) 100vw, 364px"
         />
 
         <span slot="title">

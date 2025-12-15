@@ -9,7 +9,7 @@ const { isOpen = false, ...props } = Astro.props
 <div
   {...props}
   class:list={[
-    'accordion-item bg-body hover:bg-secondary/5 border-4 border-black shadow-[10px_10px_0px_0px_theme(colors.black)] transition-all duration-300',
+    'accordion-item hover:bg-secondary/5 border-4 border-black bg-white/40 shadow-[10px_10px_0px_0px_theme(colors.black)] transition-all duration-300',
     { open: isOpen },
   ]}
 >

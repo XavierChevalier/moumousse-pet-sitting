@@ -1,47 +1,52 @@
 ---
-import GalleryParallaxScroll from './GalleryParallaxScroll.astro'
+import Bene from '../../assets/gallery/bene.jpeg'
+import Bloom from '../../assets/gallery/bloom.webp'
 import Bobby from '../../assets/gallery/bobby.jpg'
+import DoubleFaceHailey from '../../assets/gallery/double-face-hailey.webp'
+import Fiona from '../../assets/gallery/fiona.jpeg'
+import Ginger from '../../assets/gallery/ginger.webp'
+import Gipsy from '../../assets/gallery/gipsy.jpeg'
 import Jazz from '../../assets/gallery/jazz.jpg'
-import JazzSit from '../../assets/gallery/jazz-sit.jpeg'
-import Leika from '../../assets/gallery/leika-dodo.jpg'
-import LeikaCarton from '../../assets/gallery/leika-carton.webp'
+import KyonBlizGlobulOdin from '../../assets/gallery/kyon-bliz-globul-odin.jpeg'
+import Maki from '../../assets/gallery/maki.jpeg'
 import Moumousse from '../../assets/gallery/moumousse.jpg'
-import OttawaPoireau from '../../assets/gallery/ottawa-poireau.jpg'
-import OttawaGame from '../../assets/gallery/ottawa-game.jpg'
+import Naska from '../../assets/gallery/naska.webp'
 import OttawaLeika from '../../assets/gallery/ottawa-leika.jpg'
 import Texas from '../../assets/gallery/texas.jpg'
-import DoubleFaceHailey from '../../assets/gallery/double-face-hailey.webp'
-import Ginger from '../../assets/gallery/ginger.webp'
-import Naska from '../../assets/gallery/naska.webp'
-import Tsuki from '../../assets/gallery/tsuki.webp'
 import TsukiSun from '../../assets/gallery/tsuki-sun.webp'
+import Tsuki from '../../assets/gallery/tsuki.webp'
 import Zoom from '../../assets/gallery/zoom.webp'
-import ZoomSleep from '../../assets/gallery/zoom-sleep.webp'
-import Bloom from '../../assets/gallery/bloom.webp'
+import Zuri from '../../assets/gallery/zuri.jpeg'
 import SectionAnchor from '../ui/SectionAnchor.astro'
+import GalleryParallaxScroll from './GalleryParallaxScroll.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
 }
 
 const gallery = [
+  // Column 1
   { img: Moumousse, title: 'Moumousse' },
   { img: Bobby, title: 'Bobby' },
   { img: Jazz, title: 'Jazz' },
   { img: Naska, title: 'Naska' },
-  { img: OttawaPoireau, title: 'Ottawa' },
-  { img: LeikaCarton, title: 'Leïka' },
-  { img: OttawaGame, title: 'Ottawa' },
+  { img: Bene, title: 'Bene' },
+  { img: KyonBlizGlobulOdin, title: 'Kyon Bliz Globul Odin' },
+
+  // Column 2
+  { img: Fiona, title: 'Fiona' },
   { img: Texas, title: 'Texas' },
   { img: OttawaLeika, title: 'Ottawa & Leïka', subtitle: 'mes 2 amours' },
-  { img: JazzSit, title: 'Jazz' },
+  { img: Maki, title: 'Maki' },
   { img: DoubleFaceHailey, title: 'Double-Face & Hailey' },
   { img: Ginger, title: 'Ginger' },
-  { img: Leika, title: 'Leika' },
+
+  // Column 3
+  { img: Zuri, title: 'Zuri' },
   { img: Tsuki, title: 'Tsuki' },
   { img: TsukiSun, title: 'Tsuki' },
   { img: Zoom, title: 'Zoom' },
-  { img: ZoomSleep, title: 'Zoom' },
+  { img: Gipsy, title: 'Gipsy' },
   { img: Bloom, title: 'Bloom' },
 ]
 

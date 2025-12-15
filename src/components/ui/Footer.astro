@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import MoumousseMalisse from '../../assets/moumousse-malisse.webp'
+import { siteConfig } from '../../config/SiteConfig'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
@@ -22,7 +23,7 @@ const navLinks = [
         <a href="/#" class="group flex items-center gap-3" data-umami-event="footer:click-logo">
           <Image
             src={MoumousseMalisse}
-            alt="Moumousse Pet Sitting Logo"
+            alt={`${siteConfig.business.name} Logo`}
             height={60}
             loading="lazy"
             class="pointer-events-none select-none"
@@ -56,7 +57,7 @@ const navLinks = [
         <div class="flex flex-col gap-3">
           <div class="flex flex-col gap-1">
             <p class="text-sm font-bold">
-              © 2025 <span class="text-secondary">Moumousse Pet Sitting</span>
+              © 2025 <span class="text-secondary">{siteConfig.business.name}</span>
             </p>
             <p class="text-xs text-gray-400">
               Développé par <a

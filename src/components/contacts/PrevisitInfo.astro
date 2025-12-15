@@ -1,0 +1,40 @@
+---
+import { siteConfig } from '../../config/SiteConfig'
+import { cn } from '../../core/tailwindcn'
+import Button from '../ui/Button.astro'
+
+interface Props extends astroHTML.JSX.HTMLAttributes {
+  class?: string
+}
+
+const { class: className = '', ...props } = Astro.props
+---
+
+<div
+  {...props}
+  class={cn(
+    'border-2 border-black bg-white/40 px-4 py-4 text-black shadow-[6px_6px_0px_0px_theme(colors.black)]',
+    className
+  )}
+>
+  <div class="mb-10 space-y-2">
+    <p>
+      La pré-visite est <strong>gratuite</strong> et <strong>obligatoire</strong> avant toute première
+      garde ou promenade. Elle permet de :
+    </p>
+    <ul class="list-inside list-disc space-y-1 pl-4 text-black/80">
+      <li>vous rencontrer et discuter de vos besoins,</li>
+      <li>collecter toutes les informations utiles pour des gardes sereines.</li>
+    </ul>
+  </div>
+
+  <Button
+    variant="filled"
+    href={siteConfig.bookPrevisiteUrl}
+    target="_blank"
+    data-umami-event="contact:click-calendly-previsite-from-form"
+    class="mx-auto mb-6 block w-fit text-center"
+  >
+    Réserver ma pré-visite en ligne
+  </Button>
+</div>

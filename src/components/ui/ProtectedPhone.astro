@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '../../config/SiteConfig'
 import ProtectedContent from './ProtectedContent.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
@@ -6,7 +7,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
 <ProtectedContent
   {...Astro.props}
-  encodedContent="MDYgNDYgNDcgMzAgMTE="
+  encodedContent={siteConfig.contact.encodedPhone}
   placeholder="Cliquez pour voir le téléphone"
   contentType="phone"
 />

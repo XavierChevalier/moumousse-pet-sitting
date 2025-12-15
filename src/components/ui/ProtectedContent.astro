@@ -35,41 +35,66 @@ const {
 </div>
 
 <script>
+  function decode(encoded: string): string {
+    // Custom algorithm:
+    // 1. Each character was shifted by +3 when encoding -> shift back by -3
+    // 2. The resulting string was reversed
+    // 3. The final value is a base64 string of the original content
+    const unshifted = encoded
+      .split('')
+      .map((c) => String.fromCharCode(c.charCodeAt(0) - 3))
+      .join('')
+
+    const reversed = unshifted.split('').reverse().join('')
+
+    return atob(reversed)
+  }
+
+  function decodeProtectedContent(
+    element: HTMLElement,
+    encodedContent: string,
+    contentType: 'phone' | 'text'
+  ) {
+    const contentText = element.querySelector('.protected-content-text') as HTMLSpanElement
+    const trigger = element.querySelector('.protected-trigger') as HTMLButtonElement
+    const revealed = element.querySelector('.protected-revealed') as HTMLDivElement
+
+    const decodedContent = decode(encodedContent)
+    switch (contentType) {
+      case 'phone':
+        const phoneLink = document.createElement('a')
+        phoneLink.href = `tel:${decodedContent.replaceAll(/ /g, '')}`
+        phoneLink.className =
+          'hover:text-primary flex items-center text-left gap-2 transition-colors'
+        phoneLink.innerHTML = revealed.innerHTML.replace(
+          '<span class="protected-content-text"></span>',
+          `<span>${decodedContent}</span>`
+        )
+        element.replaceWith(phoneLink)
+        break
+
+      default:
+        contentText.textContent = decodedContent
+        trigger.classList.add('hidden')
+        revealed.classList.remove('hidden')
+        break
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    const protectedElements = document.querySelectorAll('.protected-content')
+    const protectedElements = document.querySelectorAll<HTMLElement>('.protected-content')
 
     protectedElements.forEach((element) => {
       const trigger = element.querySelector('.protected-trigger') as HTMLButtonElement
       const revealed = element.querySelector('.protected-revealed') as HTMLDivElement
       const contentText = element.querySelector('.protected-content-text') as HTMLSpanElement
       const encodedContent = element.getAttribute('data-encoded')
-      const contentType = element.getAttribute('data-content-type')
+      const contentType = element.getAttribute('data-content-type') as 'phone' | 'text'
       if (!trigger || !revealed || !contentText || !encodedContent) return
 
       trigger.addEventListener(
         'click',
-        () => {
-          const decodedContent = atob(encodedContent)
-
-          // Handle different content types
-          if (contentType === 'phone') {
-            const phoneLink = document.createElement('a')
-            phoneLink.href = `tel:${decodedContent.replaceAll(/ /g, '')}`
-            phoneLink.className =
-              'hover:text-primary flex items-center text-left gap-2 transition-colors'
-            phoneLink.innerHTML = revealed.innerHTML.replace(
-              '<span class="protected-content-text"></span>',
-              `<span>${decodedContent}</span>`
-            )
-            element.replaceWith(phoneLink)
-            return
-          }
-
-          // Regular text content
-          contentText.textContent = decodedContent
-          trigger.classList.add('hidden')
-          revealed.classList.remove('hidden')
-        },
+        () => decodeProtectedContent(element, encodedContent, contentType),
         { once: true }
       )
     })

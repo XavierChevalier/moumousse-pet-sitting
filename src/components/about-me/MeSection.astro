@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets'
 import SteffieOttawa from '../../assets/steffie-ottawa.jpg'
 import SectionAnchor from '../ui/SectionAnchor.astro'
+import { siteConfig } from '../../config/SiteConfig'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
@@ -50,14 +51,14 @@ const { id, ...props } = Astro.props
           </p>
           <p class="mt-4">
             Une expérience en refuge et <strong>la garde d’animaux</strong> dans mon entourage aura donné
-            naissance à <strong>Moumousse Pet Sitting</strong> qui un jour, je l'espère, deviendra un
+            naissance à <strong>{siteConfig.business.name}</strong> qui un jour, je l'espère, deviendra un
             refuge à son tour et un havre de paix pour tous les animaux dans le besoin.
           </p>
         </div>
 
         <span
           class="mt-4 block w-full text-right text-lg tracking-tight text-black/40 sm:text-xl lg:mt-2"
-          >Steffie Thollot</span
+          >{siteConfig.business.ownerName}</span
         >
       </div>
     </div>

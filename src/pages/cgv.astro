@@ -1,19 +1,22 @@
 ---
+import { siteConfig } from '../config/SiteConfig'
 import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout>
-  <div class="prose container mx-auto max-w-7xl py-16">
+  <div class="prose container mx-auto max-w-7xl px-4 py-16">
     <h1>Conditions générales de vente</h1>
 
     <p>
-      Moumousse Pet Sitting est une micro-entreprise représentée par Steffie Thollot, immatriculée
-      sous le numéro SIRET XXXXXXX, spécialisée dans la garde d'animaux à domicile.
+      {siteConfig.business.name} est une micro-entreprise représentée par {
+        siteConfig.business.ownerName
+      }, immatriculée sous le numéro SIRET {siteConfig.business.siret}, spécialisée dans la garde
+      d'animaux à domicile.
     </p>
     <p>
       <strong>Contact :</strong>
-      <a href="mailto:contact@moumousse-pet-sitting.fr" data-umami-event="cgv:click-email"
-        >contact@moumousse-pet-sitting.fr</a
+      <a href={`mailto:${siteConfig.contact.email}`} data-umami-event="cgv:click-email"
+        >{siteConfig.contact.email}</a
       >
     </p>
 

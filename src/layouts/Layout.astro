@@ -1,6 +1,7 @@
 ---
 import Navigation from '../components/navigations/Navigation.astro'
 import Footer from '../components/ui/Footer.astro'
+import { siteConfig } from '../config/SiteConfig'
 import '../styles/global.css'
 ---
 
@@ -13,18 +14,18 @@ import '../styles/global.css'
     <meta name="generator" content={Astro.generator} />
     <meta
       name="copyright"
-      content="© 2025 Moumousse Pet Sitting & Jeeves Studio. Tous droits réservés."
+      content={`© 2025 ${siteConfig.business.name} & Jeeves Studio. Tous droits réservés.`}
     />
     <meta
       name="description"
-      content="Moumousse Pet Sitting - Garde d'animaux de compagnie à domicile avec style punk-rock par Steffie. Service professionnel et passionné."
+      content={`${siteConfig.business.name} - Garde d'animaux de compagnie à domicile par ${siteConfig.business.ownerName}. Service professionnel et passionné.`}
     />
     <meta
       name="keywords"
       content="pet sitting, garde animaux, domicile, Pélussin, chien, chat, NAC, professionnel"
     />
 
-    <title>Moumousse Pet Sitting - Garde d'animaux de compagnie à domicile</title>
+    <title>{siteConfig.business.name} - Garde d'animaux de compagnie à domicile</title>
 
     <!-- Google Fonts - Punk/Bold Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

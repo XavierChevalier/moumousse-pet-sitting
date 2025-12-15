@@ -1,0 +1,21 @@
+---
+import { Phone } from '@lucide/astro'
+import ProtectedPhone from '../ui/ProtectedPhone.astro'
+
+interface Props extends astroHTML.JSX.HTMLAttributes {}
+
+const { ...props } = Astro.props
+---
+
+<div
+  {...props}
+  class="text-muted-foreground rounded-md border border-black/10 bg-white/40 px-4 py-3 text-sm"
+>
+  <div class="flex items-center justify-center gap-4">
+    <Phone class="h-4 w-4" />
+    <div>
+      Vous pouvez me contacter depuis le formulaire ci-dessous ou directement par téléphone :
+      <ProtectedPhone class="inline" />
+    </div>
+  </div>
+</div>

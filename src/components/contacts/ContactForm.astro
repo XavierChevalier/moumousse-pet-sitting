@@ -1,12 +1,15 @@
 ---
-import { Mail, Loader2, Phone } from '@lucide/astro'
+import { Mail, Loader2 } from '@lucide/astro'
 import Button from '../ui/Button.astro'
 import Alert from '../ui/Alert.astro'
 import Input from '../ui/forms/Input.astro'
 import Select from '../ui/forms/Select.astro'
 import Textarea from '../ui/forms/Textarea.astro'
 import Label from '../ui/forms/Label.astro'
+import ContactPhoneInfo from './ContactPhoneInfo.astro'
 import ProtectedPhone from '../ui/ProtectedPhone.astro'
+import PrevisitInfo from './PrevisitInfo.astro'
+import { siteConfig } from '../../config/SiteConfig'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
 ---
@@ -26,12 +29,12 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
       Veuillez me contacter directement par mail ou par SMS.
       <br />
       <a
-        href="mailto:contact@moumousse-pet-sitting.fr"
+        href={`mailto:${siteConfig.contact.email}`}
         class="hover:text-primary flex items-center gap-2 transition-colors"
         data-umami-event="contact:click-email-error"
       >
         <Mail width={18} />
-        contact@moumousse-pet-sitting.fr
+        {siteConfig.contact.email}
       </a>
       <ProtectedPhone />
     </p>
@@ -48,17 +51,15 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     <input type="hidden" name="form-name" value="contact" />
     <input type="hidden" name="subject" data-remove-prefix value="[%{siteName}] Nouveau message" />
 
-    <!-- Email Field -->
-    <div>
-      <Label for="email">Email *</Label>
-      <Input type="email" id="email" name="email" required placeholder="votre@email.com" />
-    </div>
+    <!-- Phone alternative (above main CTA) -->
+    <ContactPhoneInfo />
 
     <!-- Topic Dropdown -->
     <div>
       <Label for="topic">Sujet *</Label>
       <Select id="topic" name="topic" required>
         <option value="">Choisissez un sujet</option>
+        <option value="previsite">Réserver ma pré-visite gratuite</option>
         <option value="garde-domicile">Garde à domicile</option>
         <option value="visite-quotidienne">Visite quotidienne</option>
         <option value="promenade">Promenade</option>
@@ -67,8 +68,17 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
       </Select>
     </div>
 
+    <!-- Email Field -->
+    <div id="email-field">
+      <Label for="email">Email *</Label>
+      <Input type="email" id="email" name="email" required placeholder="votre@email.com" />
+    </div>
+
+    <!-- Pré-visite helper (shown when corresponding topic is selected) -->
+    <PrevisitInfo id="previsit-info" class="hidden" />
+
     <!-- Content Textarea -->
-    <div>
+    <div id="content-field">
       <Label for="content">Message *</Label>
       <Textarea
         id="content"
@@ -82,21 +92,8 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     <!-- Recaptcha (hidden by default) -->
     <div data-netlify-recaptcha="true" class="flex justify-center"></div>
 
-    <!-- Phone alternative (above main CTA) -->
-    <div
-      class="text-muted-foreground rounded-md border border-black/10 bg-white/40 px-4 py-3 text-center text-sm"
-    >
-      <div class="flex items-center justify-center gap-2">
-        <Phone class="h-4 w-4" />
-        <span>Vous pouvez aussi me contacter directement par téléphone :</span>
-      </div>
-      <div class="mt-1 flex justify-center">
-        <ProtectedPhone />
-      </div>
-    </div>
-
     <!-- Submit Button -->
-    <div class="text-center">
+    <div id="submit-wrapper" class="text-center">
       <Button
         variant="filled"
         size="large"
@@ -117,41 +114,61 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
 
+  function submitForm(event: SubmitEvent) {
+    event.preventDefault()
+
+    const form = event.target as HTMLFormElement
+    const submitButton = document.getElementById('contact-submit-btn') as HTMLButtonElement
+    const submitText = document.getElementById('contact-submit-text') as HTMLSpanElement
+    const submitSpinner = document.getElementById('contact-submit-spinner') as HTMLElement
+    const successAlert = document.getElementById('contact-success-alert') as HTMLElement
+    const errorAlert = document.getElementById('contact-error-alert') as HTMLElement
+
+    // Show spinner, hide text
+    submitText.classList.add('hidden')
+    submitSpinner.classList.remove('hidden')
+    submitButton.disabled = true
+
+    const formData = new FormData(event.target as HTMLFormElement)
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData as unknown as URLSearchParams).toString(),
+    })
+      .then(() => {
+        // Hide spinner, show text
+        submitText.classList.remove('hidden')
+        submitSpinner.classList.add('hidden')
+        submitButton.disabled = false
+
+        showAlert(successAlert)
+        form.reset()
+      })
+      .catch((error) => {
+        console.error('Error submitting form:', error)
+        showAlert(errorAlert)
+      })
+  }
+
+  function updatePrevisitInfoVisibility(topicSelect: HTMLSelectElement) {
+    const previsitInfo = document.getElementById('previsit-info') as HTMLElement | null
+    const emailField = document.getElementById('email-field') as HTMLElement | null
+    const contentField = document.getElementById('content-field') as HTMLElement | null
+    const submitWrapper = document.getElementById('submit-wrapper') as HTMLElement | null
+    if (!previsitInfo || !emailField || !contentField || !submitWrapper) return
+
+    const isPrevisit = topicSelect.value === 'previsite'
+    previsitInfo.classList.toggle('hidden', !isPrevisit)
+    emailField.classList.toggle('hidden', isPrevisit)
+    contentField.classList.toggle('hidden', isPrevisit)
+    submitWrapper.classList.toggle('hidden', isPrevisit)
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('contact-form') as HTMLFormElement
-    form.addEventListener('submit', function (event) {
-      event.preventDefault()
-
-      const submitButton = document.getElementById('contact-submit-btn') as HTMLButtonElement
-      const submitText = document.getElementById('contact-submit-text') as HTMLSpanElement
-      const submitSpinner = document.getElementById('contact-submit-spinner') as HTMLElement
-      const successAlert = document.getElementById('contact-success-alert') as HTMLElement
-      const errorAlert = document.getElementById('contact-error-alert') as HTMLElement
-
-      // Show spinner, hide text
-      submitText.classList.add('hidden')
-      submitSpinner.classList.remove('hidden')
-      submitButton.disabled = true
-
-      const formData = new FormData(event.target as HTMLFormElement)
-      fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData as unknown as URLSearchParams).toString(),
-      })
-        .then(() => {
-          // Hide spinner, show text
-          submitText.classList.remove('hidden')
-          submitSpinner.classList.add('hidden')
-          submitButton.disabled = false
-
-          showAlert(successAlert)
-          form.reset()
-        })
-        .catch((error) => {
-          console.error('Error submitting form:', error)
-          showAlert(errorAlert)
-        })
-    })
+    const topicSelect = document.getElementById('topic') as HTMLSelectElement
+    updatePrevisitInfoVisibility(topicSelect)
+    topicSelect.addEventListener('change', () => updatePrevisitInfoVisibility(topicSelect))
+    form.addEventListener('submit', submitForm)
   })
 </script>

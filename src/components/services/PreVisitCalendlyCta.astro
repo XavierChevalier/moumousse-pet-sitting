@@ -1,0 +1,39 @@
+---
+import { cn } from '../../core/tailwindcn'
+import Button from '../ui/Button.astro'
+import { siteConfig } from '../../config/SiteConfig'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  umamiEvent: string
+}
+
+const { umamiEvent, class: className = '', ...props } = Astro.props
+---
+
+<div class={cn('mt-4 space-y-2 text-sm', className)} {...props}>
+  <p class="font-medium">
+    Cette pré-visite est <strong>gratuite</strong> et <strong>obligatoire</strong> avant toute première
+    garde ou promenade.
+  </p>
+
+  <div class="flex flex-wrap items-center gap-3">
+    <Button
+      href={siteConfig.bookPrevisiteUrl}
+      variant="filled"
+      size="small"
+      data-umami-event={umamiEvent}
+    >
+      Réserver ma pré-visite gratuite
+    </Button>
+  </div>
+
+  <p class="text-xs text-black/60">
+    Vous préférez échanger d&apos;abord&nbsp;? Vous pouvez aussi
+    <a
+      href="#contact"
+      class="hover:text-primary underline decoration-dotted underline-offset-2 transition-colors"
+      >me contacter directement</a
+    >
+    pour fixer ensemble la pré-visite.
+  </p>
+</div>

@@ -16,6 +16,7 @@ import Leika from '../../assets/leika.jpeg'
 import Accordion from '../ui/Accordion.astro'
 import AccordionItem from '../ui/AccordionItem.astro'
 import SectionAnchor from '../ui/SectionAnchor.astro'
+import PreVisitCalendlyCta from './PreVisitCalendlyCta.astro'
 import Service from './Service.astro'
 import VisitPricing from './pricing/VisitPricing.astro'
 import WalkingPricing from './pricing/WalkingPricing.astro'
@@ -49,8 +50,7 @@ const { id, ...props } = Astro.props
 
         <Fragment slot="description">
           <p>
-            Je passe à domicile pour m'occuper de vos <strong>chiens</strong>, <strong
-              >chats</strong
+            Je passe à domicile pour m'occuper de vos <strong>chiens</strong>, <strong>chats</strong
             > et <strong>NAC</strong>.
           </p>
           <p>Chaque passage inclut :</p>
@@ -97,6 +97,9 @@ const { id, ...props } = Astro.props
               <li>créer un premier contact avec votre compagnon,</li>
               <li>collecter toutes les infos utiles pour des visites en toute confiance.</li>
             </ul>
+            <PreVisitCalendlyCta
+              umamiEvent="services:visite-ponctuelle:click-calendly-previsite-visites"
+            />
           </AccordionItem>
         </Accordion>
       </Service>
@@ -165,6 +168,9 @@ const { id, ...props } = Astro.props
               <li>rencontrer votre chien,</li>
               <li>recueillir toutes les infos essentielles pour des balades adaptées.</li>
             </ul>
+            <PreVisitCalendlyCta
+              umamiEvent="services:promenade-canine:click-calendly-previsite-promenades"
+            />
           </AccordionItem>
         </Accordion>
       </Service>

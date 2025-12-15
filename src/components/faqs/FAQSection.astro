@@ -2,6 +2,7 @@
 import { AlertTriangle, Mail, Phone } from '@lucide/astro'
 import { Picture } from 'astro:assets'
 import MoumousseDog from '../../assets/moumousse-dog.webp'
+import { siteConfig } from '../../config/SiteConfig'
 import Accordion from '../ui/Accordion.astro'
 import AccordionItem from '../ui/AccordionItem.astro'
 import ProtectedContent from '../ui/ProtectedContent.astro'
@@ -143,15 +144,15 @@ const { id, ...props } = Astro.props
           <p class="mb-4">Contactez-moi sans hésiter :</p>
           <div class="space-y-2">
             <a
-              href="mailto:contact@moumousse-pet-sitting.fr"
+              href={`mailto:${siteConfig.contact.email}`}
               class="hover:text-primary flex items-center gap-2 transition-colors"
               data-umami-event="faq:click-email"
             >
               <Mail width={18} />
-              contact@moumousse-pet-sitting.fr
+              {siteConfig.contact.email}
             </a>
             <ProtectedContent
-              encodedContent="MDYgNDYgNDcgMzAgMTE="
+              encodedContent={siteConfig.contact.encodedPhone}
               placeholder="Cliquez pour voir le téléphone"
               contentType="phone"
             >
@@ -165,7 +166,7 @@ const { id, ...props } = Astro.props
         <Picture
           src={MoumousseDog}
           formats={['avif', 'webp']}
-          alt="Moumousse Pet Sitting logo"
+          alt={`${siteConfig.business.name} logo`}
           width={300}
           class="pointer-events-none w-32 select-none sm:w-40 lg:w-auto"
         />

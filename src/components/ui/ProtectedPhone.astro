@@ -1,0 +1,12 @@
+---
+import ProtectedContent from './ProtectedContent.astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+---
+
+<ProtectedContent
+  {...Astro.props}
+  encodedContent="MDYgNDYgNDcgMzAgMTE="
+  placeholder="Cliquez pour voir le téléphone"
+  contentType="phone"
+/>

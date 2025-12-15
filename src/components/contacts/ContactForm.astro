@@ -1,12 +1,12 @@
 ---
-import { Mail, Loader2 } from '@lucide/astro'
+import { Mail, Loader2, Phone } from '@lucide/astro'
 import Button from '../ui/Button.astro'
 import Alert from '../ui/Alert.astro'
 import Input from '../ui/forms/Input.astro'
 import Select from '../ui/forms/Select.astro'
 import Textarea from '../ui/forms/Textarea.astro'
 import Label from '../ui/forms/Label.astro'
-import ProtectedContent from '../ui/ProtectedContent.astro'
+import ProtectedPhone from '../ui/ProtectedPhone.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
 ---
@@ -33,11 +33,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         <Mail width={18} />
         contact@moumousse-pet-sitting.fr
       </a>
-      <ProtectedContent
-        encodedContent="MDYgNDYgNDcgMzAgMTE="
-        placeholder="Cliquez pour voir le téléphone"
-        contentType="phone"
-      />
+      <ProtectedPhone />
     </p>
   </Alert>
 
@@ -85,6 +81,19 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
     <!-- Recaptcha (hidden by default) -->
     <div data-netlify-recaptcha="true" class="flex justify-center"></div>
+
+    <!-- Phone alternative (above main CTA) -->
+    <div
+      class="text-muted-foreground rounded-md border border-black/10 bg-white/40 px-4 py-3 text-center text-sm"
+    >
+      <div class="flex items-center justify-center gap-2">
+        <Phone class="h-4 w-4" />
+        <span>Vous pouvez aussi me contacter directement par téléphone :</span>
+      </div>
+      <div class="mt-1 flex justify-center">
+        <ProtectedPhone />
+      </div>
+    </div>
 
     <!-- Submit Button -->
     <div class="text-center">

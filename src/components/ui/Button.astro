@@ -24,12 +24,9 @@ const buttonVariants = cva(
   }
 )
 
-export interface Props
-  extends VariantProps<typeof buttonVariants>,
-    astroHTML.JSX.ButtonHTMLAttributes {
-  class?: string
-  href?: string
-}
+type AnchorProps = { href: string } & Omit<astroHTML.JSX.AnchorHTMLAttributes, 'type'>
+type ButtonProps = { href?: never } & astroHTML.JSX.ButtonHTMLAttributes
+export type Props = VariantProps<typeof buttonVariants> & (AnchorProps | ButtonProps)
 
 const { variant, size, class: className = '', href, ...props } = Astro.props
 const combinedClasses = cn(buttonVariants({ variant, size }), className)

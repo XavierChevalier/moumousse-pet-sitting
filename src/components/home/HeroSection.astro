@@ -65,6 +65,10 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         src={MoumousseMalisse}
         formats={['avif', 'webp']}
         alt="Chat roux malicieux - Moumousse Pet Sitting à Pélussin - Garde d'animaux professionnelle"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        sizes="(max-width: 640px) 320px, (max-width: 1024px) 480px, 640px"
         class="pointer-events-none mx-auto max-h-[35dvh] w-40 object-contain select-none sm:max-h-none sm:w-48 md:w-80 lg:w-auto"
       />
     </div>

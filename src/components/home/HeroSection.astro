@@ -9,7 +9,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
 <section
   {...Astro.props}
-  class="relative flex min-h-[calc(100dvh-5rem)] flex-col justify-between gap-8 px-4 py-12 sm:min-h-[80dvh] sm:gap-16 sm:py-20 lg:justify-center lg:gap-24"
+  class="relative flex flex-col justify-between gap-8 px-4 py-12 sm:min-h-[80dvh] sm:gap-16 sm:py-20 lg:justify-center lg:gap-24"
 >
   <PunkBackground />
 
@@ -61,16 +61,19 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         </div>
       </div>
 
-      <Picture
-        src={MoumousseMalisse}
-        formats={['avif', 'webp']}
-        alt="Chat roux malicieux - Moumousse Pet Sitting à Pélussin - Garde d'animaux professionnelle"
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        sizes="(max-width: 640px) 320px, (max-width: 1024px) 480px, 640px"
-        class="pointer-events-none mx-auto max-h-[35dvh] w-40 object-contain select-none sm:max-h-none sm:w-48 md:w-80 lg:w-auto"
-      />
+      <div class="mx-auto flex items-center justify-center">
+        <Picture
+          src={MoumousseMalisse}
+          formats={['avif', 'webp']}
+          alt="Chat roux malicieux - Moumousse Pet Sitting à Pélussin - Garde d'animaux professionnelle"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          sizes="(max-width: 640px) 320px, (max-width: 1024px) 480px, 640px"
+          class="pointer-events-none w-40 max-w-full object-contain select-none sm:w-64 md:w-80 lg:w-[22rem]"
+          style="aspect-ratio: 504 / 573"
+        />
+      </div>
     </div>
   </div>
 </section>

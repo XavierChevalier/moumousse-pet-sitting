@@ -5,16 +5,16 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
 const pricingData = [
   {
-    label: 'Zone 1 (0-10 km)',
-    price: '13\u00A0€',
+    label: 'Zone 1 (0-10km)',
+    price: '13€',
   },
   {
-    label: 'Zone 2 (10-15 km)',
-    price: '15\u00A0€',
+    label: 'Zone 2 (10-15km)',
+    price: '15€',
   },
   {
-    label: 'Zone 3 (15-20 km)',
-    price: '17\u00A0€',
+    label: 'Zone 3 (15-20km)',
+    price: '17€',
   },
 ]
 ---
@@ -23,7 +23,7 @@ const pricingData = [
   <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
     {pricingData.map(({ label, price }) => <VisitPricingItem label={label} price={price} />)}
     <a href="/#contact" class="">
-      <VisitPricingItem label="Au-delà de 20 km" price="Me contacter" />
+      <VisitPricingItem label="Au-delà de 20km" price="Me contacter" />
     </a>
   </div>
 </div>

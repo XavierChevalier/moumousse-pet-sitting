@@ -1,0 +1,83 @@
+---
+import SEO from '../components/SEO.astro'
+import VisitCardRecto from '../components/visit-card/VisitCardRecto.astro'
+import VisitCardVerso from '../components/visit-card/VisitCardVerso.astro'
+import { siteConfig } from '../config/SiteConfig'
+import '../styles/global.css'
+
+if (!import.meta.env.DEV) {
+  return new Response(null, { status: 404 })
+}
+---
+
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO
+      title="Carte de visite - Moumousse Pet Sitting"
+      description="Prévisualisez et exportez en PDF la carte de visite Moumousse Pet Sitting pour impression."
+      image={siteConfig.seo.image}
+      imageAlt={siteConfig.seo.imageAlt}
+      noindex={true}
+    />
+
+    <style>
+      @page {
+        size: 85mm 55mm;
+        margin: 0;
+      }
+
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+      }
+
+      @media print {
+        html,
+        body {
+          width: 85mm;
+          height: 55mm;
+        }
+
+        body {
+          background: #faf8f6;
+        }
+
+        main {
+          min-height: auto;
+          padding: 0;
+        }
+
+        section {
+          max-width: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        article {
+          margin: 0;
+        }
+
+        article:first-of-type {
+          page-break-after: always;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-white font-sans text-base text-black">
+    <main class="min-h-screen px-4 py-10 sm:py-12">
+      <section
+        class="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-8 sm:py-12 lg:flex-row lg:items-stretch lg:justify-center"
+      >
+        <VisitCardRecto />
+        <VisitCardVerso />
+      </section>
+    </main>
+  </body>
+</html>

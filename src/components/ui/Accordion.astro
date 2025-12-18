@@ -11,16 +11,67 @@ const id = `accordionContainer-${Math.random().toString(36).slice(2)}`
 </div>
 
 <script>
-  document.addEventListener('click', (e) => {
+  function updateAccordionContentHeight(item: HTMLDivElement) {
+    const content = item.querySelector('.accordion-content') as HTMLDivElement
+    const container = item.querySelector('.accordion-content-container') as HTMLDivElement
+    if (!content || !container) return
+
+    // Temporarily remove max-height constraint to get real scrollHeight
+    const originalMaxHeight = container.style.maxHeight
+    container.style.maxHeight = 'none'
+    const contentHeight = content.scrollHeight
+    container.style.maxHeight = originalMaxHeight
+
+    item.style.setProperty('--accordion-content-height', `${contentHeight}px`)
+    // Force reflow to ensure CSS variable is applied
+    void item.offsetHeight
+  }
+
+  function updateAllAccordionHeights() {
+    document
+      .querySelectorAll<HTMLDivElement>('.accordion-item')
+      .forEach(updateAccordionContentHeight)
+  }
+
+  function handleAccordionClick(e: MouseEvent) {
     const header = (e.target as HTMLElement).closest('.accordion-header')
     if (!header) return
 
-    const item = header.closest('.accordion-item')
+    const item = header.closest('.accordion-item') as HTMLDivElement
     const container = item?.closest('[id^="accordionContainer-"]')
     if (!item || !container) return
 
     const isOpen = item.classList.contains('open')
-    container.querySelectorAll('.accordion-item').forEach((item) => item.classList.remove('open'))
-    item.classList.toggle('open', !isOpen)
-  })
+    const allItems = container.querySelectorAll<HTMLDivElement>('.accordion-item')
+
+    // Close all items in the container
+    allItems.forEach((accordionItem) => accordionItem.classList.remove('open'))
+
+    if (!isOpen) {
+      // Calculate height while closed, then open with animation
+      updateAccordionContentHeight(item)
+      // Use requestAnimationFrame to ensure CSS variable is applied before transition
+      requestAnimationFrame(() => {
+        item.classList.add('open')
+      })
+    }
+  }
+
+  // Debounce resize handler to avoid excessive calculations
+  let resizeTimeout: number | undefined
+  function handleResize() {
+    clearTimeout(resizeTimeout)
+    resizeTimeout = window.setTimeout(updateAllAccordionHeights, 150)
+  }
+
+  // Initialize heights on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateAllAccordionHeights)
+  } else {
+    updateAllAccordionHeights()
+  }
+
+  // Event listeners
+  document.addEventListener('click', handleAccordionClick)
+  window.addEventListener('resize', handleResize)
 </script>

@@ -1,0 +1,122 @@
+---
+import { Globe, Mail, Phone } from '@lucide/astro'
+import MoumousseDogImage from '../../assets/moumousse-dog.webp'
+import HeroImage from '../../assets/moumousse-malisse.webp'
+---
+
+<!-- Face 4-1 : Contacts et slogan fusionnés (pleine largeur 198mm × 210mm) -->
+<article class="flyer-face-full bg-body relative z-0 h-full overflow-hidden p-6">
+  <!-- Décor géométrique en arrière-plan -->
+  <div class="pointer-events-none absolute inset-0 opacity-15">
+    <!-- Carré -->
+    <div class="border-tertiary absolute top-10 -right-10 h-24 w-24 rotate-45 border-8"></div>
+    <!-- Rond -->
+    <div
+      class="border-secondary absolute bottom-24 -left-12 size-32 rotate-12 rounded-full border-6"
+    >
+    </div>
+    <!-- Triangle -->
+    <div
+      class="bg-tertiary absolute top-68 left-0 h-[35px] w-[40px] rotate-12"
+      style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
+    >
+    </div>
+    <!-- Triangle -->
+    <div
+      class="bg-secondary absolute right-0 bottom-1/4 h-[26px] w-[30px] -rotate-45"
+      style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);"
+    >
+    </div>
+    <!-- Rond -->
+    <div
+      class="border-primary absolute top-1/2 left-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-6"
+    >
+    </div>
+  </div>
+
+  <div class="relative grid h-full grid-cols-2 gap-6">
+    <!-- Partie gauche : Face 4 (Contacts) -->
+    <div class="flex flex-col justify-between gap-4">
+      <!-- En-tête -->
+      <div>
+        <h2 class="text-primary text-xl font-black tracking-wide uppercase">Steffie Thollot</h2>
+        <p class="text-base leading-snug text-black/90">Pet Sitter Professionnelle</p>
+      </div>
+
+      <!-- Informations de contact -->
+      <div class="space-y-2 text-sm leading-snug text-black">
+        <div class="flex items-center gap-2">
+          <Phone class="h-5 w-5" aria-hidden="true" />
+          <p class="text-base font-bold">06 46 47 30 11</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <Mail class="h-5 w-5" aria-hidden="true" />
+          <p class="text-base font-bold break-all">contact@moumousse-pet-sitting.fr</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <Globe class="h-5 w-5" aria-hidden="true" />
+          <p class="text-base font-bold">moumousse-pet-sitting.fr</p>
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <p class="text-xs tracking-wide text-black/80 uppercase">
+          Visites à domicile &amp; promenades
+        </p>
+        <p class="text-xs tracking-wide text-black/80 uppercase">Pélussin et alentours</p>
+      </div>
+
+      <!-- CTA final -->
+      <div class="mt-auto">
+        <!-- Image du chien -->
+        <div class="flex-shrink-0">
+          <img
+            src={MoumousseDogImage.src}
+            alt="Chien Moumousse - Moumousse Pet Sitting"
+            class="mx-auto h-52 object-contain"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Partie droite : Face 1 (Slogan et image) -->
+    <div class="relative flex flex-col items-center justify-center gap-6 text-center">
+      <!-- Logo/Image principale -->
+      <div class="flex-shrink-0">
+        <img
+          src={HeroImage.src}
+          alt="Chat roux malicieux - Moumousse Pet Sitting"
+          class="mx-auto h-52 object-contain"
+        />
+      </div>
+
+      <!-- Slogan principal -->
+      <div class="space-y-6">
+        <h1
+          class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl"
+        >
+          <span class="text-outline text-tertiary whitespace-nowrap" data-text="Faites garder">
+            Faites garder
+          </span>
+          <span class="text-outline text-secondary whitespace-nowrap" data-text="vos animaux">
+            vos animaux
+          </span>
+          <span class="text-outline text-primary whitespace-nowrap" data-text="en bonne">
+            en bonne
+          </span>
+          <span class="whitespace-nowrap text-black" data-text="compagnie"> compagnie </span>
+        </h1>
+
+        <p class="text-base font-semibold text-black">À Pélussin et ses alentours</p>
+      </div>
+
+      <div class="absolute right-0 bottom-6 left-0">
+        <p class="w-full text-center text-sm leading-snug text-black/90">
+          Garde d'animaux à domicile &amp; promenades
+        </p>
+      </div>
+    </div>
+  </div>
+</article>

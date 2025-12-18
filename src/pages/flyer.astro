@@ -1,0 +1,173 @@
+---
+import SEO from '../components/SEO.astro'
+import FlyerFace1_4 from '../components/flyer/FlyerFace1-4.astro'
+import FlyerFace2_3 from '../components/flyer/FlyerFace2-3.astro'
+import { siteConfig } from '../config/SiteConfig'
+import '../styles/global.css'
+
+if (!import.meta.env.DEV) {
+  return new Response(null, { status: 404 })
+}
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <meta name="generator" content={Astro.generator} />
+    <SEO
+      title="Flyer 4 faces - Moumousse Pet Sitting"
+      description="Prévisualisez et exportez en PDF le flyer 4 faces Moumousse Pet Sitting pour impression (format plié 99mm×210mm, ouvert 198mm×210mm)."
+      image={siteConfig.seo.image}
+      imageAlt={siteConfig.seo.imageAlt}
+      noindex={true}
+    />
+
+    <style>
+      /* Format ouvert : 198mm × 210mm (2 faces côte à côte) */
+      @page {
+        size: 198mm 210mm;
+        margin: 0;
+      }
+
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Conteneur pour l'affichage à l'écran - vue d'ensemble des 2 pages verticalement */
+      .flyer-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: min(100vw - 2rem, 198mm);
+      }
+
+      /* Pages fusionnées pleine largeur (198mm × 210mm) */
+      .flyer-page-full {
+        display: block;
+        width: 198mm;
+        height: 210mm;
+        overflow: hidden;
+      }
+
+      .flyer-face-full {
+        width: 198mm;
+        height: 210mm;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      @media screen {
+        .flyer-page-full {
+          width: 100%;
+          height: calc((100vw - 2rem) * 210 / 198);
+          max-height: 210mm;
+          aspect-ratio: 198 / 210;
+        }
+
+        .flyer-face-full {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      @media print {
+        html,
+        body {
+          width: 198mm;
+          height: 210mm;
+        }
+
+        body {
+          background: #faf8f6;
+        }
+
+        main {
+          min-height: auto;
+          padding: 0;
+          display: block;
+        }
+
+        /* Masquer le conteneur écran */
+        .flyer-container {
+          display: none;
+        }
+
+        /* Afficher les pages d'impression */
+        .flyer-page-full {
+          display: block;
+          page-break-after: always;
+        }
+
+        .flyer-page-full:last-child {
+          page-break-after: auto;
+        }
+
+        .flyer-face-full {
+          width: 198mm;
+          height: 210mm;
+          margin: 0;
+          box-sizing: border-box;
+          overflow: hidden;
+        }
+
+        section {
+          max-width: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        article {
+          margin: 0;
+        }
+      }
+
+      /* Masquer les pages d'impression à l'écran (doublons) */
+      @media screen {
+        .print-only {
+          display: none;
+        }
+      }
+
+      @media print {
+        .print-only {
+          display: block;
+        }
+
+        .print-only.flyer-page {
+          display: grid;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-white font-sans text-base text-black">
+    <main class="min-h-screen">
+      <!-- Vue écran : affichage des 2 pages verticalement -->
+      <div class="flyer-container">
+        <!-- Page 1 : Face 1-4 fusionnée (pleine largeur) -->
+        <div class="flyer-page-full">
+          <FlyerFace1_4 />
+        </div>
+        <!-- Page 2 : Face 2-3 fusionnée (pleine largeur) -->
+        <div class="flyer-page-full">
+          <FlyerFace2_3 />
+        </div>
+      </div>
+
+      <!-- Pages d'impression recto-verso -->
+      <!-- Page 1 : Face 1-4 fusionnée (pleine largeur) -->
+      <div class="flyer-page-full print-only">
+        <FlyerFace1_4 />
+      </div>
+      <!-- Page 2 : Face 2-3 fusionnée (pleine largeur) -->
+      <div class="flyer-page-full print-only">
+        <FlyerFace2_3 />
+      </div>
+    </main>
+  </body>
+</html>

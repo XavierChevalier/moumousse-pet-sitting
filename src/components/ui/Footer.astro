@@ -11,7 +11,8 @@ const navLinks = [
   { href: '/#galerie', label: 'Galerie' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/#contact', label: 'Contact' },
-  { href: '/cgv', label: 'Conditions générales de vente' },
+  // Keep trailing slash to match canonical + sitemap URLs (avoids duplicate /cgv vs /cgv/ crawl paths)
+  { href: '/cgv/', label: 'Conditions générales de vente' },
 ]
 ---
 
@@ -45,7 +46,7 @@ const navLinks = [
             <a
               href={link.href}
               class="hover:text-primary p-2 text-sm font-semibold tracking-wide text-white uppercase transition-colors duration-200"
-              data-umami-event={`footer:click-${link.href.replace('#', '').replace('/', '') || 'home'}`}
+              data-umami-event={`footer:click-${link.href.replace(/[\/#]/g, '') || 'home'}`}
             >
               {link.label}
             </a>

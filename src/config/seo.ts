@@ -11,11 +11,11 @@ export interface SEOConfig {
 }
 
 export const defaultSEO: SEOConfig = {
-  title: "Moumousse Pet Sitting - Garde d'animaux à Pélussin (42) | Chiens, Chats & NAC",
+  title: "Moumousse Pet Sitting - Garde d'animaux | Chiens, Chats & NAC",
   description:
-    "Service professionnel de garde d'animaux à domicile à Pélussin et alentours (42). Visites, promenades canines, soins pour chiens, chats et NAC. Steffie, pet sitter passionnée et diplômée.",
+    "Service de garde d'animaux à domicile à Pélussin et alentours. Visites, promenades canines, soins pour chiens, chats et NAC. Steffie, pet sitter passionnée et diplômée.",
   image: '/moumousse-malisse.webp',
-  imageAlt: "Moumousse Pet Sitting - Garde d'animaux professionnelle à Pélussin",
+  imageAlt: "Moumousse Pet Sitting - Garde d'animaux professionnelle à Pélussin et alentours",
   type: 'website',
   author: 'Steffie Thollot - Moumousse Pet Sitting',
 }

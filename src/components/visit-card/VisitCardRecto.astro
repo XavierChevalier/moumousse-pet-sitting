@@ -2,62 +2,36 @@
 import HeroImage from '../../assets/moumousse-malisse.webp'
 ---
 
-<article
-  class="bg-body relative z-0 flex h-[55mm] w-[85mm] overflow-hidden border-[3px] border-black p-4"
->
-  <div class="absolute inset-0 opacity-10">
+<article class="bg-body relative z-0 flex h-[55mm] w-[85mm] overflow-hidden p-4 px-5">
+  <div class="absolute inset-0 opacity-15">
     <div class="border-tertiary absolute top-3 -left-6 h-12 w-12 rotate-12 border-4"></div>
     <div class="border-secondary absolute -right-4 bottom-4 h-10 w-10 -rotate-12 border-4"></div>
     <div
-      class="border-primary absolute top-1/2 left-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rotate-45 border-4"
+      class="border-primary absolute top-[60%] left-[54%] h-8 w-8 -translate-x-1/2 -translate-y-1/2 rotate-45 border-4"
     >
     </div>
   </div>
 
   <div class="relative grid h-full w-full grid-cols-[1.3fr_1fr] items-center gap-3">
-    <div class="space-y-1.5 text-left">
-      <div class="flex flex-col text-xl leading-5 font-black uppercase">
+    <div class="text-left">
+      <div class="flex flex-col text-2xl leading-6 font-black uppercase">
         <span class="text-primary"> Moumousse </span>
         <span> Pet Sitting </span>
       </div>
 
-      <h1 class="text-[16px] leading-snug font-black tracking-wide text-black uppercase">
-        <style>
-          .text-outline::before {
-            -webkit-text-stroke: 3px #000;
-          }
-        </style>
-        <!-- <span class="text-outline text-tertiary block whitespace-nowrap" data-text="Faites garder">
-          Faites garder
-        </span>
-        <span class="text-outline text-secondary block whitespace-nowrap" data-text="vos animaux">
-          vos animaux
-        </span>
-        <span class="text-outline text-primary block whitespace-nowrap" data-text="en bonne">
-          en bonne
-        </span>
-        <span class="block whitespace-nowrap" data-text="compagnie">compagnie</span> -->
-      </h1>
+      <p class="mt-1 text-sm tracking-normal text-black">Chiens · Chats · NAC</p>
 
-      <p class="text-[9px] font-semibold tracking-wide text-black">Chiens · Chats · NAC</p>
-
-      <p class="text-[9px] leading-tight text-black">
-        Garde d'animaux à domicile<br />à Pélussin et alentours
+      <p class="mt-5 text-xs leading-tight tracking-wide text-black/80 uppercase">
+        Garde d'animaux à Pélussin et alentours
       </p>
     </div>
 
-    <div class="flex items-center justify-end">
+    <div class="absolute right-0">
       <img
         src={HeroImage.src}
         alt="Chat roux malicieux - Moumousse Pet Sitting"
-        class="h-34 w-auto"
+        class="h-32 w-auto"
       />
     </div>
-
-    <!-- <div class="absolute right-0 -bottom-2 left-0">
-      <p class="text-center text-[9px] leading-tight font-semibold text-black">
-        Garde d'animaux à domicile à Pélussin et alentours
-      </p>
-    </div> -->
   </div>
 </article>

@@ -167,8 +167,18 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
   document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('contact-form') as HTMLFormElement
     const topicSelect = document.getElementById('topic') as HTMLSelectElement
+    const emailInput = document.getElementById('email') as HTMLInputElement
+    const subjectInput = form.querySelector('input[name="subject"]') as HTMLInputElement
+
     updatePrevisitInfoVisibility(topicSelect)
     topicSelect.addEventListener('change', () => updatePrevisitInfoVisibility(topicSelect))
     form.addEventListener('submit', submitForm)
+
+    // Update subject when email changes
+    emailInput.addEventListener('input', () => {
+      if (emailInput.value) {
+        subjectInput.value = `Contact ${emailInput.value}`
+      }
+    })
   })
 </script>

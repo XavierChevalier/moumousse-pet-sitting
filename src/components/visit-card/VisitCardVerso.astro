@@ -1,11 +1,26 @@
 ---
 import { Link, Mail, Phone } from '@lucide/astro'
+
+interface Props {
+  withBleed?: boolean
+}
+
+const { withBleed = false } = Astro.props
 ---
 
 <article
-  class="bg-body relative z-0 flex h-[55mm] w-[85mm] flex-col justify-between overflow-hidden p-4 px-5"
+  class:list={[
+    'bg-body relative z-0 overflow-hidden',
+    withBleed ? 'h-[58mm] w-[89mm]' : 'h-[54mm] w-[85mm]',
+  ]}
 >
-  <div class="absolute inset-0 opacity-15">
+  <!-- Background Shapes (Full Bleed) -->
+  <div
+    class:list={[
+      'pointer-events-none absolute opacity-15',
+      withBleed ? 'top-[2mm] left-[2mm] h-[54mm] w-[85mm]' : 'inset-0',
+    ]}
+  >
     <div class="border-primary absolute top-10 -right-4 h-12 w-12 rotate-45 border-4"></div>
 
     <!-- Triangles -->
@@ -21,33 +36,44 @@ import { Link, Mail, Phone } from '@lucide/astro'
     </div>
   </div>
 
-  <header>
-    <div class="-space-y-1">
-      <h2 class="text-primary text-lg font-black tracking-wide uppercase">Steffie Thollot</h2>
-      <span class="text-sm leading-snug tracking-[0.014em] text-black/90"
-        >Pet Sitter Professionnelle</span
-      >
-    </div>
-  </header>
+  <!-- Content Safe Zone -->
+  <div
+    class:list={[
+      'z-10',
+      withBleed ? 'absolute top-[2mm] left-[2mm] h-[54mm] w-[85mm]' : 'relative h-full w-full',
+    ]}
+  >
+    <!-- Inner Safe Zone (4mm from trim edge for extra safety) -->
+    <div class="relative flex h-full w-full flex-col justify-center gap-5 p-[4mm]">
+      <header>
+        <div class="-space-y-1">
+          <h2 class="text-primary text-lg font-black tracking-wide uppercase">Steffie Thollot</h2>
+          <span class="text-sm leading-snug tracking-[0.014em] text-black/90"
+            >Pet Sitter Professionnelle</span
+          >
+        </div>
+      </header>
 
-  <dl class="space-y-1.5 text-sm leading-relaxed text-black">
-    <div class="flex items-center gap-2">
-      <Phone class="size-4 flex-shrink-0 text-black" aria-hidden="true" />
-      <span class="font-semibold">06 46 47 30 11</span>
-    </div>
+      <dl class="space-y-1.5 text-sm leading-relaxed text-black">
+        <div class="flex items-center gap-2">
+          <Phone class="size-4 flex-shrink-0 text-black" aria-hidden="true" />
+          <span class="font-semibold">06 46 47 30 11</span>
+        </div>
 
-    <div class="flex items-center gap-2">
-      <Link class="size-4 flex-shrink-0 text-black" aria-hidden="true" />
-      <span class="font-semibold">moumousse-pet-sitting.fr</span>
-    </div>
+        <div class="flex items-center gap-2">
+          <Link class="size-4 flex-shrink-0 text-black" aria-hidden="true" />
+          <span class="font-semibold">moumousse-pet-sitting.fr</span>
+        </div>
 
-    <div class="flex items-center gap-2">
-      <Mail class="size-4 flex-shrink-0 text-black" aria-hidden="true" />
-      <span class="font-semibold">contact@moumousse-pet-sitting.fr</span>
-    </div>
-  </dl>
+        <div class="flex items-center gap-2">
+          <Mail class="size-4 flex-shrink-0 text-black" aria-hidden="true" />
+          <span class="font-semibold">contact@moumousse-pet-sitting.fr</span>
+        </div>
+      </dl>
 
-  <div class="space-y-1 text-xs tracking-wide text-black/80 uppercase">
-    <p class="">Visites à domicile &amp; promenades</p>
+      <div class="space-y-1 text-xs tracking-wide text-black/80 uppercase">
+        <p class="">Visites à domicile &amp; promenades</p>
+      </div>
+    </div>
   </div>
 </article>

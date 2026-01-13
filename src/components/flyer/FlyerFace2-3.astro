@@ -12,11 +12,22 @@ import {
 } from '@lucide/astro'
 import JazzImage from '../../assets/jazz.jpeg'
 import LeikaImage from '../../assets/leika.jpeg'
+
+interface Props {
+  withBleed?: boolean
+}
+
+const { withBleed = false } = Astro.props
 ---
 
 <!-- Face 2-3 : Services et zone d'intervention fusionnés (pleine largeur 198mm × 210mm) -->
-<article class="flyer-face-full bg-body relative z-0 h-full overflow-hidden p-6">
-  <!-- Décor géométrique en arrière-plan -->
+<article
+  class:list={[
+    'bg-body relative z-0 overflow-hidden',
+    withBleed ? 'h-[214mm] w-[202mm]' : 'h-[210mm] w-[198mm]',
+  ]}
+>
+  <!-- Décor géométrique en arrière-plan (couvre toute la zone avec fond perdu) -->
   <div class="pointer-events-none absolute inset-0 opacity-15">
     <!-- Carré -->
     <div class="border-tertiary absolute top-10 -right-10 size-24 rotate-45 border-8"></div>
@@ -39,115 +50,125 @@ import LeikaImage from '../../assets/leika.jpeg'
     </div>
   </div>
 
-  <div class="relative flex h-full flex-col gap-8">
-    <h2
-      class="text-secondary text-outline text-3xl font-black tracking-wide uppercase"
-      data-text="Mes services"
-    >
-      Mes services
-    </h2>
+  <!-- Content Safe Zone -->
+  <div
+    class:list={[
+      'z-10',
+      withBleed ? 'absolute top-[2mm] left-[2mm] h-[210mm] w-[198mm]' : 'relative h-full w-full',
+    ]}
+  >
+    <!-- Inner Safe Zone (4mm from trim edge) -->
+    <div class="relative flex h-full w-full flex-col gap-8 p-[4mm]">
+      <h2
+        class="text-secondary text-outline text-3xl font-black tracking-wide uppercase"
+        data-text="Mes services"
+      >
+        Mes services
+      </h2>
 
-    <!-- Deux services en quinconce -->
-    <div class="flex flex-col gap-16 text-base leading-snug text-black">
-      <!-- Service 1 : Image chat (gauche) | Texte visites (droite) -->
-      <div class="grid grid-cols-[1fr_2fr] gap-6">
-        <div class="flex items-center justify-center">
-          <img
-            src={LeikaImage.src}
-            alt="Chat gardé par Moumousse Pet Sitting"
-            class="size-62 border-4 border-black object-cover shadow-[4px_4px_0_theme(colors.black)]"
-          />
-        </div>
-        <div class="space-y-2">
-          <div class="flex items-baseline gap-2">
-            <h3 class="text-secondary text-xl font-black tracking-wide uppercase">
-              <span class="text-primary">Visites</span> à votre domicile
-            </h3>
-            <p class="text-xs whitespace-nowrap text-black/50">À partir de 13 €</p>
+      <!-- Deux services en quinconce -->
+      <div class="flex flex-col gap-16 text-base leading-snug text-black">
+        <!-- Service 1 : Image chat (gauche) | Texte visites (droite) -->
+        <div class="grid grid-cols-[1fr_2fr] gap-6">
+          <div class="flex items-center justify-center">
+            <img
+              src={LeikaImage.src}
+              alt="Chat gardé par Moumousse Pet Sitting"
+              class="size-62 border-4 border-black object-cover shadow-[4px_4px_0_theme(colors.black)]"
+            />
           </div>
-          <p class="text-base text-pretty">
-            Je passe à domicile pour m'occuper de vos <strong>chiens</strong>, <strong>chats</strong
-            > et
-            <strong>NAC</strong>.
-          </p>
-          <p class="font-medium text-black/90">Chaque passage inclut :</p>
-          <ul class="space-y-1 text-black/80">
-            <li class="flex items-start gap-2">
-              <UtensilsCrossedIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Remplissage des gamelles d'eau et de nourriture</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <PawPrintIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Sortie dédiée aux besoins</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <BubblesIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Nettoyage ou remplacement de la litière</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <VolleyballIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Jeux et/ou câlins selon l'envie de votre animal</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <CameraIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Des nouvelles, photos et vidéos régulièrement</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Service 2 : Texte promenades (gauche) | Image chien (droite) -->
-      <div class="grid grid-cols-[2fr_1fr] gap-6">
-        <div class="space-y-2">
-          <div class="flex items-baseline gap-2">
-            <h3 class="text-secondary text-xl font-black tracking-wide uppercase">
-              <span class="text-primary">Promenades</span> canines
-            </h3>
-            <p class="text-xs whitespace-nowrap text-black/50">À partir de 18 €/h</p>
+          <div class="space-y-2">
+            <div class="flex items-baseline gap-2">
+              <h3 class="text-secondary text-xl font-black tracking-wide uppercase">
+                <span class="text-primary">Visites</span> à votre domicile
+              </h3>
+              <p class="text-xs whitespace-nowrap text-black/50">À partir de 13 €</p>
+            </div>
+            <p class="text-base text-pretty">
+              Je passe à domicile pour m'occuper de vos <strong>chiens</strong>, <strong
+                >chats</strong
+              > et
+              <strong>NAC</strong>.
+            </p>
+            <p class="font-medium text-black/90">Chaque passage inclut :</p>
+            <ul class="space-y-1 text-black/80">
+              <li class="flex items-start gap-2">
+                <UtensilsCrossedIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Remplissage des gamelles d'eau et de nourriture</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <PawPrintIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Sortie dédiée aux besoins</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <BubblesIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Nettoyage ou remplacement de la litière</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <VolleyballIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Jeux et/ou câlins selon l'envie de votre animal</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <CameraIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Des nouvelles, photos et vidéos régulièrement</span>
+              </li>
+            </ul>
           </div>
-          <p class="text-base text-pretty">
-            <strong>Promenades personnalisées</strong> de <strong>1h à 2h</strong> (ou plus selon vos
-            besoins).
-          </p>
-          <p class="font-medium text-black/90">Chaque balade inclut :</p>
-          <ul class="space-y-1 text-black/80">
-            <li class="flex items-start gap-2">
-              <FootprintsIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Une vraie sortie nécessaire à son bien-être</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <BrainIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Un temps de jeu et de stimulation</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <HeartIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Et bien sûr… des câlins à volonté !</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <CameraIcon class="mt-0.5 size-4 flex-shrink-0" />
-              <span>Des nouvelles, photos et vidéos régulièrement</span>
-            </li>
-          </ul>
         </div>
-        <div class="flex items-center justify-center">
-          <img
-            src={JazzImage.src}
-            alt="Chien gardé par Moumousse Pet Sitting"
-            class="size-58 border-4 border-black object-cover shadow-[4px_4px_0_theme(colors.black)]"
-          />
-        </div>
-      </div>
-    </div>
 
-    <!-- Zone d'intervention et informations -->
-    <div class="mt-auto space-y-2 pt-6">
-      <div class="flex items-center justify-center gap-2 leading-snug text-black">
-        <MapPin class="text-primary size-4 flex-shrink-0" />
-        <p class="font-medium">Je me déplace jusqu'à 20km autour de Pélussin (42)</p>
+        <!-- Service 2 : Texte promenades (gauche) | Image chien (droite) -->
+        <div class="grid grid-cols-[2fr_1fr] gap-6">
+          <div class="space-y-2">
+            <div class="flex items-baseline gap-2">
+              <h3 class="text-secondary text-xl font-black tracking-wide uppercase">
+                <span class="text-primary">Promenades</span> canines
+              </h3>
+              <p class="text-xs whitespace-nowrap text-black/50">À partir de 18 €/h</p>
+            </div>
+            <p class="text-base text-pretty">
+              <strong>Promenades personnalisées</strong> de <strong>1h à 2h</strong> (ou plus selon vos
+              besoins).
+            </p>
+            <p class="font-medium text-black/90">Chaque balade inclut :</p>
+            <ul class="space-y-1 text-black/80">
+              <li class="flex items-start gap-2">
+                <FootprintsIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Une vraie sortie nécessaire à son bien-être</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <BrainIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Un temps de jeu et de stimulation</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <HeartIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Et bien sûr… des câlins à volonté !</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <CameraIcon class="mt-0.5 size-4 flex-shrink-0" />
+                <span>Des nouvelles, photos et vidéos régulièrement</span>
+              </li>
+            </ul>
+          </div>
+          <div class="flex items-center justify-center">
+            <img
+              src={JazzImage.src}
+              alt="Chien gardé par Moumousse Pet Sitting"
+              class="size-58 border-4 border-black object-cover shadow-[4px_4px_0_theme(colors.black)]"
+            />
+          </div>
+        </div>
       </div>
-      <p class="text-center text-xs leading-snug text-black/80">
-        Pré-visite obligatoire • <strong class="text-bold">Devis personnalisé gratuit</strong>
-      </p>
+
+      <!-- Zone d'intervention et informations -->
+      <div class="mt-auto space-y-2 pt-6">
+        <div class="flex items-center justify-center gap-2 leading-snug text-black">
+          <MapPin class="text-primary size-4 flex-shrink-0" />
+          <p class="font-medium">Je me déplace jusqu'à 20km autour de Pélussin (42)</p>
+        </div>
+        <p class="text-center text-xs leading-snug text-black/80">
+          Pré-visite obligatoire • <strong class="text-bold">Devis personnalisé gratuit</strong>
+        </p>
+      </div>
     </div>
   </div>
 </article>

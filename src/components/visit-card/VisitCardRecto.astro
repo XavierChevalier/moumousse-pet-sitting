@@ -1,37 +1,65 @@
 ---
 import HeroImage from '../../assets/moumousse-malisse.webp'
+
+interface Props {
+  withBleed?: boolean
+}
+
+const { withBleed = false } = Astro.props
 ---
 
-<article class="bg-body relative z-0 flex h-[55mm] w-[85mm] overflow-hidden p-4 px-5">
-  <div class="absolute inset-0 opacity-15">
-    <div class="border-tertiary absolute top-3 -left-6 h-12 w-12 rotate-12 border-4"></div>
-    <div class="border-secondary absolute -right-4 bottom-4 h-10 w-10 -rotate-12 border-4"></div>
+<article
+  class:list={[
+    'bg-body relative z-0 overflow-hidden',
+    withBleed ? 'h-[58mm] w-[89mm]' : 'h-[54mm] w-[85mm]',
+  ]}
+>
+  <!-- Background Shapes (Full Bleed) -->
+  <div
+    class:list={[
+      'pointer-events-none absolute opacity-15',
+      withBleed ? 'top-[2mm] left-[2mm] h-[54mm] w-[85mm]' : 'inset-0',
+    ]}
+  >
+    <div class="border-tertiary absolute top-2 -left-9 h-12 w-12 rotate-12 border-4"></div>
+    <div class="border-secondary absolute -right-4 bottom-2 h-10 w-10 -rotate-12 border-4"></div>
     <div
       class="border-primary absolute top-[60%] left-[54%] h-8 w-8 -translate-x-1/2 -translate-y-1/2 rotate-45 border-4"
     >
     </div>
   </div>
 
-  <div class="relative grid h-full w-full grid-cols-[1.3fr_1fr] items-center gap-3">
-    <div class="text-left">
-      <div class="flex flex-col text-2xl leading-6 font-black uppercase">
-        <span class="text-primary"> Moumousse </span>
-        <span> Pet Sitting </span>
+  <!-- Content Safe Zone -->
+  <div
+    class:list={[
+      'z-10',
+      withBleed ? 'absolute top-[2mm] left-[2mm] h-[54mm] w-[85mm]' : 'relative h-full w-full',
+    ]}
+  >
+    <!-- Inner Safe Zone (4mm from trim edge for extra safety) -->
+    <div class="relative flex h-full w-full p-[4mm]">
+      <div class="relative grid h-full w-full grid-cols-[1.3fr_1fr] items-center gap-3">
+        <div class="text-left">
+          <div class="flex flex-col text-2xl leading-6 font-black uppercase">
+            <span class="text-primary"> Moumousse </span>
+            <span> Pet Sitting </span>
+          </div>
+
+          <p class="mt-1 text-sm tracking-normal text-black">Chiens · Chats · NAC</p>
+
+          <p class="mt-4 text-xs leading-tight tracking-wide text-black/80 uppercase">
+            Garde d'animaux à Pélussin et alentours
+          </p>
+        </div>
+
+        <div class="absolute right-0">
+          <img
+            src={HeroImage.src}
+            alt="Chat roux malicieux - Moumousse Pet Sitting"
+            class="h-32 w-auto"
+          />
+        </div>
       </div>
-
-      <p class="mt-1 text-sm tracking-normal text-black">Chiens · Chats · NAC</p>
-
-      <p class="mt-5 text-xs leading-tight tracking-wide text-black/80 uppercase">
-        Garde d'animaux à Pélussin et alentours
-      </p>
-    </div>
-
-    <div class="absolute right-0">
-      <img
-        src={HeroImage.src}
-        alt="Chat roux malicieux - Moumousse Pet Sitting"
-        class="h-32 w-auto"
-      />
     </div>
   </div>
 </article>

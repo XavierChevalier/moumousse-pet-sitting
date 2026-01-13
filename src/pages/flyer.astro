@@ -31,9 +31,18 @@ if (!import.meta.env.DEV) {
     />
 
     <style>
-      /* Format ouvert : 198mm × 210mm (2 faces côte à côte) */
+      /* 
+       * DOCUMENT FORMAT
+       * Flyer ouvert: 198mm × 210mm (Finished)
+       * Bleed: 2mm (as per Exaprint instructions)
+       * Total with Bleed: 202mm × 214mm
+       * Safe Zone: 4mm inside trim (handled by padding in components)
+       *
+       * PAGE FORMAT
+       * 222mm x 234mm allows ~10mm margins around the 202x214mm content
+       */
       @page {
-        size: 198mm 210mm;
+        size: 222mm 234mm;
         margin: 0;
       }
 
@@ -41,138 +50,351 @@ if (!import.meta.env.DEV) {
       body {
         padding: 0;
         margin: 0;
+        background: #faf8f6;
       }
 
-      /* Conteneur pour l'affichage à l'écran - vue d'ensemble des 2 pages verticalement */
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem;
+        gap: 2rem;
+      }
+
       .flyer-container {
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        width: min(100vw - 2rem, 198mm);
+        align-items: center;
+        gap: 1rem;
       }
 
-      /* Pages fusionnées pleine largeur (198mm × 210mm) */
-      .flyer-page-full {
-        display: block;
-        width: 198mm;
-        height: 210mm;
-        overflow: hidden;
+      .flyer-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
-      .flyer-face-full {
-        width: 198mm;
-        height: 210mm;
-        margin: 0;
+      /* Wrapper for crop marks */
+      .print-flyer-wrapper {
+        position: relative;
+        padding: 10mm; /* Visual margin on screen */
+        background: white;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         box-sizing: border-box;
       }
 
-      @media screen {
-        .flyer-page-full {
-          width: 100%;
-          height: calc((100vw - 2rem) * 210 / 198);
-          max-height: 210mm;
-          aspect-ratio: 198 / 210;
-        }
+      /* Crop Marks */
+      .crop-mark {
+        position: absolute;
+        background-color: #000;
+        /* Hairline thickness for precision (0.25pt = ~0.088mm) */
+        width: 0.25pt;
+        height: 0.25pt;
+        z-index: 50;
+      }
 
-        .flyer-face-full {
-          width: 100%;
-          height: 100%;
-        }
+      /* Length of crop marks */
+      :root {
+        --mark-len: 5mm;
+        --mark-offset: 2mm; /* Distance from bleed edge */
+        --bleed: 2mm; /* 2mm bleed as requested */
+        --wrapper-padding: 10mm;
+      }
+
+      /* Top Left */
+      .mark-tl-h {
+        top: calc(var(--wrapper-padding) + var(--bleed));
+        left: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        width: var(--mark-len);
+        height: 0.25pt;
+      }
+      .mark-tl-v {
+        top: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        left: calc(var(--wrapper-padding) + var(--bleed));
+        width: 0.25pt;
+        height: var(--mark-len);
+      }
+
+      /* Top Right */
+      .mark-tr-h {
+        top: calc(var(--wrapper-padding) + var(--bleed));
+        right: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        width: var(--mark-len);
+        height: 0.25pt;
+      }
+      .mark-tr-v {
+        top: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        right: calc(var(--wrapper-padding) + var(--bleed));
+        width: 0.25pt;
+        height: var(--mark-len);
+      }
+
+      /* Bottom Left */
+      .mark-bl-h {
+        bottom: calc(var(--wrapper-padding) + var(--bleed));
+        left: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        width: var(--mark-len);
+        height: 0.25pt;
+      }
+      .mark-bl-v {
+        bottom: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        left: calc(var(--wrapper-padding) + var(--bleed));
+        width: 0.25pt;
+        height: var(--mark-len);
+      }
+
+      /* Bottom Right */
+      .mark-br-h {
+        bottom: calc(var(--wrapper-padding) + var(--bleed));
+        right: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        width: var(--mark-len);
+        height: 0.25pt;
+      }
+      .mark-br-v {
+        bottom: calc(var(--wrapper-padding) - var(--mark-len) - var(--mark-offset));
+        right: calc(var(--wrapper-padding) + var(--bleed));
+        width: 0.25pt;
+        height: var(--mark-len);
+      }
+
+      /* Export button */
+      .export-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: #3ecfb1;
+        color: white;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .export-btn:hover {
+        background: #35b89c;
+      }
+
+      .export-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* Navigation link */
+      .nav-link {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: #3ecfb1;
+        color: white;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 0.375rem;
+        transition: background 0.2s;
+        z-index: 100;
+      }
+
+      .nav-link:hover {
+        background: #35b89c;
       }
 
       @media print {
         html,
         body {
-          width: 198mm;
-          height: 210mm;
-        }
-
-        body {
-          background: #faf8f6;
+          width: 222mm;
+          height: 100%;
+          background: none;
         }
 
         main {
-          min-height: auto;
+          display: block;
           padding: 0;
-          display: block;
-        }
-
-        /* Masquer le conteneur écran */
-        .flyer-container {
-          display: none;
-        }
-
-        /* Afficher les pages d'impression */
-        .flyer-page-full {
-          display: block;
-          page-break-after: always;
-        }
-
-        .flyer-page-full:last-child {
-          page-break-after: auto;
-        }
-
-        .flyer-face-full {
-          width: 198mm;
-          height: 210mm;
           margin: 0;
-          box-sizing: border-box;
+          min-height: 0;
+          width: 100%;
+        }
+
+        .flyer-container {
+          display: contents;
+        }
+
+        .flyer-label,
+        .export-btn,
+        .nav-link {
+          display: none !important;
+        }
+
+        .print-flyer-wrapper {
+          box-shadow: none;
+          margin: 0;
+          padding: 0;
+          width: 222mm;
+          height: 234mm;
+          page-break-after: always;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           overflow: hidden;
         }
 
-        section {
-          max-width: none;
-          padding: 0;
-          margin: 0;
-        }
-
-        article {
-          margin: 0;
-        }
-      }
-
-      /* Masquer les pages d'impression à l'écran (doublons) */
-      @media screen {
-        .print-only {
-          display: none;
-        }
-      }
-
-      @media print {
-        .print-only {
-          display: block;
-        }
-
-        .print-only.flyer-page {
-          display: grid;
+        .print-flyer-wrapper:last-child {
+          page-break-after: auto;
         }
       }
     </style>
   </head>
 
-  <body class="bg-white font-sans text-base text-black">
-    <main class="min-h-screen">
-      <!-- Vue écran : affichage des 2 pages verticalement -->
+  <body class="font-sans text-base text-black">
+    <a href="/visit-card/" class="nav-link">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M19 12H5"></path>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Aller à la carte de visite
+    </a>
+    <main>
+      <!-- Face 1-4 (Contacts + Slogan) -->
       <div class="flyer-container">
-        <!-- Page 1 : Face 1-4 fusionnée (pleine largeur) -->
-        <div class="flyer-page-full">
-          <FlyerFace1_4 />
+        <span class="flyer-label">Face 1-4 (Contacts + Slogan)</span>
+        <div class="print-flyer-wrapper" id="flyer-face-1-4">
+          <!-- Crop Marks -->
+          <div class="crop-mark mark-tl-h"></div>
+          <div class="crop-mark mark-tl-v"></div>
+          <div class="crop-mark mark-tr-h"></div>
+          <div class="crop-mark mark-tr-v"></div>
+          <div class="crop-mark mark-bl-h"></div>
+          <div class="crop-mark mark-bl-v"></div>
+          <div class="crop-mark mark-br-h"></div>
+          <div class="crop-mark mark-br-v"></div>
+
+          <FlyerFace1_4 withBleed={true} />
         </div>
-        <!-- Page 2 : Face 2-3 fusionnée (pleine largeur) -->
-        <div class="flyer-page-full">
-          <FlyerFace2_3 />
-        </div>
+        <button class="export-btn" data-target="flyer-face-1-4" data-filename="flyer-face-1-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+              points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg
+          >
+          Exporter en PNG (300 DPI)
+        </button>
       </div>
 
-      <!-- Pages d'impression recto-verso -->
-      <!-- Page 1 : Face 1-4 fusionnée (pleine largeur) -->
-      <div class="flyer-page-full print-only">
-        <FlyerFace1_4 />
-      </div>
-      <!-- Page 2 : Face 2-3 fusionnée (pleine largeur) -->
-      <div class="flyer-page-full print-only">
-        <FlyerFace2_3 />
+      <!-- Face 2-3 (Services) -->
+      <div class="flyer-container">
+        <span class="flyer-label">Face 2-3 (Services)</span>
+        <div class="print-flyer-wrapper" id="flyer-face-2-3">
+          <!-- Crop Marks -->
+          <div class="crop-mark mark-tl-h"></div>
+          <div class="crop-mark mark-tl-v"></div>
+          <div class="crop-mark mark-tr-h"></div>
+          <div class="crop-mark mark-tr-v"></div>
+          <div class="crop-mark mark-bl-h"></div>
+          <div class="crop-mark mark-bl-v"></div>
+          <div class="crop-mark mark-br-h"></div>
+          <div class="crop-mark mark-br-v"></div>
+
+          <FlyerFace2_3 withBleed={true} />
+        </div>
+        <button class="export-btn" data-target="flyer-face-2-3" data-filename="flyer-face-2-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline
+              points="7 10 12 15 17 10"></polyline><line x1="12" x2="12" y1="15" y2="3"></line></svg
+          >
+          Exporter en PNG (300 DPI)
+        </button>
       </div>
     </main>
+
+    <script type="module">
+      import * as htmlToImage from 'https://esm.sh/html-to-image@1.11.11'
+
+      // 300 DPI for print quality
+      // 222mm x 234mm at 300 DPI = 2622 x 2764 pixels
+      const DPI = 300
+      const MM_TO_INCH = 1 / 25.4
+      const PAGE_WIDTH_MM = 222
+      const PAGE_HEIGHT_MM = 234
+      const TARGET_WIDTH = Math.round(PAGE_WIDTH_MM * MM_TO_INCH * DPI)
+      const TARGET_HEIGHT = Math.round(PAGE_HEIGHT_MM * MM_TO_INCH * DPI)
+
+      document.querySelectorAll('.export-btn').forEach(function (btn) {
+        btn.addEventListener('click', async function () {
+          const targetId = btn.getAttribute('data-target')
+          const filename = btn.getAttribute('data-filename')
+          const element = document.getElementById(targetId)
+
+          if (!element) return
+
+          // Disable button during export
+          btn.disabled = true
+          const originalText = btn.innerHTML
+          btn.innerHTML = 'Export en cours...'
+
+          try {
+            // Get current element dimensions
+            const rect = element.getBoundingClientRect()
+            // Calculate scale to achieve 300 DPI
+            const scale = TARGET_WIDTH / rect.width
+
+            const dataUrl = await htmlToImage.toPng(element, {
+              pixelRatio: scale,
+              backgroundColor: '#ffffff',
+              canvasWidth: TARGET_WIDTH,
+              canvasHeight: TARGET_HEIGHT,
+            })
+
+            // Create download link
+            const link = document.createElement('a')
+            link.download = filename + '.png'
+            link.href = dataUrl
+            link.click()
+          } catch (error) {
+            console.error('Export failed:', error)
+            alert("Erreur lors de l'export. Veuillez réessayer.")
+          } finally {
+            // Restore button
+            btn.disabled = false
+            btn.innerHTML = originalText
+          }
+        })
+      })
+    </script>
   </body>
 </html>

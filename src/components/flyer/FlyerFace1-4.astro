@@ -2,11 +2,22 @@
 import { Link, Mail, Phone } from '@lucide/astro'
 import MoumousseDogImage from '../../assets/moumousse-dog.webp'
 import HeroImage from '../../assets/moumousse-malisse.webp'
+
+interface Props {
+  withBleed?: boolean
+}
+
+const { withBleed = false } = Astro.props
 ---
 
 <!-- Face 4-1 : Contacts et slogan fusionnés (pleine largeur 198mm × 210mm) -->
-<article class="flyer-face-full bg-body relative z-0 h-full overflow-hidden p-6">
-  <!-- Décor géométrique en arrière-plan -->
+<article
+  class:list={[
+    'bg-body relative z-0 overflow-hidden',
+    withBleed ? 'h-[214mm] w-[202mm]' : 'h-[210mm] w-[198mm]',
+  ]}
+>
+  <!-- Décor géométrique en arrière-plan (couvre toute la zone avec fond perdu) -->
   <div class="pointer-events-none absolute inset-0 opacity-15">
     <!-- Carré -->
     <div class="border-tertiary absolute top-10 -right-10 h-24 w-24 rotate-45 border-8"></div>
@@ -34,86 +45,97 @@ import HeroImage from '../../assets/moumousse-malisse.webp'
     </div>
   </div>
 
-  <div class="relative grid h-full grid-cols-2 gap-6">
-    <!-- Partie gauche : Face 4 (Contacts) -->
-    <div class="flex flex-col justify-between gap-4">
-      <!-- En-tête -->
-      <div>
-        <h2 class="text-primary text-xl font-black tracking-wide uppercase">Steffie Thollot</h2>
-        <p class="text-base leading-snug text-black/90">Pet Sitter Professionnelle</p>
-      </div>
+  <!-- Content Safe Zone -->
+  <div
+    class:list={[
+      'z-10',
+      withBleed ? 'absolute top-[2mm] left-[2mm] h-[210mm] w-[198mm]' : 'relative h-full w-full',
+    ]}
+  >
+    <!-- Inner Safe Zone (4mm from trim edge) -->
+    <div class="relative h-full w-full p-[4mm]">
+      <div class="grid h-full grid-cols-2 gap-6">
+        <!-- Partie gauche : Face 4 (Contacts) -->
+        <div class="flex flex-col justify-between gap-4">
+          <!-- En-tête -->
+          <div>
+            <h2 class="text-primary text-xl font-black tracking-wide uppercase">Steffie Thollot</h2>
+            <p class="text-base leading-snug text-black/90">Pet Sitter Professionnelle</p>
+          </div>
 
-      <!-- Informations de contact -->
-      <div class="space-y-2 text-sm leading-snug text-black">
-        <div class="flex items-center gap-2">
-          <Phone class="h-5 w-5" aria-hidden="true" />
-          <p class="text-base font-bold">06 46 47 30 11</p>
+          <!-- Informations de contact -->
+          <div class="space-y-2 text-sm leading-snug text-black">
+            <div class="flex items-center gap-2">
+              <Phone class="h-5 w-5" aria-hidden="true" />
+              <p class="text-base font-bold">06 46 47 30 11</p>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <Link class="h-5 w-5" aria-hidden="true" />
+              <p class="text-base font-bold">moumousse-pet-sitting.fr</p>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <Mail class="h-5 w-5" aria-hidden="true" />
+              <p class="text-base font-bold break-all">contact@moumousse-pet-sitting.fr</p>
+            </div>
+          </div>
+
+          <div class="space-y-1 text-xs tracking-wide text-black/80 uppercase">
+            <p>Visites à domicile &amp; promenades</p>
+            <p>Pélussin et alentours</p>
+          </div>
+
+          <!-- CTA final -->
+          <div class="mt-auto">
+            <!-- Image du chien -->
+            <div class="flex-shrink-0">
+              <img
+                src={MoumousseDogImage.src}
+                alt="Chien Moumousse - Moumousse Pet Sitting"
+                class="mx-auto h-52 object-contain"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <Link class="h-5 w-5" aria-hidden="true" />
-          <p class="text-base font-bold">moumousse-pet-sitting.fr</p>
+        <!-- Partie droite : Face 1 (Slogan et image) -->
+        <div class="relative flex flex-col items-center justify-center gap-6 text-center">
+          <!-- Logo/Image principale -->
+          <div class="flex-shrink-0">
+            <img
+              src={HeroImage.src}
+              alt="Chat roux malicieux - Moumousse Pet Sitting"
+              class="mx-auto h-52 object-contain"
+            />
+          </div>
+
+          <!-- Slogan principal -->
+          <div class="space-y-6">
+            <h1
+              class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl"
+            >
+              <span class="text-outline text-tertiary whitespace-nowrap" data-text="Faites garder">
+                Faites garder
+              </span>
+              <span class="text-outline text-secondary whitespace-nowrap" data-text="vos animaux">
+                vos animaux
+              </span>
+              <span class="text-outline text-primary whitespace-nowrap" data-text="en bonne">
+                en bonne
+              </span>
+              <span class="whitespace-nowrap text-black" data-text="compagnie"> compagnie </span>
+            </h1>
+
+            <p class="text-base font-semibold text-black">À Pélussin et alentours</p>
+          </div>
+
+          <div class="absolute right-0 bottom-0 left-0">
+            <p class="w-full text-center text-sm leading-snug text-black/90">
+              Garde d'animaux à domicile &amp; promenades
+            </p>
+          </div>
         </div>
-
-        <div class="flex items-center gap-2">
-          <Mail class="h-5 w-5" aria-hidden="true" />
-          <p class="text-base font-bold break-all">contact@moumousse-pet-sitting.fr</p>
-        </div>
-      </div>
-
-      <div class="space-y-1 text-xs tracking-wide text-black/80 uppercase">
-        <p>Visites à domicile &amp; promenades</p>
-        <p>Pélussin et alentours</p>
-      </div>
-
-      <!-- CTA final -->
-      <div class="mt-auto">
-        <!-- Image du chien -->
-        <div class="flex-shrink-0">
-          <img
-            src={MoumousseDogImage.src}
-            alt="Chien Moumousse - Moumousse Pet Sitting"
-            class="mx-auto h-52 object-contain"
-          />
-        </div>
-      </div>
-    </div>
-
-    <!-- Partie droite : Face 1 (Slogan et image) -->
-    <div class="relative flex flex-col items-center justify-center gap-6 text-center">
-      <!-- Logo/Image principale -->
-      <div class="flex-shrink-0">
-        <img
-          src={HeroImage.src}
-          alt="Chat roux malicieux - Moumousse Pet Sitting"
-          class="mx-auto h-52 object-contain"
-        />
-      </div>
-
-      <!-- Slogan principal -->
-      <div class="space-y-6">
-        <h1
-          class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl"
-        >
-          <span class="text-outline text-tertiary whitespace-nowrap" data-text="Faites garder">
-            Faites garder
-          </span>
-          <span class="text-outline text-secondary whitespace-nowrap" data-text="vos animaux">
-            vos animaux
-          </span>
-          <span class="text-outline text-primary whitespace-nowrap" data-text="en bonne">
-            en bonne
-          </span>
-          <span class="whitespace-nowrap text-black" data-text="compagnie"> compagnie </span>
-        </h1>
-
-        <p class="text-base font-semibold text-black">À Pélussin et alentours</p>
-      </div>
-
-      <div class="absolute right-0 bottom-6 left-0">
-        <p class="w-full text-center text-sm leading-snug text-black/90">
-          Garde d'animaux à domicile &amp; promenades
-        </p>
       </div>
     </div>
   </div>

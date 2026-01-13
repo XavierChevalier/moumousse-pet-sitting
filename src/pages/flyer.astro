@@ -24,7 +24,7 @@ if (!import.meta.env.DEV) {
     <meta name="generator" content={Astro.generator} />
     <SEO
       title="Flyer 4 faces - Moumousse Pet Sitting"
-      description="Prévisualisez et exportez en PDF le flyer 4 faces Moumousse Pet Sitting pour impression (format plié 99mm×210mm, ouvert 198mm×210mm)."
+      description="Prévisualisez et exportez en PDF le flyer 4 faces Moumousse Pet Sitting pour impression (format plié 105mm×210mm, ouvert 210mm×210mm)."
       image={siteConfig.seo.image}
       imageAlt={siteConfig.seo.imageAlt}
       noindex={true}
@@ -33,16 +33,16 @@ if (!import.meta.env.DEV) {
     <style>
       /* 
        * DOCUMENT FORMAT
-       * Flyer ouvert: 198mm × 210mm (Finished)
+       * Flyer ouvert: 210mm × 210mm (Finished)
        * Bleed: 2mm (as per Exaprint instructions)
-       * Total with Bleed: 202mm × 214mm
+       * Total with Bleed: 214mm × 214mm
        * Safe Zone: 4mm inside trim (handled by padding in components)
        *
        * PAGE FORMAT
-       * 222mm x 234mm allows ~10mm margins around the 202x214mm content
+       * 234mm x 234mm allows ~10mm margins around the 214x214mm content
        */
       @page {
-        size: 222mm 234mm;
+        size: 234mm 234mm;
         margin: 0;
       }
 
@@ -211,7 +211,7 @@ if (!import.meta.env.DEV) {
       @media print {
         html,
         body {
-          width: 222mm;
+          width: 234mm;
           height: 100%;
           background: none;
         }
@@ -238,7 +238,7 @@ if (!import.meta.env.DEV) {
           box-shadow: none;
           margin: 0;
           padding: 0;
-          width: 222mm;
+          width: 234mm;
           height: 234mm;
           page-break-after: always;
           display: flex;
@@ -346,10 +346,10 @@ if (!import.meta.env.DEV) {
       import * as htmlToImage from 'https://esm.sh/html-to-image@1.11.11'
 
       // 300 DPI for print quality
-      // 222mm x 234mm at 300 DPI = 2622 x 2764 pixels
+      // 234mm x 234mm at 300 DPI = 2764 x 2764 pixels
       const DPI = 300
       const MM_TO_INCH = 1 / 25.4
-      const PAGE_WIDTH_MM = 222
+      const PAGE_WIDTH_MM = 234
       const PAGE_HEIGHT_MM = 234
       const TARGET_WIDTH = Math.round(PAGE_WIDTH_MM * MM_TO_INCH * DPI)
       const TARGET_HEIGHT = Math.round(PAGE_HEIGHT_MM * MM_TO_INCH * DPI)

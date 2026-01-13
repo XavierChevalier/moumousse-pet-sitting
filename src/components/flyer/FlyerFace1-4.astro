@@ -10,11 +10,11 @@ interface Props {
 const { withBleed = false } = Astro.props
 ---
 
-<!-- Face 4-1 : Contacts et slogan fusionnés (pleine largeur 198mm × 210mm) -->
+<!-- Face 4-1 : Contacts et slogan fusionnés (pleine largeur 210mm × 210mm) -->
 <article
   class:list={[
     'bg-body relative z-0 overflow-hidden',
-    withBleed ? 'h-[214mm] w-[202mm]' : 'h-[210mm] w-[198mm]',
+    withBleed ? 'h-[214mm] w-[214mm]' : 'h-[210mm] w-[210mm]',
   ]}
 >
   <!-- Décor géométrique en arrière-plan (couvre toute la zone avec fond perdu) -->
@@ -49,7 +49,7 @@ const { withBleed = false } = Astro.props
   <div
     class:list={[
       'z-10',
-      withBleed ? 'absolute top-[2mm] left-[2mm] h-[210mm] w-[198mm]' : 'relative h-full w-full',
+      withBleed ? 'absolute top-[2mm] left-[2mm] h-[210mm] w-[210mm]' : 'relative h-full w-full',
     ]}
   >
     <!-- Inner Safe Zone (4mm from trim edge) -->

@@ -13,7 +13,8 @@ export default defineConfig({
       // These routes are intentionally DEV-only (they return 404 in prod) so they must not appear in sitemap.
       filter: (page) => {
         const pathname = page.startsWith('http') ? new URL(page).pathname : page
-        return !['/flyer', '/flyer/', '/visit-card', '/visit-card/'].includes(pathname)
+        const withTrailingSlash = (path) => [path, `${path}/`]
+        return !['/flyer', '/visit-card'].flatMap(withTrailingSlash).includes(pathname)
       },
     }),
     playformInline(),

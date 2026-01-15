@@ -1,0 +1,9 @@
+# Netlify redirects for canonical URLs
+
+# Force HTTPS + apex domain
+http://moumousse-pet-sitting.fr/* https://moumousse-pet-sitting.fr/:splat 301!
+http://www.moumousse-pet-sitting.fr/* https://moumousse-pet-sitting.fr/:splat 301!
+https://www.moumousse-pet-sitting.fr/* https://moumousse-pet-sitting.fr/:splat 301!
+
+# Strip tracking parameters (e.g. ?fbclid=...)
+/* fbclid=:fbclid /:splat 301!

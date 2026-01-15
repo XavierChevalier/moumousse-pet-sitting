@@ -15,9 +15,21 @@ const {
   author = siteConfig.seo.author,
 } = Astro.props
 
-const canonicalURL = canonical
-  ? new URL(canonical, siteConfig.seo.url).href
-  : new URL(Astro.url.pathname, siteConfig.seo.url).href
+const canonicalTarget = canonical ?? Astro.url.pathname
+const canonicalUrl = new URL(canonicalTarget, siteConfig.seo.url)
+canonicalUrl.hash = ''
+canonicalUrl.search = ''
+const canonicalHasFileExtension = canonicalUrl.pathname.split('/').pop()?.includes('.')
+
+if (
+  canonicalUrl.pathname !== '/' &&
+  !canonicalUrl.pathname.endsWith('/') &&
+  !canonicalHasFileExtension
+) {
+  canonicalUrl.pathname = `${canonicalUrl.pathname}/`
+}
+
+const canonicalURL = canonicalUrl.href
 
 const fullImageUrl = image.startsWith('http') ? image : new URL(image, siteConfig.seo.url).href
 ---

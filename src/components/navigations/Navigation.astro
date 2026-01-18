@@ -3,6 +3,19 @@ import Button from '../ui/Button.astro'
 import { MenuIcon } from '@lucide/astro'
 import NavigationLogo from './NavigationLogo.astro'
 
+const isHomePage = Astro.url.pathname === '/'
+const resolveAnchorHref = (href: string) => {
+  // On the homepage we can keep plain hashes for smooth in-page navigation.
+  if (isHomePage) return href
+
+  // If this is an in-page anchor (e.g. "#services"), make it target the homepage.
+  if (href.startsWith('#')) return `/${href}`
+
+  return href
+}
+
+const anchorNameFromHref = (href: string) => href.replace(/^.*#/, '')
+
 const links = [
   { href: '#services', label: 'Prestations & Tarifs' },
   { href: '#galerie', label: 'Galerie' },
@@ -22,9 +35,9 @@ const links = [
           {
             links.map((link) => (
               <a
-                href={link.href}
+                href={resolveAnchorHref(link.href)}
                 class="hover:text-primary p-4 text-sm font-bold tracking-wide uppercase transition-colors duration-150"
-                data-umami-event={`navigation:click-${link.href.replace('#', '')}`}
+                data-umami-event={`navigation:click-${anchorNameFromHref(link.href)}`}
               >
                 {link.label}
               </a>
@@ -33,7 +46,7 @@ const links = [
 
           <!-- Contact Button -->
           <Button
-            href="#contact"
+            href={resolveAnchorHref('#contact')}
             size="small"
             class="ml-4"
             data-umami-event="navigation:click-contact"
@@ -63,9 +76,9 @@ const links = [
         {
           links.map((link) => (
             <a
-              href={link.href}
+              href={resolveAnchorHref(link.href)}
               class="hover:text-primary focus:text-primary block p-8 font-bold tracking-wide uppercase transition-colors duration-150"
-              data-umami-event={`navigation:click-${link.href.replace('#', '')}-mobile`}
+              data-umami-event={`navigation:click-${anchorNameFromHref(link.href)}-mobile`}
             >
               {link.label}
             </a>
@@ -74,7 +87,7 @@ const links = [
 
         <!-- Contact Button -->
         <Button
-          href="#contact"
+          href={resolveAnchorHref('#contact')}
           size="large"
           class="mt-8 text-center"
           data-umami-event="navigation:click-contact-mobile"

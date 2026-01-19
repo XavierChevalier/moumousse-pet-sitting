@@ -1,17 +1,17 @@
 ---
 import {
-  BrainIcon,
-  BubblesIcon,
-  CameraIcon,
-  FootprintsIcon,
-  HeartIcon,
-  MapPin,
-  PawPrintIcon,
-  UtensilsCrossedIcon,
-  VolleyballIcon,
+BrainIcon,
+BubblesIcon,
+CameraIcon,
+FootprintsIcon,
+HeartIcon,
+MapPin,
+PawPrintIcon,
+UtensilsCrossedIcon,
+VolleyballIcon,
 } from '@lucide/astro'
-import JazzImage from '../../assets/jazz.jpeg'
-import LeikaImage from '../../assets/leika.jpeg'
+import JazzImage from '../../../assets/jazz.jpeg'
+import LeikaImage from '../../../assets/leika.jpeg'
 
 interface Props {
   withBleed?: boolean
@@ -44,9 +44,7 @@ const { withBleed = false } = Astro.props
     >
     </div>
     <!-- Rond -->
-    <div
-      class="border-secondary absolute bottom-36 left-1/2 size-12 -translate-y-1/2 rounded-full border-6"
-    >
+    <div class="border-secondary absolute bottom-36 left-1/2 size-12 -translate-y-1/2 rounded-full border-6">
     </div>
   </div>
 
@@ -59,10 +57,7 @@ const { withBleed = false } = Astro.props
   >
     <!-- Inner Safe Zone (4mm from trim edge) -->
     <div class="relative flex h-full w-full flex-col gap-8 p-[4mm]">
-      <h2
-        class="text-secondary text-outline text-3xl font-black tracking-wide uppercase"
-        data-text="Mes services"
-      >
+      <h2 class="text-secondary text-outline text-3xl font-black tracking-wide uppercase" data-text="Mes services">
         Mes services
       </h2>
 
@@ -85,9 +80,7 @@ const { withBleed = false } = Astro.props
               <p class="text-xs whitespace-nowrap text-black/50">À partir de 13 €</p>
             </div>
             <p class="text-base text-pretty">
-              Je passe à domicile pour m'occuper de vos <strong>chiens</strong>, <strong
-                >chats</strong
-              > et
+              Je passe à domicile pour m'occuper de vos <strong>chiens</strong>, <strong>chats</strong> et
               <strong>NAC</strong>.
             </p>
             <p class="font-medium text-black/90">Chaque passage inclut :</p>
@@ -126,8 +119,7 @@ const { withBleed = false } = Astro.props
               <p class="text-xs whitespace-nowrap text-black/50">À partir de 18 €/h</p>
             </div>
             <p class="text-base text-pretty">
-              <strong>Promenades personnalisées</strong> de <strong>1h à 2h</strong> (ou plus selon vos
-              besoins).
+              <strong>Promenades personnalisées</strong> de <strong>1h à 2h</strong> (ou plus selon vos besoins).
             </p>
             <p class="font-medium text-black/90">Chaque balade inclut :</p>
             <ul class="space-y-1 text-black/80">

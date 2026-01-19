@@ -1,0 +1,104 @@
+---
+import type { PrintableDimensions } from '../../core/printables/dimensions'
+
+interface Props {
+  dimensions: PrintableDimensions
+  title?: string
+}
+
+const { dimensions, title = 'Dimensions (impression / export)' } = Astro.props
+const {
+  dpi,
+  finishedWidthMm,
+  finishedHeightMm,
+  bleedMm,
+  safeZoneMm,
+  contentPaddingMm,
+  totalWithBleedWidthMm,
+  totalWithBleedHeightMm,
+  safeAreaWidthMm,
+  safeAreaHeightMm,
+  pageWidthMm,
+  pageHeightMm,
+  targetWidthPx,
+  targetHeightPx,
+  pageMarginXmm,
+  pageMarginYmm,
+} = dimensions
+---
+
+<details
+  class="group min-w-[675px] rounded-xl border border-black/10 bg-white p-4 shadow-sm"
+  aria-labelledby="dimensions-panel-title"
+>
+  <summary
+    id="dimensions-panel-title"
+    class="mb-3 flex cursor-pointer select-none items-center justify-between gap-3 rounded-lg text-base font-extrabold tracking-[0.02em] uppercase outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3ecfb1cc] [&::-webkit-details-marker]:hidden [&::marker]:content-[''] after:text-xs after:font-bold after:normal-case after:text-black/60 after:content-['▽'] group-open:after:content-['△']"
+  >
+    {title}
+  </summary>
+  <dl
+    class="grid grid-cols-1 gap-x-4 gap-y-2 sm:grid-cols-2 [&_dt]:text-xs [&_dt]:font-bold [&_dt]:text-black [&_dd]:mt-0.5 [&_dd]:text-[0.95rem] [&_dd]:text-black/90"
+  >
+    <div>
+      <dt>Format fini (cm)</dt>
+      <dd>{(finishedWidthMm / 10).toFixed(1)} × {(finishedHeightMm / 10).toFixed(1)} cm</dd>
+    </div>
+    <div>
+      <dt>Format fini (mm)</dt>
+      <dd>{finishedWidthMm} × {finishedHeightMm} mm</dd>
+    </div>
+    <div>
+      <dt>Fonds perdus</dt>
+      <dd>{bleedMm} mm (chaque côté)</dd>
+    </div>
+    <div>
+      <dt>Total avec fonds perdus</dt>
+      <dd>{totalWithBleedWidthMm} × {totalWithBleedHeightMm} mm</dd>
+    </div>
+    <div>
+      <dt>Zone de sécurité (recommandée)</dt>
+      <dd>
+        {safeZoneMm} mm (chaque côté) → {safeAreaWidthMm} × {safeAreaHeightMm} mm
+      </dd>
+    </div>
+    <div>
+      <dt>Padding contenu (dans les composants)</dt>
+      <dd>{contentPaddingMm} mm</dd>
+    </div>
+    <div>
+      <dt>Page (mm)</dt>
+      <dd>{pageWidthMm.toFixed(3)} × {pageHeightMm.toFixed(3)} mm</dd>
+    </div>
+    <div>
+      <dt>Export raster</dt>
+      <dd>
+        {targetWidthPx} × {targetHeightPx} px @ {dpi} DPI
+      </dd>
+    </div>
+    <div>
+      <dt>Marge (gauche / droite)</dt>
+      <dd>{pageMarginXmm.toFixed(3)} mm</dd>
+    </div>
+    <div>
+      <dt>Marge (haut / bas)</dt>
+      <dd>{pageMarginYmm.toFixed(3)} mm</dd>
+    </div>
+    <div>
+      <dt>Repères de coupe</dt>
+      <dd>Longueur 5mm · Décalage 2mm</dd>
+    </div>
+    <div>
+      <dt>Épaisseur filets mini (quadri)</dt>
+      <dd>0.25 pt ≈ 0,088 mm (0.3 pt ≈ 0,106 mm si éléments non aplatis)</dd>
+    </div>
+    <div>
+      <dt>Tolérance de façonnage</dt>
+      <dd>± 1 mm</dd>
+    </div>
+    <div class="sm:col-span-2">
+      <dt>Corps min. (rappel)</dt>
+      <dd>Sans sérif 6–7pt (12–14pt en négatif) · Sérif 8–9pt (16–18pt en négatif)</dd>
+    </div>
+  </dl>
+</details>

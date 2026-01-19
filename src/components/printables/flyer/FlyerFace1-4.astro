@@ -1,7 +1,7 @@
 ---
 import { Link, Mail, Phone } from '@lucide/astro'
-import MoumousseDogImage from '../../assets/moumousse-dog.webp'
-import HeroImage from '../../assets/moumousse-malisse.webp'
+import MoumousseDogImage from '../../../assets/moumousse-dog.webp'
+import HeroImage from '../../../assets/moumousse-malisse.webp'
 
 interface Props {
   withBleed?: boolean
@@ -22,10 +22,7 @@ const { withBleed = false } = Astro.props
     <!-- Carré -->
     <div class="border-tertiary absolute top-10 -right-10 h-24 w-24 rotate-45 border-8"></div>
     <!-- Rond -->
-    <div
-      class="border-secondary absolute bottom-24 -left-12 size-32 rotate-12 rounded-full border-6"
-    >
-    </div>
+    <div class="border-secondary absolute bottom-24 -left-12 size-32 rotate-12 rounded-full border-6"></div>
     <!-- Triangle -->
     <div
       class="bg-tertiary absolute top-68 left-0 h-[35px] w-[40px] rotate-12"
@@ -112,9 +109,7 @@ const { withBleed = false } = Astro.props
 
           <!-- Slogan principal -->
           <div class="space-y-6">
-            <h1
-              class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl"
-            >
+            <h1 class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl">
               <span class="text-outline text-tertiary whitespace-nowrap" data-text="Faites garder">
                 Faites garder
               </span>

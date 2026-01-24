@@ -1,5 +1,5 @@
 ---
-import { ArrowRightIcon, FileText } from '@lucide/astro'
+import { ArrowRightIcon } from '@lucide/astro'
 import SEO from '../components/SEO.astro'
 import PrintableDimensionsPanel from '../components/printables/PrintableDimensionsPanel.astro'
 import PrintableExportCard from '../components/printables/PrintableExportCard.astro'
@@ -14,7 +14,7 @@ if (!import.meta.env.DEV) {
 }
 
 const dimensions = createPrintableDimensions({
-  dpiMultiplier: 3,
+  dpiMultiplier: 2,
   baseDpi: 300,
   finishedWidthMm: 85,
   finishedHeightMm: 54,
@@ -60,24 +60,13 @@ const dimensions = createPrintableDimensions({
         dimensions={dimensions}
       />
 
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <button
-          class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[#3ecfb1] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#35b89c] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3ecfb1cc]"
-          data-export="pdf"
-          data-filename="carte-visite"
-        >
-          <FileText class="size-4" aria-hidden="true" />
-          Exporter en PDF
-        </button>
-      </div>
-
       <!-- Recto -->
       <PrintableExportCard
         label="Recto"
         targetId="card-recto"
         filename="carte-visite-recto"
         dimensions={dimensions}
-        pdfPage={1}
+        overlaySrc="/85x54_H_coins-droits.png"
       >
         <VisitCardRecto withBleed={true} />
       </PrintableExportCard>
@@ -88,7 +77,7 @@ const dimensions = createPrintableDimensions({
         targetId="card-verso"
         filename="carte-visite-verso"
         dimensions={dimensions}
-        pdfPage={2}
+        overlaySrc="/85x54_H_coins-droits.png"
       >
         <VisitCardVerso withBleed={true} />
       </PrintableExportCard>

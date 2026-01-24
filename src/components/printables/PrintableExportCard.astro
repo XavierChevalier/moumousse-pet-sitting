@@ -7,12 +7,11 @@ interface Props {
   targetId: string
   filename: string
   dimensions: PrintableDimensions
-  /** Order of pages in PDF export (1..n). If omitted, this card won't be included in PDF export. */
-  pdfPage?: number
+  /** Overlay (crop marks) */
+  overlaySrc: string
 }
 
-const { label, targetId, filename, dimensions, pdfPage } = Astro.props
-const { dpi, bleedMm, pageMarginXmm, pageMarginYmm } = dimensions
+const { label, targetId, filename, dimensions, overlaySrc } = Astro.props
 ---
 
 <div class="flex flex-col items-center gap-4">
@@ -20,21 +19,17 @@ const { dpi, bleedMm, pageMarginXmm, pageMarginYmm } = dimensions
   <div
     class="relative box-border bg-white px-[var(--page-margin-x)] py-[var(--page-margin-y)] shadow-md"
     id={targetId}
-    data-pdf-page={typeof pdfPage === 'number' ? String(pdfPage) : undefined}
-    data-pdf-label={label}
-    style={`--mark-len: 5mm; --mark-offset: 2mm; --bleed: ${bleedMm}mm; --page-margin-x: ${pageMarginXmm}mm; --page-margin-y: ${pageMarginYmm}mm;`}
+    style={`--page-margin-x: ${dimensions.pageMarginXmm}mm; --page-margin-y: ${dimensions.pageMarginYmm}mm;`}
   >
-    <!-- Marks -->
-    <div class="mark-tl-h absolute z-50 bg-black"></div>
-    <div class="mark-tl-v absolute z-50 bg-black"></div>
-    <div class="mark-tr-h absolute z-50 bg-black"></div>
-    <div class="mark-tr-v absolute z-50 bg-black"></div>
-    <div class="mark-bl-h absolute z-50 bg-black"></div>
-    <div class="mark-bl-v absolute z-50 bg-black"></div>
-    <div class="mark-br-h absolute z-50 bg-black"></div>
-    <div class="mark-br-v absolute z-50 bg-black"></div>
-
     <slot />
+
+    <img
+      src={overlaySrc}
+      alt=""
+      aria-hidden="true"
+      draggable="false"
+      class="pointer-events-none absolute inset-0 z-50 h-full w-full select-none object-contain"
+    />
   </div>
   <button
     class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[#3ecfb1] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#35b89c] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3ecfb1cc]"
@@ -42,141 +37,50 @@ const { dpi, bleedMm, pageMarginXmm, pageMarginYmm } = dimensions
     data-filename={filename}
   >
     <Download class="size-4" aria-hidden="true" />
-    Exporter en PNG ({dpi} DPI)
+    Exporter en PNG ({dimensions.dpi} DPI)
   </button>
 </div>
-
-<style>
-  /* Crop marks (keep CSS: mm + calc()) */
-  /* Top Left */
-  .mark-tl-h {
-    top: calc(var(--page-margin-y) + var(--bleed));
-    left: calc(var(--page-margin-x) - var(--mark-len) - var(--mark-offset));
-    width: var(--mark-len);
-    height: 0.25pt;
-  }
-  .mark-tl-v {
-    top: calc(var(--page-margin-y) - var(--mark-len) - var(--mark-offset));
-    left: calc(var(--page-margin-x) + var(--bleed));
-    width: 0.25pt;
-    height: var(--mark-len);
-  }
-
-  /* Top Right */
-  .mark-tr-h {
-    top: calc(var(--page-margin-y) + var(--bleed));
-    right: calc(var(--page-margin-x) - var(--mark-len) - var(--mark-offset));
-    width: var(--mark-len);
-    height: 0.25pt;
-  }
-  .mark-tr-v {
-    top: calc(var(--page-margin-y) - var(--mark-len) - var(--mark-offset));
-    right: calc(var(--page-margin-x) + var(--bleed));
-    width: 0.25pt;
-    height: var(--mark-len);
-  }
-
-  /* Bottom Left */
-  .mark-bl-h {
-    bottom: calc(var(--page-margin-y) + var(--bleed));
-    left: calc(var(--page-margin-x) - var(--mark-len) - var(--mark-offset));
-    width: var(--mark-len);
-    height: 0.25pt;
-  }
-  .mark-bl-v {
-    bottom: calc(var(--page-margin-y) - var(--mark-len) - var(--mark-offset));
-    left: calc(var(--page-margin-x) + var(--bleed));
-    width: 0.25pt;
-    height: var(--mark-len);
-  }
-
-  /* Bottom Right */
-  .mark-br-h {
-    bottom: calc(var(--page-margin-y) + var(--bleed));
-    right: calc(var(--page-margin-x) - var(--mark-len) - var(--mark-offset));
-    width: var(--mark-len);
-    height: 0.25pt;
-  }
-  .mark-br-v {
-    bottom: calc(var(--page-margin-y) - var(--mark-len) - var(--mark-offset));
-    right: calc(var(--page-margin-x) + var(--bleed));
-    width: 0.25pt;
-    height: var(--mark-len);
-  }
-</style>
 
 <script type="module" define:vars={{ dimensions }}>
   // Avoid double initialization when this component is rendered multiple times on the page.
   const GLOBAL_KEY = '__moumousse_printables_export_init__'
-  if (window[GLOBAL_KEY]) {
-    // already initialized
-  } else {
+  if (!window[GLOBAL_KEY]) {
     window[GLOBAL_KEY] = true
 
     const htmlToImage = await import('https://esm.sh/html-to-image@1.11.11')
-    const { jsPDF } = await import('https://esm.sh/jspdf@2.5.1')
+
+
+    async function ensureFontsReady() {
+      try {
+        if (document.fonts?.ready) await document.fonts.ready
+      } catch {
+        // ignore
+      }
+    }
+
+    async function ensureFontEmbedCSS(sampleElement) {
+      await ensureFontsReady()
+      // Ensure webfonts are embedded for consistent metrics (fixes outline offset issues on export)
+      return await htmlToImage.getFontEmbedCSS(sampleElement)
+    }
 
     async function elementToPngDataUrl(element) {
+      await ensureFontsReady()
       const rect = element.getBoundingClientRect()
       const scale = dimensions.targetWidthPx / rect.width
 
-      return await htmlToImage.toPng(element, {
-        pixelRatio: scale,
-        backgroundColor: '#ffffff', // flatten transparency
-        canvasWidth: dimensions.targetWidthPx,
-        canvasHeight: dimensions.targetHeightPx,
-      })
-    }
-
-    async function exportPdf({ filename, btn }) {
-      btn.disabled = true
-      const originalText = btn.innerHTML
-      btn.setAttribute('aria-busy', 'true')
-
-      const setProgress = (label) => {
-        btn.innerHTML = label
-      }
-
+      document.documentElement.classList.add('exporting')
       try {
-        const pages = Array.from(document.querySelectorAll('[data-pdf-page]')).sort(
-          (a, b) => Number(a.getAttribute('data-pdf-page')) - Number(b.getAttribute('data-pdf-page'))
-        )
-        if (pages.length === 0) return
-
-        const pngs = []
-        for (const page of pages) {
-          const label = page.getAttribute('data-pdf-label') || 'page'
-          setProgress(`Rendu ${label}…`)
-          pngs.push(await elementToPngDataUrl(page))
-        }
-
-        setProgress('Génération PDF…')
-
-        const orientation = dimensions.pageWidthMm >= dimensions.pageHeightMm ? 'landscape' : 'portrait'
-        const doc = new jsPDF({
-          unit: 'mm',
-          format: [dimensions.pageWidthMm, dimensions.pageHeightMm],
-          orientation,
-          compress: true,
+        return await htmlToImage.toPng(element, {
+          pixelRatio: scale,
+          backgroundColor: '#ffffff', // flatten transparency
+          canvasWidth: dimensions.targetWidthPx,
+          canvasHeight: dimensions.targetHeightPx,
+          fontEmbedCSS: await ensureFontEmbedCSS(element),
+          preferredFontFormat: 'woff2',
         })
-
-        if (doc?.internal?.setPdfVersion) {
-          doc.internal.setPdfVersion('1.3')
-        }
-
-        pngs.forEach((png, idx) => {
-          if (idx > 0) doc.addPage([dimensions.pageWidthMm, dimensions.pageHeightMm], orientation)
-          doc.addImage(png, 'PNG', 0, 0, dimensions.pageWidthMm, dimensions.pageHeightMm)
-        })
-
-        doc.save(`${filename}.pdf`)
-      } catch (error) {
-        console.error('PDF export failed:', error)
-        alert("Erreur lors de l'export PDF. Veuillez réessayer.")
       } finally {
-        btn.disabled = false
-        btn.innerHTML = originalText
-        btn.removeAttribute('aria-busy')
+        document.documentElement.classList.remove('exporting')
       }
     }
 
@@ -194,7 +98,7 @@ const { dpi, bleedMm, pageMarginXmm, pageMarginYmm } = dimensions
         try {
           const dataUrl = await elementToPngDataUrl(element)
           const link = document.createElement('a')
-          link.download = `${filename}.png`
+          link.download = `${filename}-${dimensions.finishedWidthMm}x${dimensions.finishedHeightMm}.png`
           link.href = dataUrl
           link.click()
         } catch (error) {
@@ -204,13 +108,6 @@ const { dpi, bleedMm, pageMarginXmm, pageMarginYmm } = dimensions
           btn.disabled = false
           btn.innerHTML = originalText
         }
-      })
-    })
-
-    document.querySelectorAll('button[data-export=\"pdf\"][data-filename]').forEach(function (btn) {
-      btn.addEventListener('click', async function () {
-        const filename = btn.getAttribute('data-filename') || 'printable'
-        await exportPdf({ filename, btn })
       })
     })
   }

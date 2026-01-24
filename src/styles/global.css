@@ -19,6 +19,9 @@
 .text-outline {
   position: relative;
   display: inline-block;
+  /* Stabilize rasterization (html-to-image) at high pixelRatio */
+  z-index: 0;
+  transform: translateZ(0);
 }
 
 .text-outline::before {
@@ -29,4 +32,5 @@
   z-index: -1;
   -webkit-text-stroke: 6px #000;
   color: transparent;
+  transform: translateZ(0);
 }

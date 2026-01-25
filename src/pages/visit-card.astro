@@ -30,7 +30,7 @@ const dimensions = createPrintableDimensions({
 const faces = [
   { id: 'card-recto', label: 'Recto' },
   { id: 'card-verso', label: 'Verso' },
-]
+] satisfies Array<{ id: string; label: string }>
 const currentFaceId = 'card-recto'
 ---
 
@@ -79,24 +79,20 @@ const currentFaceId = 'card-recto'
       >
         <!-- Recto -->
         <PrintableExportCard
-          label="Recto"
           targetId="card-recto"
-          filename="carte-visite-recto"
           dimensions={dimensions}
           overlaySrc="/printables/85x54_H_coins-droits.png"
-          visible={currentFaceId === 'card-recto'}
+          visible={String(currentFaceId) === 'card-recto'}
         >
           <VisitCardRecto withBleed={true} />
         </PrintableExportCard>
 
         <!-- Verso -->
         <PrintableExportCard
-          label="Verso"
           targetId="card-verso"
-          filename="carte-visite-verso"
           dimensions={dimensions}
           overlaySrc="/printables/85x54_H_coins-droits.png"
-          visible={currentFaceId === 'card-verso'}
+          visible={String(currentFaceId) === 'card-verso'}
         >
           <VisitCardVerso withBleed={true} />
         </PrintableExportCard>
@@ -105,151 +101,15 @@ const currentFaceId = 'card-recto'
 
     <PrintableDimensionsPanel dimensions={dimensions} />
 
-    <script is:inline>
-      ;(function () {
-        'use strict'
+    <script>
+      import { setupContentCentering } from '../components/printables/behaviors/centering'
+      import { createPanningController } from '../components/printables/behaviors/panning'
 
-        const main = document.getElementById('printables-main')
-        const content = document.getElementById('printables-content')
-        if (!main || !content) return
-
-        // Center content initially - find the visible card and center it
-        function centerContent() {
-          // Find the visible card
-          const containers = document.querySelectorAll('[data-face-container]')
-          let visibleCard = null
-          for (const container of containers) {
-            if (!container.classList.contains('hidden')) {
-              const cardId = container.getAttribute('data-face-container')
-              if (cardId) {
-                visibleCard = document.getElementById(cardId)
-                break
-              }
-            }
-          }
-
-          if (!visibleCard) return
-
-          const mainRect = main.getBoundingClientRect()
-          const cardRect = visibleCard.getBoundingClientRect()
-
-          // Calculate scroll position to center the card
-          const cardCenterX = cardRect.left + cardRect.width / 2
-          const cardCenterY = cardRect.top + cardRect.height / 2
-          const mainCenterX = mainRect.left + mainRect.width / 2
-          const mainCenterY = mainRect.top + mainRect.height / 2
-
-          const scrollX = main.scrollLeft + (cardCenterX - mainCenterX)
-          const scrollY = main.scrollTop + (cardCenterY - mainCenterY)
-
-          main.scrollLeft = scrollX
-          main.scrollTop = scrollY
-        }
-
-        // Center on load - wait for everything to be ready
-        function initCentering() {
-          if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-              setTimeout(() => {
-                centerContent()
-                // Also center after a short delay to ensure all content is loaded
-                setTimeout(centerContent, 300)
-              }, 100)
-            })
-          } else {
-            setTimeout(() => {
-              centerContent()
-              setTimeout(centerContent, 300)
-            }, 100)
-          }
-        }
-
-        initCentering()
-
-        let isPanning = false
-        let isSpacePressed = false
-        let startX = 0
-        let startY = 0
-        let scrollLeft = 0
-        let scrollTop = 0
-
-        // Space key handlers
-        document.addEventListener('keydown', (e) => {
-          if (e.code === 'Space' && !e.target.matches('input, textarea')) {
-            e.preventDefault()
-            isSpacePressed = true
-            main.style.cursor = 'grab'
-          }
-        })
-
-        document.addEventListener('keyup', (e) => {
-          if (e.code === 'Space') {
-            isSpacePressed = false
-            if (!isPanning) {
-              main.style.cursor = ''
-            }
-          }
-        })
-
-        // Mouse down - start panning
-        main.addEventListener('mousedown', (e) => {
-          // Space + click or middle mouse button
-          if (isSpacePressed || e.button === 1) {
-            e.preventDefault()
-            isPanning = true
-            main.style.cursor = 'grabbing'
-            const rect = main.getBoundingClientRect()
-            startX = e.clientX - rect.left
-            startY = e.clientY - rect.top
-            scrollLeft = main.scrollLeft
-            scrollTop = main.scrollTop
-          }
-        })
-
-        // Mouse move - pan
-        main.addEventListener('mousemove', (e) => {
-          if (!isPanning) return
-          e.preventDefault()
-          const rect = main.getBoundingClientRect()
-          const x = e.clientX - rect.left
-          const y = e.clientY - rect.top
-          const walkX = x - startX
-          const walkY = y - startY
-          main.scrollLeft = scrollLeft - walkX
-          main.scrollTop = scrollTop - walkY
-        })
-
-        // Mouse up - stop panning
-        main.addEventListener('mouseup', (e) => {
-          if (isPanning) {
-            isPanning = false
-            if (isSpacePressed) {
-              main.style.cursor = 'grab'
-            } else {
-              main.style.cursor = ''
-            }
-          }
-        })
-
-        // Mouse leave - stop panning
-        main.addEventListener('mouseleave', () => {
-          if (isPanning) {
-            isPanning = false
-            if (isSpacePressed) {
-              main.style.cursor = 'grab'
-            } else {
-              main.style.cursor = ''
-            }
-          }
-        })
-
-        // Prevent context menu on middle click
-        main.addEventListener('contextmenu', (e) => {
-          if (e.button === 1) {
-            e.preventDefault()
-          }
-        })
-      })()
+      const main = document.getElementById('printables-main')
+      if (main) {
+        setupContentCentering(main)
+        createPanningController(main)
+      }
     </script>
   </body>
 </html>

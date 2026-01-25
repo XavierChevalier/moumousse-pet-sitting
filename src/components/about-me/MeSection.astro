@@ -3,6 +3,7 @@ import { Picture } from 'astro:assets'
 import SteffieOttawa from '../../assets/steffie-ottawa.jpg'
 import { siteConfig } from '../../config/SiteConfig'
 import SectionAnchor from '../ui/SectionAnchor.astro'
+import SocialLinks from '../ui/SocialLinks.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
@@ -46,8 +47,8 @@ const { id, ...props } = Astro.props
           <p class="mt-4">
             Une passion et une sensibilité envers les animaux s'est développée tout au long de ma
             vie pour qu’à l’aube de mes 30 ans, je plaque un super travail, décision dure mais
-            nécessaire, pour <strong>me consacrer à la cause animale</strong> et le bien-être de nos
-            boules de poils.
+            nécessaire, pour <strong>me consacrer à la cause animale</strong> et le bien-être de nos boules
+            de poils.
           </p>
           <p class="mt-4">
             Une expérience en refuge et <strong>la garde d’animaux</strong> dans mon entourage aura donné
@@ -56,10 +57,13 @@ const { id, ...props } = Astro.props
           </p>
         </div>
 
-        <span
-          class="mt-4 block w-full text-right text-lg tracking-tight text-black/40 sm:text-xl lg:mt-2"
-          >{siteConfig.business.ownerName}</span
-        >
+        <div class="mt-4 flex w-full items-center justify-end gap-4">
+          <span class="text-lg font-medium tracking-tight text-black/50 sm:text-xl">
+            {siteConfig.business.ownerName}
+          </span>
+          <!-- <span class="text-black/20" aria-hidden="true">•</span> -->
+          <SocialLinks context="about" />
+        </div>
       </div>
     </div>
   </div>

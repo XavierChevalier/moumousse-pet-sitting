@@ -18,6 +18,11 @@ export const siteConfig = {
     email: 'contact@moumousse-pet-sitting.fr',
   },
 
+  social: {
+    instagram: 'https://www.instagram.com/moumoussepetsitting/',
+    facebook: 'https://www.facebook.com/p/Moumousse-Pet-Sitting-61586131220302/',
+  },
+
   business: {
     name: 'Moumousse Pet Sitting',
     ownerName: 'Steffie Thollot',

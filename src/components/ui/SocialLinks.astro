@@ -1,0 +1,49 @@
+---
+import { Facebook, Instagram } from '@lucide/astro'
+import { siteConfig } from '../../config/SiteConfig'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  light?: boolean
+  context: string
+}
+
+const { light = false, context, class: className = '', ...props } = Astro.props
+
+const linkClass = light
+  ? 'text-white hover:text-primary hover:bg-white/10'
+  : 'text-black hover:text-primary hover:bg-black/5'
+
+const socialLinks = [
+  {
+    href: siteConfig.social.instagram,
+    icon: Instagram,
+    label: 'Suivez-nous sur Instagram',
+    event: `social:click-instagram-${context}`,
+  },
+  {
+    href: siteConfig.social.facebook,
+    icon: Facebook,
+    label: 'Suivez-nous sur Facebook',
+    event: `social:click-facebook-${context}`,
+  },
+]
+---
+
+<div {...props} class={`flex items-center gap-2 ${className}`}>
+  {
+    socialLinks.map(({ href, icon: Icon, label, event }) => (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class={`focus:ring-primary rounded-full p-2 transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none ${
+          light ? 'focus:ring-offset-black' : 'focus:ring-offset-white'
+        } ${linkClass}`}
+        aria-label={label}
+        data-umami-event={event}
+      >
+        <Icon class="h-6 w-6" />
+      </a>
+    ))
+  }
+</div>

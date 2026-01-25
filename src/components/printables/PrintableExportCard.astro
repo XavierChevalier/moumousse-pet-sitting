@@ -2,9 +2,7 @@
 import type { PrintableDimensions } from '../../core/printables/dimensions'
 
 interface Props {
-  label: string
   targetId: string
-  filename: string
   dimensions: PrintableDimensions
   /** Overlay (crop marks) */
   overlaySrc: string
@@ -12,7 +10,7 @@ interface Props {
   visible?: boolean
 }
 
-const { label, targetId, filename, dimensions, overlaySrc, visible = true } = Astro.props
+const { targetId, dimensions, overlaySrc, visible = true } = Astro.props
 ---
 
 <div

@@ -84,8 +84,32 @@ const { id, ...props } = Astro.props
           <p class="mb-4">
             Par <strong>mail</strong>, <strong>SMS</strong> ou <strong>appel téléphonique</strong>.
           </p>
+          <div class="mb-4 space-y-2">
+            <a
+              href={`mailto:${siteConfig.contact.email}`}
+              class="hover:text-primary flex items-center gap-2 transition-colors"
+              data-umami-event="faq:click-email-reservation"
+            >
+              <Mail width={18} />
+              {siteConfig.contact.email}
+            </a>
+            <ProtectedContent
+              encodedContent={siteConfig.contact.encodedPhone}
+              placeholder="Cliquez pour voir le téléphone"
+              contentType="phone"
+            >
+              <Phone slot="prepend" width={18} />
+            </ProtectedContent>
+          </div>
+          <p class="mb-4">
+            Vous pouvez également utiliser le <a
+              href="/#contact"
+              class="text-primary hover:underline"
+              data-umami-event="faq:click-contact-form-reservation">formulaire de contact</a
+            >.
+          </p>
           <p class="flex items-center gap-4 leading-tight">
-            <AlertTriangle class="h-5 w-5 text-yellow-400" />
+            <AlertTriangle class="h-6 w-6 text-yellow-400 flex-shrink-0" />
             Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.
           </p>
         </AccordionItem>

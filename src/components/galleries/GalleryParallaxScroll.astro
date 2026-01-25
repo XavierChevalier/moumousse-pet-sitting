@@ -47,6 +47,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
                 data-preview={lqipSources[globalIndex]}
                 data-highres={highResSources[globalIndex]}
                 data-title={title}
+                data-subtitle={subtitle || ''}
               >
                 <div class="group relative cursor-zoom-in overflow-hidden rounded-lg">
                   <Image
@@ -128,6 +129,20 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
             class="block h-auto max-h-[80vh] w-auto max-w-[90vw] object-contain opacity-0 transition-opacity duration-200 will-change-transform select-none md:max-h-[90vh] md:max-w-[85vw] lg:max-h-[95vh] lg:max-w-[90vw]"
             style="transition: opacity .2s ease-out, filter .15s ease-out;"
           />
+        </div>
+        <!-- Title and subtitle -->
+        <div
+          id="lightbox-title"
+          class="pointer-events-none absolute top-4 left-1/2 z-[62] -translate-x-1/2 text-center text-white opacity-0 transition-opacity duration-200 sm:top-6 lg:top-8"
+        >
+          <div class="rounded-lg bg-black/60 px-6 py-3 backdrop-blur-sm sm:px-8 sm:py-4">
+            <div id="lightbox-title-text" class="text-2xl font-bold sm:text-3xl lg:text-4xl"></div>
+            <div
+              id="lightbox-subtitle-text"
+              class="mt-1 text-base text-white/90 sm:text-lg lg:text-xl"
+            >
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -260,6 +275,9 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
     const closeBtn = document.getElementById('lightbox-close') as HTMLButtonElement
     const thumbs = document.getElementById('lightbox-thumbs') as HTMLDivElement
     const container = document.getElementById('gallery-parallax-container') as HTMLDivElement
+    const titleEl = document.getElementById('lightbox-title') as HTMLDivElement
+    const titleTextEl = document.getElementById('lightbox-title-text') as HTMLDivElement
+    const subtitleTextEl = document.getElementById('lightbox-subtitle-text') as HTMLDivElement
 
     if (!overlay || !container) return
 
@@ -269,12 +287,18 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
     const total = imageItems.length
     const sources: string[] = new Array(total).fill('')
     const previewSources: string[] = new Array(total).fill('')
+    const titles: string[] = new Array(total).fill('')
+    const subtitles: string[] = new Array(total).fill('')
     imageItems.forEach((item) => {
       const index = Number(item.getAttribute('data-index'))
       const highres = item.getAttribute('data-highres') || ''
       const preview = item.getAttribute('data-preview') || ''
+      const title = item.getAttribute('data-title') || ''
+      const subtitle = item.getAttribute('data-subtitle') || ''
       if (!Number.isNaN(index) && highres) sources[index] = highres
       if (!Number.isNaN(index)) previewSources[index] = preview
+      if (!Number.isNaN(index)) titles[index] = title
+      if (!Number.isNaN(index)) subtitles[index] = subtitle
     })
 
     let currentIndex = 0
@@ -296,6 +320,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
     function showOverlay(index: number) {
       currentIndex = index
       updateImage()
+      updateTitle()
       preloadNext()
       overlay.classList.remove('hidden')
       requestAnimationFrame(() => {
@@ -304,6 +329,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
         prevBtn && (prevBtn.style.opacity = '1')
         nextBtn && (nextBtn.style.opacity = '1')
         closeBtn && (closeBtn.style.opacity = '1')
+        if (titleEl) titleEl.style.opacity = '1'
       })
       highlightThumb()
       lockScroll()
@@ -315,6 +341,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
       prevBtn && (prevBtn.style.opacity = '0')
       nextBtn && (nextBtn.style.opacity = '0')
       closeBtn && (closeBtn.style.opacity = '0')
+      if (titleEl) titleEl.style.opacity = '0'
       // Hide thumbnails with smooth transition
       if (thumbs) {
         thumbs.style.transform = 'translateY(100%)'
@@ -353,7 +380,22 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
         tmp.src = full
       }
 
+      updateTitle()
       highlightThumb()
+    }
+
+    function updateTitle() {
+      if (!titleTextEl || !subtitleTextEl) return
+      const title = titles[currentIndex] || ''
+      const subtitle = subtitles[currentIndex] || ''
+      titleTextEl.textContent = title
+      if (subtitle) {
+        subtitleTextEl.textContent = subtitle
+        subtitleTextEl.style.display = 'block'
+      } else {
+        subtitleTextEl.textContent = ''
+        subtitleTextEl.style.display = 'none'
+      }
     }
 
     // Preload next image for smoother navigation
@@ -430,6 +472,7 @@ const columns = [images.slice(0, third), images.slice(third, 2 * third), images.
           if (!Number.isNaN(idx)) {
             currentIndex = idx
             updateImage()
+            preloadNext()
           }
         }
       })

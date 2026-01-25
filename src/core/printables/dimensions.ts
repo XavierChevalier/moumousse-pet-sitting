@@ -16,6 +16,12 @@ export interface PrintableDimensionsInput {
   contentPaddingMm: number
 
   /**
+   * Crop mark offset from page edge in mm (for "Après découpe" mode)
+   * If not provided, defaults to pageMargin + bleed
+   */
+  cropMarkOffsetFromPageEdgeMm?: number
+
+  /**
    * One of:
    * - Provide the final page size in mm (recommended when you know it)
    * - Or provide the required output size in px at baseDpi (useful when requirements are pixel-based)
@@ -43,6 +49,7 @@ export interface PrintableDimensions {
   targetHeightPx: number
   pageMarginXmm: number
   pageMarginYmm: number
+  cropMarkOffsetFromPageEdgeMm?: number
 }
 
 function computePageMmFromBaseTargetPx({
@@ -84,6 +91,7 @@ export function createPrintableDimensions({
   bleedMm,
   safeZoneMm,
   contentPaddingMm,
+  cropMarkOffsetFromPageEdgeMm,
   pageWidthMm: pageWidthMmInput,
   pageHeightMm: pageHeightMmInput,
   baseTargetWidthPx,
@@ -113,6 +121,9 @@ export function createPrintableDimensions({
   const totalWithBleedWidthMm = finishedWidthMm + bleedMm * 2
   const totalWithBleedHeightMm = finishedHeightMm + bleedMm * 2
 
+  const pageMarginXmm = (pageWidthMm - totalWithBleedWidthMm) / 2
+  const pageMarginYmm = (pageHeightMm - totalWithBleedHeightMm) / 2
+
   return {
     dpi,
     finishedWidthMm,
@@ -128,8 +139,9 @@ export function createPrintableDimensions({
     pageHeightMm,
     targetWidthPx,
     targetHeightPx,
-    pageMarginXmm: (pageWidthMm - totalWithBleedWidthMm) / 2,
-    pageMarginYmm: (pageHeightMm - totalWithBleedHeightMm) / 2,
+    pageMarginXmm,
+    pageMarginYmm,
+    cropMarkOffsetFromPageEdgeMm,
   }
 }
 

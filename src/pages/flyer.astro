@@ -10,6 +10,7 @@ import SEO from '../components/SEO.astro'
 import { siteConfig } from '../config/SiteConfig'
 import { createPrintableDimensions } from '../core/printables/dimensions'
 import '../styles/global.css'
+import '../components/printables/printables.css'
 
 if (!import.meta.env.DEV) {
   return new Response(null, { status: 404 })
@@ -21,10 +22,11 @@ const dimensions = createPrintableDimensions({
   finishedWidthMm: 210,
   finishedHeightMm: 210,
   bleedMm: 2,
-  safeZoneMm: 8,
+  safeZoneMm: 3,
   contentPaddingMm: 8,
-  pageWidthMm: 234,
-  pageHeightMm: 234,
+  pageWidthMm: 242,
+  pageHeightMm: 242,
+  cropMarkOffsetFromPageEdgeMm: 16, // pageMargin (14) + bleed (2) = position standard
 })
 
 const faces = [

@@ -51,14 +51,34 @@ function hidePrintableCardMargins(cardEl: HTMLElement, dimensions: PrintableDime
   requestAnimationFrame(() => {
     const rect = cardEl.getBoundingClientRect()
 
-    // Convert dimensions to pixels
+    // After padding is set to 0, the card size corresponds to totalWithBleedWidthMm
     const totalWithBleedWidthMm = dimensions.finishedWidthMm + 2 * dimensions.bleedMm
+    const totalWithBleedHeightMm = dimensions.finishedHeightMm + 2 * dimensions.bleedMm
     const MM_TO_PX = rect.width / totalWithBleedWidthMm
-    const bleedPx = dimensions.bleedMm * MM_TO_PX
 
-    // Finished zone starts after bleed
-    const cropX = bleedPx
-    const cropY = bleedPx
+    // Calculate crop mark position
+    // If cropMarkOffsetFromPageEdgeMm is provided, use it (converted to card coordinates)
+    // Otherwise, use default: pageMargin + bleed (which equals just bleed in card coordinates)
+    let cropX: number
+    let cropY: number
+
+    if (dimensions.cropMarkOffsetFromPageEdgeMm !== undefined) {
+      // Crop mark is at specified offset from page edge
+      // After padding removal, the card represents the content area (totalWithBleedWidthMm)
+      // The card starts at pageMarginXmm from the page edge
+      // So: cropMarkFromPageEdge = pageMargin + cropMarkFromCardEdge
+      // Therefore: cropMarkFromCardEdge = cropMarkFromPageEdge - pageMargin
+      const cropMarkFromCardEdgeMm =
+        dimensions.cropMarkOffsetFromPageEdgeMm - dimensions.pageMarginXmm
+      cropX = cropMarkFromCardEdgeMm * MM_TO_PX
+      cropY =
+        (dimensions.cropMarkOffsetFromPageEdgeMm - dimensions.pageMarginYmm) * MM_TO_PX
+    } else {
+      // Default: finished zone starts after bleed
+      cropX = dimensions.bleedMm * MM_TO_PX
+      cropY = dimensions.bleedMm * MM_TO_PX
+    }
+
     const finishedWidthPx = dimensions.finishedWidthMm * MM_TO_PX
     const finishedHeightPx = dimensions.finishedHeightMm * MM_TO_PX
 

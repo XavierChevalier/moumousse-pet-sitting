@@ -9,7 +9,7 @@ export class TextOutlineFixer implements ITextOutlineFixer {
   private readonly originalStyles = new Map<HTMLElement, Map<string, string>>()
 
   fixTextOutlineElements(element: HTMLElement): void {
-    const textOutlineElements = element.querySelectorAll<HTMLElement>('.text-outline')
+    const textOutlineElements = element.querySelectorAll<HTMLElement>('.text-outline-printable')
     textOutlineElements.forEach((el) => {
       // Store original styles for potential restoration
       const originalStyleMap = new Map<string, string>()
@@ -35,7 +35,7 @@ export class TextOutlineFixer implements ITextOutlineFixer {
   }
 
   restoreTextOutlineElements(element: HTMLElement): void {
-    const textOutlineElements = element.querySelectorAll<HTMLElement>('.text-outline')
+    const textOutlineElements = element.querySelectorAll<HTMLElement>('.text-outline-printable')
     textOutlineElements.forEach((el) => {
       const originalStyleMap = this.originalStyles.get(el)
       if (originalStyleMap) {

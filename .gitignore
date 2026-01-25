@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # MCP
 .playwright-mcp/
+
+# Temporary printables exclusion
+.printables-temp/

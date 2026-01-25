@@ -2,6 +2,7 @@ import sitemap from '@astrojs/sitemap'
 import playformInline from '@playform/inline'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
+import { excludePrintables } from './build/exclude-printables.js'
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,6 +19,7 @@ export default defineConfig({
       },
     }),
     playformInline(),
+    excludePrintables(),
   ],
   vite: {
     plugins: [tailwindcss()],

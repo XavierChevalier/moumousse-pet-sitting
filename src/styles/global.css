@@ -30,69 +30,8 @@
   top: 0;
   left: 0;
   z-index: -1;
-  /* Inherit ALL font properties from parent to ensure perfect match */
-  font-family: inherit;
-  font-size: var(--font-size, inherit);
-  font-weight: inherit;
-  font-style: inherit;
-  /* Critical: use CSS variable for exact line-height match to prevent broken shadows */
-  line-height: var(--line-height, inherit);
-  letter-spacing: var(--letter-spacing, inherit);
-  text-transform: inherit;
-  word-spacing: inherit;
   -webkit-text-stroke: 6px #000;
   color: transparent;
   transform: translateZ(0);
-  white-space: nowrap;
-  /* Ensure perfect alignment */
-  margin: 0;
-  padding: 0;
-  vertical-align: baseline;
-  text-rendering: inherit;
-  -webkit-font-smoothing: inherit;
-  -moz-osx-font-smoothing: inherit;
 }
 
-/* Fix outline rendering during export - keep ::before with -webkit-text-stroke but optimize for html-to-image */
-/* Different approach: Instead of hiding ::before and using text-shadow, optimize ::before rendering */
-.exporting .text-outline::before {
-  /* Keep ::before visible but optimize its rendering for html-to-image */
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  /* Use exact values from CSS variables for perfect alignment */
-  line-height: var(--line-height, inherit) !important;
-  font-size: var(--font-size, inherit) !important;
-  letter-spacing: var(--letter-spacing, inherit) !important;
-  /* Use -webkit-text-stroke but with specific optimizations for html-to-image */
-  -webkit-text-stroke: 6px #000 !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-  /* Remove any text-shadow that might cause duplication */
-  text-shadow: none !important;
-  /* Force exact positioning to avoid misalignment */
-  top: 0 !important;
-  left: 0 !important;
-  transform: translateZ(0) !important;
-  /* Optimize rendering for export - use paint-order to control stroke rendering */
-  /* This helps reduce artifacts at diagonal intersections (like on 'X') */
-  paint-order: stroke fill markers !important;
-  /* Optimize rendering for export - use optimizeSpeed for sharper edges */
-  text-rendering: optimizeSpeed !important;
-  -webkit-font-smoothing: none !important;
-  -moz-osx-font-smoothing: unset !important;
-  /* Force layer creation for better rendering */
-  will-change: auto !important;
-  backface-visibility: visible !important;
-  isolation: auto !important;
-}
-
-.exporting .text-outline {
-  /* Remove any text-shadow to avoid duplication with ::before */
-  text-shadow: none !important;
-  /* Ensure text color is preserved */
-  color: var(--text-color, inherit) !important;
-  -webkit-text-fill-color: var(--text-color, inherit) !important;
-  /* Ensure no stroke on main element */
-  -webkit-text-stroke: 0 !important;
-}

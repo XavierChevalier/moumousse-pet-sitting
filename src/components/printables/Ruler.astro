@@ -9,463 +9,66 @@ interface Props {
 const { dimensions: _dimensions } = Astro.props
 ---
 
-<div class="fixed inset-0 pointer-events-none z-[95]" data-ruler="main" style="display: block !important; visibility: visible !important;">
+<div
+  class="pointer-events-none fixed inset-0 z-[95]"
+  data-ruler="main"
+  style="display: block !important; visibility: visible !important;"
+>
   <!-- Corner square at intersection of sidebar and toolbar -->
-  <div class="ruler-corner" style="position: fixed; width: 20px; height: 20px; background-color: #ffffff; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; z-index: 96; left: 192px; top: 56px;"></div>
-  
+  <div
+    class="ruler-corner"
+    style="position: fixed; width: 20px; height: 20px; background-color: #ffffff; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; z-index: 96; left: 192px; top: 56px;"
+  >
+  </div>
+
   <!-- Horizontal Ruler (top) - Canvas -->
-  <canvas class="ruler-horizontal" data-ruler="horizontal" style="position: fixed; height: 20px; background-color: #ffffff; border-bottom: 1px solid #e5e7eb; z-index: 95; display: block; left: 192px; top: 56px; right: 0;"></canvas>
-  
+  <canvas
+    class="ruler-horizontal"
+    data-ruler="horizontal"
+    style="position: fixed; height: 20px; background-color: #ffffff; border-bottom: 1px solid #e5e7eb; z-index: 95; display: block; left: 192px; top: 56px; right: 0;"
+  ></canvas>
+
   <!-- Vertical Ruler (left) - Canvas -->
-  <canvas class="ruler-vertical" data-ruler="vertical" style="position: fixed; width: 20px; background-color: #ffffff; border-right: 1px solid #e5e7eb; z-index: 95; display: block; left: 192px; top: 76px; bottom: 0;"></canvas>
-  
+  <canvas
+    class="ruler-vertical"
+    data-ruler="vertical"
+    style="position: fixed; width: 20px; background-color: #ffffff; border-right: 1px solid #e5e7eb; z-index: 95; display: block; left: 192px; top: 76px; bottom: 0;"
+  ></canvas>
+
   <!-- Horizontal marker -->
-  <div class="ruler-marker-horizontal" data-marker="horizontal" style="position: fixed; width: 2px; height: 20px; background-color: #3b82f6; opacity: 0.9; z-index: 96; display: none; pointer-events: none;"></div>
-  
+  <div
+    class="ruler-marker-horizontal"
+    data-marker="horizontal"
+    style="position: fixed; width: 2px; height: 20px; background-color: #3b82f6; opacity: 0.9; z-index: 96; display: none; pointer-events: none;"
+  >
+  </div>
+
   <!-- Vertical marker -->
-  <div class="ruler-marker-vertical" data-marker="vertical" style="position: fixed; width: 20px; height: 2px; background-color: #3b82f6; opacity: 0.9; z-index: 96; display: none; pointer-events: none;"></div>
-  
+  <div
+    class="ruler-marker-vertical"
+    data-marker="vertical"
+    style="position: fixed; width: 20px; height: 2px; background-color: #3b82f6; opacity: 0.9; z-index: 96; display: none; pointer-events: none;"
+  >
+  </div>
+
   <!-- Horizontal value display -->
-  <div class="ruler-value-horizontal" data-value="horizontal" style="position: fixed; background-color: rgba(107, 114, 128, 0.7); color: white; padding: 1px 3px; font-size: 9px; font-family: monospace; border-radius: 2px; z-index: 97; display: none; pointer-events: none; white-space: nowrap; opacity: 0.8;"></div>
-  
+  <div
+    class="ruler-value-horizontal"
+    data-value="horizontal"
+    style="position: fixed; background-color: rgba(107, 114, 128, 0.7); color: white; padding: 1px 3px; font-size: 9px; font-family: monospace; border-radius: 2px; z-index: 97; display: none; pointer-events: none; white-space: nowrap; opacity: 0.8;"
+  >
+  </div>
+
   <!-- Vertical value display -->
-  <div class="ruler-value-vertical" data-value="vertical" style="position: fixed; background-color: rgba(107, 114, 128, 0.7); color: white; padding: 1px 3px; font-size: 9px; font-family: monospace; border-radius: 2px; z-index: 97; display: none; pointer-events: none; white-space: nowrap; opacity: 0.8;"></div>
-  
+  <div
+    class="ruler-value-vertical"
+    data-value="vertical"
+    style="position: fixed; background-color: rgba(107, 114, 128, 0.7); color: white; padding: 1px 3px; font-size: 9px; font-family: monospace; border-radius: 2px; z-index: 97; display: none; pointer-events: none; white-space: nowrap; opacity: 0.8;"
+  >
+  </div>
 </div>
 
-
-<script is:inline>
-  (function() {
-    'use strict'
-    
-    // Find the visible card element (not hidden)
-    function getVisibleCard() {
-      const containers = document.querySelectorAll('[data-face-container]')
-      for (const container of containers) {
-        if (!container.classList.contains('hidden')) {
-          const cardId = container.getAttribute('data-face-container')
-          if (cardId) {
-            return document.getElementById(cardId)
-          }
-        }
-      }
-      return null
-    }
-    
-    function initRuler() {
-      const rulerContainer = document.querySelector('[data-ruler="main"]')
-      if (!rulerContainer) return false
-
-      let cardElement = getVisibleCard()
-      if (!cardElement) return false
-
-      // Get dimensions from data attribute
-      let dimensionsStr = cardElement.getAttribute('data-dimensions')
-      if (!dimensionsStr) return false
-      
-      let dimensions = JSON.parse(dimensionsStr)
-
-      const horizontalRuler = rulerContainer.querySelector('[data-ruler="horizontal"]')
-      const verticalRuler = rulerContainer.querySelector('[data-ruler="vertical"]')
-      const horizontalMarker = document.querySelector('[data-marker="horizontal"]')
-      const verticalMarker = document.querySelector('[data-marker="vertical"]')
-      const horizontalValue = document.querySelector('[data-value="horizontal"]')
-      const verticalValue = document.querySelector('[data-value="vertical"]')
-      const corner = rulerContainer.querySelector('.ruler-corner')
-
-      if (!horizontalRuler || !verticalRuler || !horizontalMarker || !verticalMarker || !horizontalValue || !verticalValue || !corner) {
-        return false
-      }
-
-      // Draw ruler on canvas - fills entire ruler bar
-      function drawRuler(canvas, isHorizontal, dimensions, cardOffset, rulerLength) {
-        const ctx = canvas.getContext('2d')
-        if (!ctx) return
-        
-        // Get actual canvas dimensions in CSS pixels (not device pixels)
-        // The canvas has been scaled by devicePixelRatio, so we need to divide by it
-        const dpr = window.devicePixelRatio || 1
-        const width = canvas.width / dpr
-        const height = canvas.height / dpr
-        
-        // Clear canvas
-        ctx.clearRect(0, 0, width, height)
-        
-        // Set background - fill entire canvas
-        ctx.fillStyle = '#ffffff'
-        ctx.fillRect(0, 0, width, height)
-        
-        // Draw border
-        ctx.strokeStyle = '#e5e7eb'
-        ctx.lineWidth = 1
-        if (isHorizontal) {
-          ctx.beginPath()
-          ctx.moveTo(0, height - 0.5)
-          ctx.lineTo(width, height - 0.5)
-          ctx.stroke()
-        } else {
-          ctx.beginPath()
-          ctx.moveTo(width - 0.5, 0)
-          ctx.lineTo(width - 0.5, height)
-          ctx.stroke()
-        }
-        
-        // Calculate scale based on card dimensions
-        const totalWidthMm = dimensions.totalWithBleedWidthMm + dimensions.pageMarginXmm * 2
-        const totalHeightMm = dimensions.totalWithBleedHeightMm + dimensions.pageMarginYmm * 2
-        
-        const currentCard = getVisibleCard()
-        if (!currentCard) return
-        
-        const cardWidthPx = currentCard.getBoundingClientRect().width
-        const cardHeightPx = currentCard.getBoundingClientRect().height
-        
-        const scaleX = cardWidthPx / totalWidthMm
-        const scaleY = cardHeightPx / totalHeightMm
-        const scale = isHorizontal ? scaleX : scaleY
-        
-        // Draw ticks across entire ruler length - fill the entire bar
-        // We need ticks from pixel 0 to pixel rulerLength
-        // Calculate mm range: convert pixel positions to mm coordinates
-        const pixelsPerMm = scale
-        // For any pixel position in ruler: mm = (pixel - cardOffset) / scale
-        // To cover entire ruler (0 to rulerLength), calculate mm range:
-        const startMm = Math.floor((0 - cardOffset) / pixelsPerMm)
-        const endMm = Math.ceil((rulerLength - cardOffset) / pixelsPerMm)
-        // Extend range to ensure we cover edges
-        const extendedStartMm = startMm - 20
-        const extendedEndMm = endMm + 20
-        
-        // Photoshop colors: ticks are light gray (#6E6E6E to #808080), labels are lighter gray (#B0B0B0 to #C0C0C0)
-        const tickColor = '#6E6E6E'
-        const labelColor = '#B0B0B0'
-        
-        ctx.strokeStyle = tickColor
-        ctx.fillStyle = labelColor
-        ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'top'
-        
-        for (let mm = extendedStartMm; mm <= extendedEndMm; mm += 1) {
-          const position = cardOffset + (mm * scale)
-          // Draw ticks across entire ruler - clamp position to ruler bounds for drawing
-          // But allow drawing if close to bounds (within 1mm)
-          if (position < -scale * 2 || position > rulerLength + scale * 2) continue
-          
-          const isMajor = mm % 10 === 0
-          const isMedium = mm % 5 === 0 && !isMajor
-          
-          // Photoshop style: numbers at top/left, ticks from bottom/left with clear spacing
-          const rulerHeight = isHorizontal ? height : width
-          // Fixed boundary: ticks must stop here to leave clear space for numbers above
-          // Numbers are ~11px tall, so we reserve top 13px for numbers, ticks start at 16px
-          const numberAreaHeight = 13
-          const tickMaxY = 16 // For horizontal: ticks stop at y: 16 max (leaving 3px gap from numbers ending at y: 13)
-          const tickMaxX = 16 // For vertical: ticks stop at x: 16 max
-          
-          // Calculate tick lengths
-          let tickLength = 3 // minor
-          if (isMajor) tickLength = Math.floor(rulerHeight / 2) // ~10px for 20px ruler
-          else if (isMedium) tickLength = Math.floor(rulerHeight / 3) // ~6-7px
-          
-          ctx.lineWidth = 1 // All ticks are 1px in Photoshop
-          ctx.strokeStyle = tickColor
-          
-          if (isHorizontal) {
-            const x = position
-            // Draw tick from bottom upward, but never above tickMaxY
-            const tickBottom = height
-            const desiredTickTop = tickBottom - tickLength
-            const tickTop = Math.min(desiredTickTop, tickMaxY)
-            ctx.beginPath()
-            ctx.moveTo(x, tickBottom)
-            ctx.lineTo(x, tickTop)
-            ctx.stroke()
-            
-            // Draw label for major ticks - Photoshop style: numbers at top, clearly above ticks
-            if (isMajor) {
-              ctx.fillStyle = labelColor
-              ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif'
-              ctx.textAlign = 'center'
-              ctx.textBaseline = 'top'
-              // Place numbers at the very top (y: 1) to ensure they're above ticks
-              ctx.fillText(String(mm), x, 1)
-            }
-          } else {
-            const y = position
-            // Draw tick from right edge leftward
-            const tickRight = width
-            const desiredTickLeft = tickRight - tickLength
-            // Ensure ticks don't go beyond the left boundary (tickMaxX from right edge)
-            const tickLeft = Math.max(desiredTickLeft, width - tickMaxX)
-            ctx.beginPath()
-            ctx.moveTo(tickRight, y)
-            ctx.lineTo(tickLeft, y)
-            ctx.stroke()
-            
-            // Draw label for major ticks (rotated) - Photoshop style: numbers at left side of ruler
-            if (isMajor) {
-              ctx.save()
-              // Position numbers at the left side of the ruler, ensuring they're fully visible
-              // The ruler width is 20px (CSS), so we position text to be fully visible
-              // After rotation of -90°, text becomes horizontal
-              // Text is ~11px tall, after rotation it becomes ~11px wide
-              // Position at x: 5.5 (center of left half) to ensure text is fully visible
-              // This positions the text center at 5.5px, so with ~5.5px on each side, it fits in the left 11px
-              ctx.translate(5.5, y)
-              ctx.rotate(-Math.PI / 2)
-              ctx.fillStyle = labelColor
-              ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif'
-              ctx.textAlign = 'center'
-              ctx.textBaseline = 'middle'
-              // Draw text - after rotation it will be readable vertically (from bottom to top)
-              const text = String(mm)
-              ctx.fillText(text, 0, 0)
-              ctx.restore()
-            }
-          }
-        }
-      }
-
-      // Update ruler ticks and position when card size changes
-      function updateRulers() {
-        const currentCard = getVisibleCard()
-        if (!currentCard) return
-        
-        const toolbar = document.getElementById('printables-toolbar')
-        const sidebar = document.getElementById('printables-sidebar')
-        if (!toolbar || !sidebar) return
-        
-        const cardRect = currentCard.getBoundingClientRect()
-        const toolbarRect = toolbar.getBoundingClientRect()
-        const sidebarRect = sidebar.getBoundingClientRect()
-        
-        // Update dimensions if card changed
-        const newDimensionsStr = currentCard.getAttribute('data-dimensions')
-        if (newDimensionsStr) {
-          dimensions = JSON.parse(newDimensionsStr)
-        }
-        
-        // Position horizontal ruler
-        const horizontalRulerLeft = sidebarRect.right
-        const horizontalRulerWidth = window.innerWidth - sidebarRect.right
-        const horizontalRulerTop = toolbarRect.bottom
-        
-        horizontalRuler.style.setProperty('position', 'fixed', 'important')
-        horizontalRuler.style.setProperty('left', horizontalRulerLeft + 'px', 'important')
-        horizontalRuler.style.setProperty('top', horizontalRulerTop + 'px', 'important')
-        horizontalRuler.style.setProperty('width', horizontalRulerWidth + 'px', 'important')
-        horizontalRuler.style.setProperty('height', '20px', 'important')
-        horizontalRuler.width = horizontalRulerWidth * window.devicePixelRatio
-        horizontalRuler.height = 20 * window.devicePixelRatio
-        horizontalRuler.style.width = horizontalRulerWidth + 'px'
-        horizontalRuler.style.height = '20px'
-        
-        // Position vertical ruler
-        const verticalRulerLeft = sidebarRect.right
-        const verticalRulerTop = toolbarRect.bottom
-        const verticalRulerHeight = window.innerHeight - toolbarRect.bottom
-        
-        verticalRuler.style.setProperty('position', 'fixed', 'important')
-        verticalRuler.style.setProperty('left', verticalRulerLeft + 'px', 'important')
-        verticalRuler.style.setProperty('top', verticalRulerTop + 'px', 'important')
-        verticalRuler.style.setProperty('width', '20px', 'important')
-        verticalRuler.style.setProperty('height', verticalRulerHeight + 'px', 'important')
-        verticalRuler.width = 20 * window.devicePixelRatio
-        verticalRuler.height = verticalRulerHeight * window.devicePixelRatio
-        verticalRuler.style.width = '20px'
-        verticalRuler.style.height = verticalRulerHeight + 'px'
-        
-        // Position corner
-        corner.style.setProperty('position', 'fixed', 'important')
-        corner.style.setProperty('left', sidebarRect.right + 'px', 'important')
-        corner.style.setProperty('top', toolbarRect.bottom + 'px', 'important')
-        corner.style.setProperty('width', '20px', 'important')
-        corner.style.setProperty('height', '20px', 'important')
-        corner.style.setProperty('background-color', '#ffffff', 'important')
-        corner.style.setProperty('border-right', '1px solid #e5e7eb', 'important')
-        corner.style.setProperty('border-bottom', '1px solid #e5e7eb', 'important')
-        corner.style.setProperty('z-index', '96', 'important')
-        
-        // Calculate card offset
-        const cardOffsetX = cardRect.left - horizontalRulerLeft
-        const cardOffsetY = cardRect.top - horizontalRulerTop
-        
-        // Scale context for retina displays and draw rulers
-        const hCtx = horizontalRuler.getContext('2d')
-        const vCtx = verticalRuler.getContext('2d')
-        if (hCtx && vCtx) {
-          const dpr = window.devicePixelRatio || 1
-          // Save context state before scaling
-          hCtx.save()
-          vCtx.save()
-          hCtx.scale(dpr, dpr)
-          vCtx.scale(dpr, dpr)
-          
-          // Draw rulers
-          drawRuler(horizontalRuler, true, dimensions, cardOffsetX, horizontalRulerWidth)
-          drawRuler(verticalRuler, false, dimensions, cardOffsetY, verticalRulerHeight)
-          
-          // Restore context state
-          hCtx.restore()
-          vCtx.restore()
-        }
-      }
-
-      // Mouse move handler
-      function handleMouseMove(e) {
-        const toolbar = document.getElementById('printables-toolbar')
-        const sidebar = document.getElementById('printables-sidebar')
-        if (!toolbar || !sidebar) return
-        
-        const toolbarRect = toolbar.getBoundingClientRect()
-        const sidebarRect = sidebar.getBoundingClientRect()
-        
-        // Check if cursor is in the viewport (below toolbar and to the right of sidebar)
-        const isInViewport = e.clientY >= toolbarRect.bottom && e.clientX >= sidebarRect.right
-        
-        if (isInViewport) {
-          const currentCard = getVisibleCard()
-          if (currentCard) {
-            const cardRect = currentCard.getBoundingClientRect()
-            
-            // Get dimensions for conversion
-            const dimensionsStr = currentCard.getAttribute('data-dimensions')
-            if (dimensionsStr) {
-              const cardDimensions = JSON.parse(dimensionsStr)
-              
-              const totalWidthMm = cardDimensions.totalWithBleedWidthMm + cardDimensions.pageMarginXmm * 2
-              const totalHeightMm = cardDimensions.totalWithBleedHeightMm + cardDimensions.pageMarginYmm * 2
-              const scaleX = cardRect.width / totalWidthMm
-              const scaleY = cardRect.height / totalHeightMm
-              
-              // Calculate position relative to card
-              const relativeX = e.clientX - cardRect.left
-              const relativeY = e.clientY - cardRect.top
-              
-              // Convert to mm
-              const mmX = relativeX / scaleX
-              const mmY = relativeY / scaleY
-              
-              // Display markers at cursor position in viewport
-              horizontalMarker.style.setProperty('position', 'fixed', 'important')
-              horizontalMarker.style.setProperty('left', e.clientX + 'px', 'important')
-              horizontalMarker.style.setProperty('top', toolbarRect.bottom + 'px', 'important')
-              horizontalMarker.style.setProperty('display', 'block', 'important')
-              
-              verticalMarker.style.setProperty('position', 'fixed', 'important')
-              verticalMarker.style.setProperty('left', sidebarRect.right + 'px', 'important')
-              verticalMarker.style.setProperty('top', e.clientY + 'px', 'important')
-              verticalMarker.style.setProperty('display', 'block', 'important')
-              
-              // Display values
-              horizontalValue.textContent = mmX.toFixed(1) + ' mm'
-              horizontalValue.style.setProperty('position', 'fixed', 'important')
-              horizontalValue.style.setProperty('left', (e.clientX + 4) + 'px', 'important')
-              horizontalValue.style.setProperty('top', (toolbarRect.bottom + 2) + 'px', 'important')
-              horizontalValue.style.setProperty('display', 'block', 'important')
-              
-              verticalValue.textContent = mmY.toFixed(1) + ' mm'
-              verticalValue.style.setProperty('position', 'fixed', 'important')
-              verticalValue.style.setProperty('left', (sidebarRect.right + 2) + 'px', 'important')
-              verticalValue.style.setProperty('top', (e.clientY + 4) + 'px', 'important')
-              verticalValue.style.setProperty('display', 'block', 'important')
-            } else {
-              // No dimensions, just show markers without values
-              horizontalMarker.style.setProperty('position', 'fixed', 'important')
-              horizontalMarker.style.setProperty('left', e.clientX + 'px', 'important')
-              horizontalMarker.style.setProperty('top', toolbarRect.bottom + 'px', 'important')
-              horizontalMarker.style.setProperty('display', 'block', 'important')
-              
-              verticalMarker.style.setProperty('position', 'fixed', 'important')
-              verticalMarker.style.setProperty('left', sidebarRect.right + 'px', 'important')
-              verticalMarker.style.setProperty('top', e.clientY + 'px', 'important')
-              verticalMarker.style.setProperty('display', 'block', 'important')
-              
-              horizontalValue.style.setProperty('display', 'none', 'important')
-              verticalValue.style.setProperty('display', 'none', 'important')
-            }
-          } else {
-            // No card, just show markers without values
-            horizontalMarker.style.setProperty('position', 'fixed', 'important')
-            horizontalMarker.style.setProperty('left', e.clientX + 'px', 'important')
-            horizontalMarker.style.setProperty('top', toolbarRect.bottom + 'px', 'important')
-            horizontalMarker.style.setProperty('display', 'block', 'important')
-            
-            verticalMarker.style.setProperty('position', 'fixed', 'important')
-            verticalMarker.style.setProperty('left', sidebarRect.right + 'px', 'important')
-            verticalMarker.style.setProperty('top', e.clientY + 'px', 'important')
-            verticalMarker.style.setProperty('display', 'block', 'important')
-            
-            horizontalValue.style.setProperty('display', 'none', 'important')
-            verticalValue.style.setProperty('display', 'none', 'important')
-          }
-        } else {
-          horizontalMarker.style.setProperty('display', 'none', 'important')
-          verticalMarker.style.setProperty('display', 'none', 'important')
-          horizontalValue.style.setProperty('display', 'none', 'important')
-          verticalValue.style.setProperty('display', 'none', 'important')
-        }
-      }
-
-      // Initial setup
-      updateRulers()
-
-      // Update on resize and scroll
-      const resizeObserver = new ResizeObserver(() => {
-        updateRulers()
-      })
-      resizeObserver.observe(cardElement)
-      
-      window.addEventListener('resize', updateRulers)
-      window.addEventListener('scroll', updateRulers)
-      
-      // Also listen to main scroll
-      const main = document.getElementById('printables-main')
-      if (main) {
-        main.addEventListener('scroll', updateRulers)
-      }
-      
-      // Watch for face changes
-      const faceButtons = document.querySelectorAll('[data-face-id]')
-      faceButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          setTimeout(updateRulers, 100)
-        })
-      })
-
-      // Add mouse move listener
-      document.addEventListener('mousemove', handleMouseMove)
-      
-      return true
-    }
-
-    // Initialize when DOM is ready
-    function init() {
-      function tryInit() {
-        const toolbar = document.getElementById('printables-toolbar')
-        const sidebar = document.getElementById('printables-sidebar')
-        const cardElement = getVisibleCard()
-        const rulerContainer = document.querySelector('[data-ruler="main"]')
-        
-        if (toolbar && sidebar && cardElement && rulerContainer) {
-          if (initRuler()) {
-            console.log('Ruler: Successfully initialized with canvas')
-          }
-        } else {
-          setTimeout(tryInit, 100)
-        }
-      }
-      
-      tryInit()
-    }
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(init, 100)
-      })
-    } else {
-      setTimeout(init, 100)
-    }
-  })()
+<script>
+  import { setupPrintablesRuler } from './behaviors/ruler'
+  setupPrintablesRuler()
 </script>

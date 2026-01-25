@@ -1,0 +1,55 @@
+---
+interface Props {
+  faces: Array<{ id: string; label: string }>
+  currentFaceId: string
+}
+
+const { faces, currentFaceId } = Astro.props
+---
+
+<div
+  class="fixed bottom-0 left-0 z-[90] w-48 overflow-y-auto border-r border-gray-200 bg-white/95 shadow-lg backdrop-blur-sm"
+  id="printables-sidebar"
+  style="top: var(--toolbar-height, 56px);"
+  data-current-face-id={currentFaceId}
+>
+  <div class="p-4">
+    <div class="flex flex-col gap-2">
+      {
+        faces.map((face) => (
+          <button
+            data-face-id={face.id}
+            class={`group relative flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 p-3 transition-all ${
+              currentFaceId === face.id
+                ? 'border-teal-500 bg-teal-50 shadow-md'
+                : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+            }`}
+            aria-current={currentFaceId === face.id ? 'true' : undefined}
+          >
+            <div
+              data-thumbnail-container={face.id}
+              class="flex h-32 w-full items-center justify-center overflow-hidden rounded border border-gray-100 bg-gray-50"
+            >
+              <span class="text-xs font-medium text-gray-400">Chargement...</span>
+            </div>
+            <span
+              class={`text-xs font-medium ${
+                currentFaceId === face.id ? 'text-teal-700' : 'text-gray-600'
+              }`}
+            >
+              {face.label}
+            </span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import { setupPrintablesSidebar } from './behaviors/sidebar'
+
+  const sidebar = document.getElementById('printables-sidebar')
+  const initialCurrentFaceId = sidebar?.getAttribute('data-current-face-id') || ''
+  setupPrintablesSidebar(initialCurrentFaceId)
+</script>

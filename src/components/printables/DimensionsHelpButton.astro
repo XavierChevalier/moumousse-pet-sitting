@@ -1,0 +1,33 @@
+---
+import { HelpCircle } from '@lucide/astro'
+
+interface Props {
+  panelId?: string
+}
+
+const { panelId = 'dimensions-panel' } = Astro.props
+---
+
+<button
+  class="fixed right-4 bottom-4 z-[201] flex h-12 w-12 items-center justify-center rounded-full bg-teal-500 text-white shadow-lg transition-colors hover:bg-teal-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
+  aria-label="Afficher les dimensions"
+  data-panel-id={panelId}
+>
+  <HelpCircle class="size-6" aria-hidden="true" />
+</button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.querySelector('[data-panel-id]')
+    const panelId = button?.getAttribute('data-panel-id')
+    if (button && panelId) {
+      button.addEventListener('click', () => {
+        const panel = document.getElementById(panelId) as HTMLDetailsElement
+        if (panel) {
+          panel.open = true
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }
+      })
+    }
+  })
+</script>

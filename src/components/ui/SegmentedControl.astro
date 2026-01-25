@@ -1,0 +1,152 @@
+---
+interface Option {
+  value: string
+  label: string
+  labelShort?: string
+  icon?: any // Astro component
+  tooltip?: string
+}
+
+interface Props {
+  id: string
+  options: Option[]
+  value?: string
+  defaultValue?: string
+  ariaLabel?: string
+}
+
+const {
+  id,
+  options,
+  value: controlledValue,
+  defaultValue,
+  ariaLabel = 'Sélectionner une option',
+} = Astro.props
+
+// Determine initial value: controlled > defaultValue > first option
+const getInitialValue = (): string => {
+  if (controlledValue !== undefined) return controlledValue
+  if (defaultValue) return defaultValue
+  return options[0]?.value || ''
+}
+
+const initialValue = getInitialValue()
+---
+
+<div
+  class="inline-flex items-center rounded-lg bg-gray-100 p-1"
+  role="group"
+  aria-label={ariaLabel}
+  id={id}
+  data-segmented-control
+  data-initial-value={initialValue}
+>
+  {options.map((option, index) => {
+    const isActive = option.value === initialValue
+    return (
+      <button
+        type="button"
+        class={`group relative flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all cursor-pointer export-mode-button ${
+          isActive
+            ? 'bg-white text-teal-700 shadow-sm'
+            : 'text-gray-600 hover:text-gray-900'
+        }`}
+        data-value={option.value}
+        data-option-index={index}
+        aria-pressed={isActive ? 'true' : 'false'}
+      >
+        {option.icon && (
+          <option.icon class="size-3.5" aria-hidden="true" />
+        )}
+        <span class="hidden sm:inline">{option.label}</span>
+        {option.labelShort && <span class="sm:hidden">{option.labelShort}</span>}
+        {!option.labelShort && <span class="sm:hidden">{option.label}</span>}
+      </button>
+    )
+  })}
+</div>
+
+<script is:inline>
+  (function () {
+    'use strict'
+
+    function initSegmentedControl(control) {
+      if (!control) return
+
+      const initialValueAttr = control.getAttribute('data-initial-value')
+      const controlId = control.id
+
+      // Update active state
+      function setActiveValue(value) {
+        const buttons = control.querySelectorAll('button[data-value]')
+        buttons.forEach((button) => {
+          const buttonValue = button.getAttribute('data-value')
+          const isActive = buttonValue === value
+
+          if (isActive) {
+            button.classList.add('bg-white', 'text-teal-700', 'shadow-sm')
+            button.classList.remove('text-gray-600')
+            button.setAttribute('aria-pressed', 'true')
+          } else {
+            button.classList.remove('bg-white', 'text-teal-700', 'shadow-sm')
+            button.classList.add('text-gray-600')
+            button.setAttribute('aria-pressed', 'false')
+          }
+        })
+
+        // Dispatch custom event
+        const event = new CustomEvent('segmented-control-change', {
+          detail: { value, controlId },
+          bubbles: true,
+        })
+        control.dispatchEvent(event)
+      }
+
+      // Initialize from initial value or first option
+      function initialize() {
+        let valueToSet = null
+
+        if (initialValueAttr) {
+          valueToSet = initialValueAttr
+        } else {
+          const firstButton = control.querySelector('button[data-value]')
+          valueToSet = firstButton?.getAttribute('data-value') || null
+        }
+
+        if (valueToSet) {
+          setActiveValue(valueToSet)
+        }
+      }
+
+      // Handle button clicks
+      control.addEventListener('click', (e) => {
+        const target = e.target
+        const button = target.closest('button[data-value]')
+        if (!button) return
+
+        const value = button.getAttribute('data-value')
+        if (value) {
+          setActiveValue(value)
+        }
+      })
+
+      // Initialize
+      initialize()
+    }
+
+    // Initialize all segmented controls
+    function initAllSegmentedControls() {
+      const controls = document.querySelectorAll('[data-segmented-control]')
+      controls.forEach((control) => {
+        initSegmentedControl(control)
+      })
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAllSegmentedControls)
+    } else {
+      initAllSegmentedControls()
+    }
+  })()
+</script>

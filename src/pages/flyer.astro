@@ -1,9 +1,11 @@
 ---
-import { ArrowLeftIcon } from '@lucide/astro'
 import FlyerFace1_4 from '../components/printables/flyer/FlyerFace1-4.astro'
 import FlyerFace2_3 from '../components/printables/flyer/FlyerFace2-3.astro'
 import PrintableDimensionsPanel from '../components/printables/PrintableDimensionsPanel.astro'
 import PrintableExportCard from '../components/printables/PrintableExportCard.astro'
+import PrintablesSidebar from '../components/printables/PrintablesSidebar.astro'
+import PrintablesToolbar from '../components/printables/PrintablesToolbar.astro'
+import Ruler from '../components/printables/Ruler.astro'
 import SEO from '../components/SEO.astro'
 import { siteConfig } from '../config/SiteConfig'
 import { createPrintableDimensions } from '../core/printables/dimensions'
@@ -19,11 +21,17 @@ const dimensions = createPrintableDimensions({
   finishedWidthMm: 210,
   finishedHeightMm: 210,
   bleedMm: 2,
-  safeZoneMm: 4,
-  contentPaddingMm: 4,
+  safeZoneMm: 8,
+  contentPaddingMm: 8,
   pageWidthMm: 234,
   pageHeightMm: 234,
 })
+
+const faces = [
+  { id: 'flyer-face-1-4', label: 'Face 1-4' },
+  { id: 'flyer-face-2-3', label: 'Face 2-3' },
+]
+const currentFaceId = 'flyer-face-1-4'
 ---
 
 <!doctype html>
@@ -48,33 +56,198 @@ const dimensions = createPrintableDimensions({
   </head>
 
   <body class="m-0 bg-[#faf8f6] p-0 font-sans text-base text-black">
-    <a
-      href="/visit-card/"
-      class="fixed top-4 right-4 z-[100] inline-flex items-center gap-2 rounded-md bg-[#3ecfb1] px-4 py-2 text-sm font-semibold text-white no-underline transition-colors hover:bg-[#35b89c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3ecfb1cc]"
+    <PrintablesToolbar
+      dimensions={dimensions}
+      currentPage="flyer"
+      currentFaceId={currentFaceId}
+      faces={faces}
+    />
+
+    <PrintablesSidebar faces={faces} currentFaceId={currentFaceId} />
+
+    <Ruler dimensions={dimensions} />
+
+    <main
+      class="fixed inset-0 overflow-auto pt-16 pl-48"
+      id="printables-main"
+      style="top: var(--toolbar-height, 56px); left: 192px; cursor: default;"
     >
-      <ArrowLeftIcon class="size-4" aria-hidden="true" />
-      Aller à la carte de visite
-    </a>
-    <main class="flex min-h-screen flex-col items-center gap-8 p-8">
-      <PrintableDimensionsPanel dimensions={dimensions} title="Dimensions (flyer)" />
-
-      <PrintableExportCard
-        label="Face 1-4"
-        targetId="flyer-face-1-4"
-        filename="flyer-face-1-4"
-        dimensions={dimensions}
+      <div
+        class="relative flex min-h-full flex-col items-center justify-center gap-8 p-8"
+        id="printables-content"
+        style="min-width: 200%; min-height: 200%;"
       >
-        <FlyerFace1_4 withBleed={true} />
-      </PrintableExportCard>
+        <PrintableExportCard
+          label="Face 1-4"
+          targetId="flyer-face-1-4"
+          filename="flyer-face-1-4"
+          dimensions={dimensions}
+          overlaySrc="/printables/210x210-crop-marks-recto.png"
+          visible={currentFaceId === 'flyer-face-1-4'}
+        >
+          <FlyerFace1_4 withBleed={true} />
+        </PrintableExportCard>
 
-      <PrintableExportCard
-        label="Face 2-3"
-        targetId="flyer-face-2-3"
-        filename="flyer-face-2-3"
-        dimensions={dimensions}
-      >
-        <FlyerFace2_3 withBleed={true} />
-      </PrintableExportCard>
+        <PrintableExportCard
+          label="Face 2-3"
+          targetId="flyer-face-2-3"
+          filename="flyer-face-2-3"
+          dimensions={dimensions}
+          overlaySrc="/printables/210x210-crop-marks-verso.png"
+          visible={currentFaceId === 'flyer-face-2-3'}
+        >
+          <FlyerFace2_3 withBleed={true} />
+        </PrintableExportCard>
+      </div>
     </main>
+
+    <PrintableDimensionsPanel dimensions={dimensions} title="Dimensions (flyer)" />
+
+    <script is:inline>
+      ;(function () {
+        'use strict'
+
+        const main = document.getElementById('printables-main')
+        const content = document.getElementById('printables-content')
+        if (!main || !content) return
+
+        // Center content initially - find the visible card and center it
+        function centerContent() {
+          // Find the visible card
+          const containers = document.querySelectorAll('[data-face-container]')
+          let visibleCard = null
+          for (const container of containers) {
+            if (!container.classList.contains('hidden')) {
+              const cardId = container.getAttribute('data-face-container')
+              if (cardId) {
+                visibleCard = document.getElementById(cardId)
+                break
+              }
+            }
+          }
+
+          if (!visibleCard) return
+
+          const mainRect = main.getBoundingClientRect()
+          const cardRect = visibleCard.getBoundingClientRect()
+
+          // Calculate scroll position to center the card
+          const cardCenterX = cardRect.left + cardRect.width / 2
+          const cardCenterY = cardRect.top + cardRect.height / 2
+          const mainCenterX = mainRect.left + mainRect.width / 2
+          const mainCenterY = mainRect.top + mainRect.height / 2
+
+          const scrollX = main.scrollLeft + (cardCenterX - mainCenterX)
+          const scrollY = main.scrollTop + (cardCenterY - mainCenterY)
+
+          main.scrollLeft = scrollX
+          main.scrollTop = scrollY
+        }
+
+        // Center on load - wait for everything to be ready
+        function initCentering() {
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              setTimeout(() => {
+                centerContent()
+                // Also center after a short delay to ensure all content is loaded
+                setTimeout(centerContent, 300)
+              }, 100)
+            })
+          } else {
+            setTimeout(() => {
+              centerContent()
+              setTimeout(centerContent, 300)
+            }, 100)
+          }
+        }
+
+        initCentering()
+
+        let isPanning = false
+        let isSpacePressed = false
+        let startX = 0
+        let startY = 0
+        let scrollLeft = 0
+        let scrollTop = 0
+
+        // Space key handlers
+        document.addEventListener('keydown', (e) => {
+          if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+            e.preventDefault()
+            isSpacePressed = true
+            main.style.cursor = 'grab'
+          }
+        })
+
+        document.addEventListener('keyup', (e) => {
+          if (e.code === 'Space') {
+            isSpacePressed = false
+            if (!isPanning) {
+              main.style.cursor = ''
+            }
+          }
+        })
+
+        // Mouse down - start panning
+        main.addEventListener('mousedown', (e) => {
+          // Space + click or middle mouse button
+          if (isSpacePressed || e.button === 1) {
+            e.preventDefault()
+            isPanning = true
+            main.style.cursor = 'grabbing'
+            const rect = main.getBoundingClientRect()
+            startX = e.clientX - rect.left
+            startY = e.clientY - rect.top
+            scrollLeft = main.scrollLeft
+            scrollTop = main.scrollTop
+          }
+        })
+
+        // Mouse move - pan
+        main.addEventListener('mousemove', (e) => {
+          if (!isPanning) return
+          e.preventDefault()
+          const rect = main.getBoundingClientRect()
+          const x = e.clientX - rect.left
+          const y = e.clientY - rect.top
+          const walkX = x - startX
+          const walkY = y - startY
+          main.scrollLeft = scrollLeft - walkX
+          main.scrollTop = scrollTop - walkY
+        })
+
+        // Mouse up - stop panning
+        main.addEventListener('mouseup', (e) => {
+          if (isPanning) {
+            isPanning = false
+            if (isSpacePressed) {
+              main.style.cursor = 'grab'
+            } else {
+              main.style.cursor = ''
+            }
+          }
+        })
+
+        // Mouse leave - stop panning
+        main.addEventListener('mouseleave', () => {
+          if (isPanning) {
+            isPanning = false
+            if (isSpacePressed) {
+              main.style.cursor = 'grab'
+            } else {
+              main.style.cursor = ''
+            }
+          }
+        })
+
+        // Prevent context menu on middle click
+        main.addEventListener('contextmenu', (e) => {
+          if (e.button === 1) {
+            e.preventDefault()
+          }
+        })
+      })()
+    </script>
   </body>
 </html>

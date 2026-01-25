@@ -1,5 +1,4 @@
 ---
-import { Download } from '@lucide/astro'
 import type { PrintableDimensions } from '../../core/printables/dimensions'
 
 interface Props {
@@ -9,16 +8,21 @@ interface Props {
   dimensions: PrintableDimensions
   /** Overlay (crop marks) */
   overlaySrc: string
+  /** Whether this face should be visible initially */
+  visible?: boolean
 }
 
-const { label, targetId, filename, dimensions, overlaySrc } = Astro.props
+const { label, targetId, filename, dimensions, overlaySrc, visible = true } = Astro.props
 ---
 
-<div class="flex flex-col items-center gap-4">
-  <span class="text-sm font-semibold uppercase tracking-[0.05em] text-black/60">{label}</span>
+<div
+  class={`relative flex flex-col items-center gap-4 ${visible ? '' : 'hidden'}`}
+  data-face-container={targetId}
+>
   <div
     class="relative box-border bg-white px-[var(--page-margin-x)] py-[var(--page-margin-y)] shadow-md"
     id={targetId}
+    data-dimensions={JSON.stringify(dimensions)}
     style={`--page-margin-x: ${dimensions.pageMarginXmm}mm; --page-margin-y: ${dimensions.pageMarginYmm}mm;`}
   >
     <slot />
@@ -28,87 +32,8 @@ const { label, targetId, filename, dimensions, overlaySrc } = Astro.props
       alt=""
       aria-hidden="true"
       draggable="false"
-      class="pointer-events-none absolute inset-0 z-50 h-full w-full select-none object-contain"
+      class="overlay-image pointer-events-none absolute inset-0 z-10 h-full w-full object-contain select-none"
     />
   </div>
-  <button
-    class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[#3ecfb1] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#35b89c] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3ecfb1cc]"
-    data-target={targetId}
-    data-filename={filename}
-  >
-    <Download class="size-4" aria-hidden="true" />
-    Exporter en PNG ({dimensions.dpi} DPI)
-  </button>
 </div>
 
-<script type="module" define:vars={{ dimensions }}>
-  // Avoid double initialization when this component is rendered multiple times on the page.
-  const GLOBAL_KEY = '__moumousse_printables_export_init__'
-  if (!window[GLOBAL_KEY]) {
-    window[GLOBAL_KEY] = true
-
-    const htmlToImage = await import('https://esm.sh/html-to-image@1.11.11')
-
-
-    async function ensureFontsReady() {
-      try {
-        if (document.fonts?.ready) await document.fonts.ready
-      } catch {
-        // ignore
-      }
-    }
-
-    async function ensureFontEmbedCSS(sampleElement) {
-      await ensureFontsReady()
-      // Ensure webfonts are embedded for consistent metrics (fixes outline offset issues on export)
-      return await htmlToImage.getFontEmbedCSS(sampleElement)
-    }
-
-    async function elementToPngDataUrl(element) {
-      await ensureFontsReady()
-      const rect = element.getBoundingClientRect()
-      const scale = dimensions.targetWidthPx / rect.width
-
-      document.documentElement.classList.add('exporting')
-      try {
-        return await htmlToImage.toPng(element, {
-          pixelRatio: scale,
-          backgroundColor: '#ffffff', // flatten transparency
-          canvasWidth: dimensions.targetWidthPx,
-          canvasHeight: dimensions.targetHeightPx,
-          fontEmbedCSS: await ensureFontEmbedCSS(element),
-          preferredFontFormat: 'woff2',
-        })
-      } finally {
-        document.documentElement.classList.remove('exporting')
-      }
-    }
-
-    document.querySelectorAll('button[data-target][data-filename]').forEach(function (btn) {
-      btn.addEventListener('click', async function () {
-        const targetId = btn.getAttribute('data-target')
-        const filename = btn.getAttribute('data-filename')
-        const element = document.getElementById(targetId)
-        if (!element) return
-
-        btn.disabled = true
-        const originalText = btn.innerHTML
-        btn.innerHTML = 'Export en cours...'
-
-        try {
-          const dataUrl = await elementToPngDataUrl(element)
-          const link = document.createElement('a')
-          link.download = `${filename}-${dimensions.finishedWidthMm}x${dimensions.finishedHeightMm}.png`
-          link.href = dataUrl
-          link.click()
-        } catch (error) {
-          console.error('Export failed:', error)
-          alert("Erreur lors de l'export. Veuillez réessayer.")
-        } finally {
-          btn.disabled = false
-          btn.innerHTML = originalText
-        }
-      })
-    })
-  }
-</script>

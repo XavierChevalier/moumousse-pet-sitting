@@ -49,8 +49,8 @@ const { withBleed = false } = Astro.props
       withBleed ? 'absolute top-[2mm] left-[2mm] h-[210mm] w-[210mm]' : 'relative h-full w-full',
     ]}
   >
-    <!-- Inner Safe Zone (4mm from trim edge) -->
-    <div class="relative h-full w-full p-[4mm]">
+    <!-- Inner Safe Zone (8mm from trim edge) -->
+    <div class="relative h-full w-full p-[8mm]">
       <div class="grid h-full grid-cols-2 gap-6">
         <!-- Partie gauche : Face 4 (Contacts) -->
         <div class="flex flex-col justify-between gap-4">

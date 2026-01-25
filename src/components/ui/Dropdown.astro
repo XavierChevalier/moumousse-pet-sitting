@@ -1,0 +1,181 @@
+---
+import { ChevronDown } from '@lucide/astro'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '../../core/tailwindcn'
+
+const dropdownButtonVariants = cva(
+  'flex items-center justify-between gap-2 rounded-md px-3 py-1.5 text-sm font-medium transition-all cursor-pointer min-w-[160px]',
+  {
+    variants: {
+      variant: {
+        default: 'text-gray-600 hover:bg-gray-100',
+        teal: 'bg-teal-50 text-teal-700',
+        primary: 'bg-primary/10 text-primary hover:bg-primary/20',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+)
+
+const dropdownMenuVariants = cva(
+  'absolute left-0 top-full mt-0.5 hidden w-full rounded-lg bg-white border border-gray-200 shadow-xl z-50 overflow-hidden transition-all duration-200 ease-out opacity-0 scale-95 min-w-[160px]',
+  {
+    variants: {
+      align: {
+        left: 'left-0',
+        right: 'right-0',
+        center: 'left-1/2 -translate-x-1/2',
+      },
+    },
+    defaultVariants: {
+      align: 'left',
+    },
+  }
+)
+
+export interface DropdownItem {
+  label: string
+  href: string
+  isActive?: boolean
+}
+
+interface Props extends VariantProps<typeof dropdownButtonVariants> {
+  label: string
+  items: DropdownItem[]
+  id?: string
+  buttonClass?: string
+  menuClass?: string
+  align?: 'left' | 'right' | 'center'
+}
+
+const {
+  label,
+  items,
+  id = `dropdown-${Math.random().toString(36).substring(2, 9)}`,
+  variant,
+  buttonClass = '',
+  menuClass = '',
+  align = 'left',
+} = Astro.props
+
+const buttonId = `${id}-button`
+const menuId = `${id}-menu`
+const chevronId = `${id}-chevron`
+---
+
+<div class="relative" id={id}>
+  <button
+    type="button"
+    id={buttonId}
+    class={cn(dropdownButtonVariants({ variant }), buttonClass)}
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-controls={menuId}
+  >
+    <span>{label}</span>
+    <ChevronDown class="size-4 transition-transform duration-200 ml-auto flex-shrink-0" id={chevronId} />
+  </button>
+
+  <!-- Menu déroulant -->
+  <div
+    id={menuId}
+    class={cn(dropdownMenuVariants({ align }), menuClass)}
+    role="menu"
+    aria-labelledby={buttonId}
+  >
+    {items.map((item, index) => {
+      const itemClasses = cn(
+        'block px-3 py-2 text-sm transition-colors',
+        index === 0 && 'first:rounded-t-lg',
+        index === items.length - 1 && 'last:rounded-b-lg',
+        item.isActive
+          ? 'bg-teal-50 text-teal-700 font-medium'
+          : 'text-gray-700 hover:bg-gray-50'
+      )
+
+      return (
+        <a
+          href={item.href}
+          class={itemClasses}
+          role="menuitem"
+          data-dropdown-item
+        >
+          {item.label}
+        </a>
+      )
+    })}
+  </div>
+</div>
+
+<script define:vars={{ buttonId, menuId, chevronId }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const pageSelectorButton = document.getElementById(buttonId)
+    const pageSelectorMenu = document.getElementById(menuId)
+    const pageSelectorChevron = document.getElementById(chevronId)
+
+    if (!pageSelectorButton || !pageSelectorMenu || !pageSelectorChevron) return
+
+    const toggleMenu = () => {
+      const isOpen = !pageSelectorMenu.classList.contains('hidden')
+      if (isOpen) {
+        // Fermeture avec animation
+        pageSelectorMenu.classList.add('opacity-0', 'scale-95')
+        setTimeout(() => {
+          pageSelectorMenu.classList.add('hidden')
+        }, 150)
+        pageSelectorChevron.classList.remove('rotate-180')
+        pageSelectorButton.setAttribute('aria-expanded', 'false')
+      } else {
+        // Ouverture avec animation
+        pageSelectorMenu.classList.remove('hidden')
+        // Force reflow pour que l'animation fonctionne
+        pageSelectorMenu.offsetHeight
+        requestAnimationFrame(() => {
+          pageSelectorMenu.classList.remove('opacity-0', 'scale-95')
+          pageSelectorMenu.classList.add('opacity-100', 'scale-100')
+        })
+        pageSelectorChevron.classList.add('rotate-180')
+        pageSelectorButton.setAttribute('aria-expanded', 'true')
+      }
+    }
+
+    pageSelectorButton.addEventListener('click', (e) => {
+      e.stopPropagation()
+      toggleMenu()
+    })
+
+    // Fermer le menu quand on clique ailleurs
+    document.addEventListener('click', (e) => {
+      const target = e.target
+      if (
+        !(target instanceof HTMLElement) ||
+        (!pageSelectorButton.contains(target) &&
+          !pageSelectorMenu.contains(target))
+      ) {
+        if (!pageSelectorMenu.classList.contains('hidden')) {
+          pageSelectorMenu.classList.add('opacity-0', 'scale-95')
+          setTimeout(() => {
+            pageSelectorMenu.classList.add('hidden')
+          }, 150)
+          pageSelectorChevron.classList.remove('rotate-180')
+          pageSelectorButton.setAttribute('aria-expanded', 'false')
+        }
+      }
+    })
+
+    // Fermer le menu quand on sélectionne une option
+    const menuItems = pageSelectorMenu.querySelectorAll('[data-dropdown-item]')
+    menuItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        pageSelectorMenu.classList.add('opacity-0', 'scale-95')
+        setTimeout(() => {
+          pageSelectorMenu.classList.add('hidden')
+        }, 150)
+        pageSelectorChevron.classList.remove('rotate-180')
+        pageSelectorButton.setAttribute('aria-expanded', 'false')
+      })
+    })
+  })
+</script>

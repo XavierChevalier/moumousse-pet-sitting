@@ -82,244 +82,10 @@ const { dimensions, currentPage, currentFaceId, faces } = Astro.props
 
 <script>
   import type { PrintableDimensions } from '../../core/printables/dimensions'
-  import { initializeExport } from './export-utils'
+import { setupPrintablesToolbar } from './behaviors/toolbar'
+import { setupPrintableExport } from './export/export-controller'
 
-  // Set toolbar height CSS variable for sidebar positioning
-  document.addEventListener('DOMContentLoaded', () => {
-    const toolbar = document.getElementById('printables-toolbar')
-    if (toolbar) {
-      const height = toolbar.offsetHeight
-      document.documentElement.style.setProperty('--toolbar-height', `${height}px`)
-    }
-
-    // Toggle lignes de coupe (overlay)
-    const CROP_LINES_STORAGE_KEY = 'moumousse-printables-crop-lines-visible'
-    
-    function toggleCropLines(show: boolean) {
-      // Masquer/afficher les overlays
-      const overlays = document.querySelectorAll('.overlay-image')
-      overlays.forEach((overlay) => {
-        const img = overlay as HTMLElement
-        if (show) {
-          img.style.display = ''
-          img.style.visibility = ''
-        } else {
-          img.style.display = 'none'
-          img.style.visibility = 'hidden'
-        }
-      })
-
-      // Masquer/afficher les marges de page et rogner pour montrer le résultat après découpe
-      const cards = document.querySelectorAll('[data-dimensions]')
-      cards.forEach((card) => {
-        const cardEl = card as HTMLElement
-        const dimensionsStr = cardEl.getAttribute('data-dimensions')
-        if (!dimensionsStr) return
-        
-        try {
-          const dimensions = JSON.parse(dimensionsStr)
-          
-          if (show) {
-            // Afficher les marges (mode avec lignes de coupe)
-            cardEl.style.removeProperty('padding-left')
-            cardEl.style.removeProperty('padding-right')
-            cardEl.style.removeProperty('padding-top')
-            cardEl.style.removeProperty('padding-bottom')
-            cardEl.style.removeProperty('clip-path')
-            cardEl.style.removeProperty('overflow')
-            cardEl.style.removeProperty('transform')
-          } else {
-            // Mode après découpe : rogner pour ne montrer que la zone finished
-            // Sauvegarder la position actuelle du centre avant les changements
-            const initialRect = cardEl.getBoundingClientRect()
-            const initialCenterX = initialRect.left + initialRect.width / 2
-            const initialCenterY = initialRect.top + initialRect.height / 2
-            
-            // On met d'abord le padding à 0 pour masquer les marges visuellement
-            cardEl.style.setProperty('padding-left', '0', 'important')
-            cardEl.style.setProperty('padding-right', '0', 'important')
-            cardEl.style.setProperty('padding-top', '0', 'important')
-            cardEl.style.setProperty('padding-bottom', '0', 'important')
-            
-            // On attend le prochain frame pour que le changement de padding soit appliqué
-            requestAnimationFrame(() => {
-              const rect = cardEl.getBoundingClientRect()
-              
-              // Convertir les dimensions en pixels
-              // La largeur totale avec bleed = finishedWidth + 2*bleed
-              const totalWithBleedWidthMm = dimensions.finishedWidthMm + 2 * dimensions.bleedMm
-              
-              // Le conteneur affiche maintenant la zone avec bleed (sans les marges de page)
-              const MM_TO_PX = rect.width / totalWithBleedWidthMm
-              const bleedPx = dimensions.bleedMm * MM_TO_PX
-              
-              // La zone finished commence après le bleed
-              const cropX = bleedPx
-              const cropY = bleedPx
-              const finishedWidthPx = dimensions.finishedWidthMm * MM_TO_PX
-              const finishedHeightPx = dimensions.finishedHeightMm * MM_TO_PX
-              
-              // Rogner le contenu pour ne montrer que la zone finished
-              // On utilise clip-path pour rogner depuis le coin supérieur gauche
-              // inset(top right bottom left)
-              const rightCrop = rect.width - cropX - finishedWidthPx
-              const bottomCrop = rect.height - cropY - finishedHeightPx
-              
-              cardEl.style.setProperty('clip-path', `inset(${cropY}px ${rightCrop}px ${bottomCrop}px ${cropX}px)`, 'important')
-              cardEl.style.setProperty('overflow', 'hidden', 'important')
-              
-              // Compenser le décalage pour garder le centre au même endroit
-              // Après le clip-path, le centre visuel change, on doit le recentrer
-              requestAnimationFrame(() => {
-                const newRect = cardEl.getBoundingClientRect()
-                const newCenterX = newRect.left + newRect.width / 2
-                const newCenterY = newRect.top + newRect.height / 2
-                
-                const offsetX = initialCenterX - newCenterX
-                const offsetY = initialCenterY - newCenterY
-                
-                if (Math.abs(offsetX) > 0.1 || Math.abs(offsetY) > 0.1) {
-                  cardEl.style.setProperty('transform', `translate(${offsetX}px, ${offsetY}px)`, 'important')
-                }
-              })
-            })
-          }
-        } catch (error) {
-          console.error('Failed to parse dimensions for crop lines toggle:', error)
-        }
-      })
-
-      localStorage.setItem(CROP_LINES_STORAGE_KEY, String(show))
-    }
-
-    // Gestion du contrôle segmenté pour le mode d'export
-    // Écouter les événements du composant SegmentedControl
-    document.addEventListener('segmented-control-change', ((e: CustomEvent) => {
-      const { value, controlId } = e.detail
-      
-      // Extraire le faceId du controlId (format: export-mode-{faceId})
-      const faceIdMatch = controlId.match(/^export-mode-(.+)$/)
-      if (!faceIdMatch) return
-      
-      const faceId = faceIdMatch[1]
-      const mode = value as 'with-overlay' | 'without-overlay'
-      
-      // Mettre à jour le bouton d'export
-      const exportButton = document.getElementById(`export-button-${faceId}`) as HTMLButtonElement
-      if (exportButton) {
-        exportButton.setAttribute('data-with-overlay', mode === 'with-overlay' ? 'true' : 'false')
-      }
-      
-      // Toggle les lignes de coupe en fonction du mode
-      // with-overlay = afficher les lignes (true), without-overlay = masquer les lignes (false)
-      toggleCropLines(mode === 'with-overlay')
-    }) as EventListener)
-
-    // Initialiser les modes d'export pour toutes les faces au chargement
-    function initializeExportModes() {
-      // Restaurer la préférence sauvegardée ou utiliser la valeur par défaut (true = with-overlay)
-      const saved = localStorage.getItem(CROP_LINES_STORAGE_KEY)
-      const shouldShow = saved === null ? true : saved === 'true'
-      const initialMode = shouldShow ? 'with-overlay' : 'without-overlay'
-      
-      const faceContainers = document.querySelectorAll('[data-toolbar-face]')
-      faceContainers.forEach((container) => {
-        const faceId = container.getAttribute('data-toolbar-face')
-        if (!faceId) return
-
-        // Mettre à jour le bouton d'export
-        const exportButton = document.getElementById(`export-button-${faceId}`) as HTMLButtonElement
-        if (exportButton) {
-          exportButton.setAttribute('data-with-overlay', initialMode === 'with-overlay' ? 'true' : 'false')
-        }
-        
-        // Synchroniser le segmented control avec l'état sauvegardé
-        const segmentedControl = document.getElementById(`export-mode-${faceId}`)
-        if (segmentedControl) {
-          const buttons = segmentedControl.querySelectorAll('button[data-value]')
-          buttons.forEach((button) => {
-            const buttonValue = button.getAttribute('data-value')
-            const isActive = buttonValue === initialMode
-            
-            if (isActive) {
-              button.classList.add('bg-white', 'text-teal-700', 'shadow-sm')
-              button.classList.remove('text-gray-600')
-              button.setAttribute('aria-pressed', 'true')
-            } else {
-              button.classList.remove('bg-white', 'text-teal-700', 'shadow-sm')
-              button.classList.add('text-gray-600')
-              button.setAttribute('aria-pressed', 'false')
-            }
-          })
-        }
-      })
-      
-      // Initialiser l'état des lignes de coupe
-      toggleCropLines(shouldShow)
-    }
-
-    // Initialiser après un court délai pour laisser le composant SegmentedControl s'initialiser
-    setTimeout(initializeExportModes, 100)
-
-    // Dynamic tooltip positioning
-    function positionTooltip(element: HTMLElement) {
-      const tooltip = element.querySelector('.tooltip-dynamic') as HTMLElement
-      if (!tooltip) return
-
-      const rect = element.getBoundingClientRect()
-      const tooltipRect = tooltip.getBoundingClientRect()
-      const viewportHeight = window.innerHeight
-      const viewportWidth = window.innerWidth
-
-      // Reset classes
-      tooltip.classList.remove('top-full', 'bottom-full', 'mt-2', 'mb-2', 'left-1/2', 'right-0', 'left-0', '-translate-x-1/2', 'translate-x-0')
-
-      // Check vertical space
-      const spaceAbove = rect.top
-      const spaceBelow = viewportHeight - rect.bottom
-      const tooltipHeight = tooltipRect.height || 30 // Estimate if not rendered
-
-      // Position vertically
-      if (spaceBelow >= tooltipHeight + 8) {
-        // Enough space below, show below
-        tooltip.classList.add('top-full', 'mt-2')
-      } else if (spaceAbove >= tooltipHeight + 8) {
-        // Enough space above, show above
-        tooltip.classList.add('bottom-full', 'mb-2')
-      } else {
-        // Not enough space either side, default to below
-        tooltip.classList.add('top-full', 'mt-2')
-      }
-
-      // Check horizontal space
-      const spaceLeft = rect.left
-      const spaceRight = viewportWidth - rect.right
-      const tooltipWidth = tooltipRect.width || 200 // Estimate if not rendered
-
-      // Position horizontally
-      if (spaceLeft >= tooltipWidth / 2 && spaceRight >= tooltipWidth / 2) {
-        // Center it
-        tooltip.classList.add('left-1/2', '-translate-x-1/2')
-      } else if (spaceRight < tooltipWidth / 2) {
-        // Not enough space on right, align to right edge
-        tooltip.classList.add('right-0', 'translate-x-0')
-      } else {
-        // Not enough space on left, align to left edge
-        tooltip.classList.add('left-0', 'translate-x-0')
-      }
-    }
-
-    // Setup tooltips for all elements with tooltip-dynamic
-    const elementsWithTooltips = document.querySelectorAll('.group')
-    elementsWithTooltips.forEach((element) => {
-      const tooltip = element.querySelector('.tooltip-dynamic')
-      if (tooltip) {
-        element.addEventListener('mouseenter', () => {
-          positionTooltip(element as HTMLElement)
-        })
-      }
-    })
-  })
+  setupPrintablesToolbar()
 
   // Initialize export functionality
   const SCRIPT_INIT_KEY = '__moumousse_printables_toolbar_init__'
@@ -333,7 +99,7 @@ const { dimensions, currentPage, currentFaceId, faces } = Astro.props
         if (dimensionsJson) {
           try {
             const dimensions = JSON.parse(dimensionsJson) as PrintableDimensions
-            initializeExport(dimensions)
+            setupPrintableExport(dimensions)
             return
           } catch (error) {
             console.error('Failed to parse dimensions:', error)
@@ -343,16 +109,16 @@ const { dimensions, currentPage, currentFaceId, faces } = Astro.props
       }
 
       if (retries > 0) {
-        setTimeout(() => init(retries - 1), 100)
+        requestAnimationFrame(() => init(retries - 1))
       }
     }
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => init(), 100)
+        requestAnimationFrame(() => init())
       })
     } else {
-      setTimeout(() => init(), 100)
+      requestAnimationFrame(() => init())
     }
   }
 </script>

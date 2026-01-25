@@ -75,7 +75,10 @@ const chevronId = `${id}-chevron`
     aria-controls={menuId}
   >
     <span>{label}</span>
-    <ChevronDown class="size-4 transition-transform duration-200 ml-auto flex-shrink-0" id={chevronId} />
+    <ChevronDown
+      class="ml-auto size-4 flex-shrink-0 transition-transform duration-200"
+      id={chevronId}
+    />
   </button>
 
   <!-- Menu déroulant -->
@@ -85,27 +88,22 @@ const chevronId = `${id}-chevron`
     role="menu"
     aria-labelledby={buttonId}
   >
-    {items.map((item, index) => {
-      const itemClasses = cn(
-        'block px-3 py-2 text-sm transition-colors',
-        index === 0 && 'first:rounded-t-lg',
-        index === items.length - 1 && 'last:rounded-b-lg',
-        item.isActive
-          ? 'bg-teal-50 text-teal-700 font-medium'
-          : 'text-gray-700 hover:bg-gray-50'
-      )
+    {
+      items.map((item, index) => {
+        const itemClasses = cn(
+          'block px-3 py-2 text-sm transition-colors',
+          index === 0 && 'first:rounded-t-lg',
+          index === items.length - 1 && 'last:rounded-b-lg',
+          item.isActive ? 'bg-teal-50 text-teal-700 font-medium' : 'text-gray-700 hover:bg-gray-50'
+        )
 
-      return (
-        <a
-          href={item.href}
-          class={itemClasses}
-          role="menuitem"
-          data-dropdown-item
-        >
-          {item.label}
-        </a>
-      )
-    })}
+        return (
+          <a href={item.href} class={itemClasses} role="menuitem" data-dropdown-item>
+            {item.label}
+          </a>
+        )
+      })
+    }
   </div>
 </div>
 
@@ -151,8 +149,7 @@ const chevronId = `${id}-chevron`
       const target = e.target
       if (
         !(target instanceof HTMLElement) ||
-        (!pageSelectorButton.contains(target) &&
-          !pageSelectorMenu.contains(target))
+        (!pageSelectorButton.contains(target) && !pageSelectorMenu.contains(target))
       ) {
         if (!pageSelectorMenu.classList.contains('hidden')) {
           pageSelectorMenu.classList.add('opacity-0', 'scale-95')

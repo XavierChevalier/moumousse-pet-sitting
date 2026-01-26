@@ -57,7 +57,7 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     <!-- Topic Dropdown -->
     <div>
       <Label for="topic">Sujet *</Label>
-      <Select id="topic" name="topic" required>
+      <Select id="topic" name="topic" required aria-describedby="topic-error">
         <option value="">Choisissez un sujet</option>
         <option value="previsite">Réserver ma pré-visite gratuite</option>
         <option value="garde-domicile">Garde à domicile</option>
@@ -66,12 +66,14 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         <option value="tarifs">Tarifs et disponibilités</option>
         <option value="autre">Autre demande</option>
       </Select>
+      <span id="topic-error" class="sr-only" role="alert" aria-live="polite"></span>
     </div>
 
     <!-- Email Field -->
     <div id="email-field">
       <Label for="email">Email *</Label>
-      <Input type="email" id="email" name="email" required placeholder="votre@email.com" />
+      <Input type="email" id="email" name="email" required placeholder="votre@email.com" aria-describedby="email-error" />
+      <span id="email-error" class="sr-only" role="alert" aria-live="polite"></span>
     </div>
 
     <!-- Pré-visite helper (shown when corresponding topic is selected) -->
@@ -86,7 +88,9 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         required
         rows={6}
         placeholder="Décrivez votre demande..."
+        aria-describedby="content-error"
       />
+      <span id="content-error" class="sr-only" role="alert" aria-live="polite"></span>
     </div>
 
     <!-- Recaptcha (hidden by default) -->
@@ -114,6 +118,94 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     alert.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
 
+  function clearFieldErrors() {
+    const errorElements = ['topic-error', 'email-error', 'content-error']
+    errorElements.forEach((id) => {
+      const errorEl = document.getElementById(id)
+      if (errorEl) {
+        errorEl.textContent = ''
+        errorEl.classList.add('sr-only')
+      }
+    })
+  }
+
+  function setFieldError(fieldId: string, errorId: string, message: string) {
+    const field = document.getElementById(fieldId) as HTMLElement
+    const errorEl = document.getElementById(errorId) as HTMLElement
+    if (field && errorEl) {
+      field.setAttribute('aria-invalid', 'true')
+      errorEl.textContent = message
+      errorEl.classList.remove('sr-only')
+      errorEl.classList.add('mt-1', 'text-sm', 'font-bold', 'text-red-600')
+    }
+  }
+
+  function clearFieldError(fieldId: string, errorId: string) {
+    const field = document.getElementById(fieldId) as HTMLElement
+    const errorEl = document.getElementById(errorId) as HTMLElement
+    if (field && errorEl) {
+      field.removeAttribute('aria-invalid')
+      errorEl.textContent = ''
+      errorEl.classList.add('sr-only')
+      errorEl.classList.remove('mt-1', 'text-sm', 'font-bold', 'text-red-600')
+    }
+  }
+
+  /**
+   * Validates the contact form before submission
+   * 
+   * Checks that all required fields are filled and valid:
+   * - Topic: must be selected
+   * - Email: must be filled and valid (email format)
+   * - Message (content): must be filled (non-empty after trim)
+   * 
+   * Displays validation errors for each invalid field.
+   * 
+   * @param form - HTML form element to validate
+   * @returns `true` if the form is valid, `false` otherwise
+   */
+  function validateForm(form: HTMLFormElement): boolean {
+    clearFieldErrors()
+    let isValid = true
+
+    const topic = form.querySelector('#topic') as HTMLSelectElement
+    if (topic && !topic.value) {
+      setFieldError('topic', 'topic-error', 'Veuillez sélectionner un sujet')
+      isValid = false
+    }
+
+    const email = form.querySelector('#email') as HTMLInputElement
+    if (email) {
+      if (!email.value) {
+        setFieldError('email', 'email-error', 'Veuillez saisir votre adresse email')
+        isValid = false
+      } else if (!email.validity.valid) {
+        setFieldError('email', 'email-error', 'Veuillez saisir une adresse email valide')
+        isValid = false
+      }
+    }
+
+    const content = form.querySelector('#content') as HTMLTextAreaElement
+    if (content && !content.value.trim()) {
+      setFieldError('content', 'content-error', 'Veuillez saisir votre message')
+      isValid = false
+    }
+
+    return isValid
+  }
+
+  /**
+   * Submits the contact form via Netlify Forms
+   * 
+   * Handles asynchronous form submission:
+   * 1. Validates the form before submission
+   * 2. Displays a loading state (spinner)
+   * 3. Sends data via POST to Netlify
+   * 4. Displays a success or error message
+   * 5. Resets the form on success
+   * 
+   * @param event - Form submission event
+   */
   function submitForm(event: SubmitEvent) {
     event.preventDefault()
 
@@ -123,6 +215,16 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     const submitSpinner = document.getElementById('contact-submit-spinner') as HTMLElement
     const successAlert = document.getElementById('contact-success-alert') as HTMLElement
     const errorAlert = document.getElementById('contact-error-alert') as HTMLElement
+
+    // Validate form before submission
+    if (!validateForm(form)) {
+      // Focus on first error field
+      const firstError = form.querySelector('[aria-invalid="true"]') as HTMLElement
+      if (firstError) {
+        firstError.focus()
+      }
+      return
+    }
 
     // Show spinner, hide text
     submitText.classList.add('hidden')
@@ -143,10 +245,14 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
         showAlert(successAlert)
         form.reset()
+        clearFieldErrors()
       })
       .catch((error) => {
         console.error('Error submitting form:', error)
         showAlert(errorAlert)
+        submitText.classList.remove('hidden')
+        submitSpinner.classList.add('hidden')
+        submitButton.disabled = false
       })
   }
 
@@ -168,16 +274,29 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
     const form = document.getElementById('contact-form') as HTMLFormElement
     const topicSelect = document.getElementById('topic') as HTMLSelectElement
     const emailInput = document.getElementById('email') as HTMLInputElement
+    const contentInput = document.getElementById('content') as HTMLTextAreaElement
     const subjectInput = form.querySelector('input[name="subject"]') as HTMLInputElement
 
     updatePrevisitInfoVisibility(topicSelect)
-    topicSelect.addEventListener('change', () => updatePrevisitInfoVisibility(topicSelect))
+    topicSelect.addEventListener('change', () => {
+      updatePrevisitInfoVisibility(topicSelect)
+      clearFieldError('topic', 'topic-error')
+    })
     form.addEventListener('submit', submitForm)
 
-    // Update subject when email changes
+    // Clear errors on input
     emailInput.addEventListener('input', () => {
       if (emailInput.value) {
         subjectInput.value = `Contact ${emailInput.value}`
+      }
+      if (emailInput.validity.valid) {
+        clearFieldError('email', 'email-error')
+      }
+    })
+
+    contentInput.addEventListener('input', () => {
+      if (contentInput.value.trim()) {
+        clearFieldError('content', 'content-error')
       }
     })
   })

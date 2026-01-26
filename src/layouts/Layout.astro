@@ -33,14 +33,14 @@ const seoProps = Astro.props
     <!-- SEO Meta Tags -->
     <SEO {...seoProps} />
 
-    <!-- Google Fonts - optimized loading to reduce render-blocking -->
+    <!-- Google Fonts - optimized loading with font-display: swap and async loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
-      rel="preload"
-      as="style"
+      rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap"
-      onload="this.rel='stylesheet'"
+      media="print"
+      onload="this.media='all'"
     />
     <noscript>
       <link
@@ -49,11 +49,36 @@ const seoProps = Astro.props
       />
     </noscript>
 
-    <!-- Umami Analytics -->
+    <!-- Preload critical hero image -->
+    <link
+      rel="preload"
+      as="image"
+      href="/moumousse-malisse.webp"
+      fetchpriority="high"
+    />
+
+    <!-- Umami Analytics - async loading -->
     <script
       defer
       src="https://umami-production-6320.up.railway.app/script.js"
-      data-website-id="4d35333e-130b-4d7d-b00b-2ca3d21e88b1"></script>
+      data-website-id="4d35333e-130b-4d7d-b00b-2ca3d21e88b1"
+    ></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('/sw.js')
+            .then((registration) => {
+              console.log('Service Worker registered:', registration.scope)
+            })
+            .catch((error) => {
+              console.warn('Service Worker registration failed:', error)
+            })
+        })
+      }
+    </script>
   </head>
 
   <body class="bg-body overflow-x-hidden font-sans text-base text-black">

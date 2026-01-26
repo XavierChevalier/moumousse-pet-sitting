@@ -15,9 +15,57 @@ const {
   author = siteConfig.seo.author,
 } = Astro.props
 
+/**
+ * Normalizes a canonical URL by:
+ * - Removing hash fragments (#)
+ * - Removing all query parameters (including UTM - Umami tracks these from the actual page URL, not canonical)
+ * - Ensuring trailing slash for HTML routes (matching Astro's trailingSlash: 'always' config)
+ * 
+ * Note: Astro.url.pathname should already exclude query/hash, but this ensures consistency
+ * especially if a canonical prop is passed as a full URL string.
+ */
+function normalizeCanonicalURL(pathname: string | undefined, baseURL: string): string {
+  if (!pathname) {
+    return baseURL
+  }
+  
+  // Handle both pathname strings and full URLs
+  // If pathname is a full URL, extract just the pathname part
+  let cleanPathname: string
+  try {
+    const url = new URL(pathname, baseURL)
+    cleanPathname = url.pathname
+  } catch {
+    // If it's not a valid URL, treat it as a pathname string
+    // Remove hash and query parameters (defensive - pathname shouldn't have these)
+    const withoutQuery = pathname.split('?')[0] ?? pathname
+    cleanPathname = withoutQuery.split('#')[0] ?? withoutQuery
+  }
+  
+  if (!cleanPathname || cleanPathname === '') {
+    return baseURL
+  }
+  
+  // Ensure trailing slash for HTML routes (exclude file extensions like .json, .xml, etc.)
+  // Root path should remain as '/'
+  const hasFileExtension = /\.\w+$/.test(cleanPathname)
+  const normalizedPath = cleanPathname === '/'
+    ? '/'
+    : hasFileExtension
+      ? cleanPathname
+      : cleanPathname.endsWith('/')
+        ? cleanPathname
+        : `${cleanPathname}/`
+  
+  return new URL(normalizedPath, baseURL).href
+}
+
+// Always use the canonical base URL (HTTPS) to avoid http vs https issues
+const baseCanonicalURL = siteConfig.seo.url
+
 const canonicalURL = canonical
-  ? new URL(canonical, siteConfig.seo.url).href
-  : new URL(Astro.url.pathname, siteConfig.seo.url).href
+  ? normalizeCanonicalURL(canonical, baseCanonicalURL)
+  : normalizeCanonicalURL(Astro.url.pathname, baseCanonicalURL)
 
 const fullImageUrl = image.startsWith('http') ? image : new URL(image, siteConfig.seo.url).href
 ---

@@ -35,6 +35,23 @@ const {
 </div>
 
 <script>
+  /**
+   * Decodes protected content (phone, text) encoded with a custom algorithm
+   * 
+   * The decoding algorithm reverses the encoding process:
+   * 1. Shift each character by -3 (reverse of +3 during encoding)
+   * 2. Reverse the character order
+   * 3. Decode the resulting base64 string
+   * 
+   * @param encoded - Encoded content to decode
+   * @returns Decoded content (plain text)
+   * 
+   * @example
+   * ```typescript
+   * const decoded = decode('@HWPjD}PjfGQj\\GQj\\GP')
+   * // Returns the original phone number or text
+   * ```
+   */
   function decode(encoded: string): string {
     // Custom algorithm:
     // 1. Each character was shifted by +3 when encoding -> shift back by -3
@@ -50,6 +67,23 @@ const {
     return atob(reversed)
   }
 
+  /**
+   * Decodes and displays protected content in the DOM
+   * 
+   * This function handles decoding and displaying content based on its type:
+   * - For phones: replaces the element with a `tel:` link
+   * - For texts: displays the decoded content in the element
+   * 
+   * @param element - HTML element containing the protected content
+   * @param encodedContent - Encoded content to decode
+   * @param contentType - Content type ('phone' | 'text')
+   * 
+   * @example
+   * ```typescript
+   * const element = document.querySelector('.protected-content')
+   * decodeProtectedContent(element, '@HWPjD}PjfGQj\\GQj\\GP', 'phone')
+   * ```
+   */
   function decodeProtectedContent(
     element: HTMLElement,
     encodedContent: string,

@@ -83,6 +83,49 @@ function computeTargetPxFromPageMm({
   }
 }
 
+/**
+ * Creates a complete dimensions object for printables
+ * 
+ * Calculates all dimensions needed for exporting a printable:
+ * - Finished dimensions (trim size)
+ * - Dimensions with bleed
+ * - Safe zones
+ * - Page margins
+ * - Target resolution in pixels based on DPI
+ * 
+ * @param input - Printable dimensions parameters
+ * @param input.dpiMultiplier - Base DPI multiplier (e.g., 2 for 600 DPI from 300)
+ * @param input.baseDpi - Base DPI (e.g., 300)
+ * @param input.finishedWidthMm - Finished width in mm (trim size)
+ * @param input.finishedHeightMm - Finished height in mm (trim size)
+ * @param input.bleedMm - Bleed per side in mm
+ * @param input.safeZoneMm - Recommended safe zone per side in mm
+ * @param input.contentPaddingMm - Inner padding used in components in mm
+ * @param input.cropMarkOffsetFromPageEdgeMm - Crop mark offset from page edge in mm (optional)
+ * @param input.pageWidthMm - Page width in mm (optional, alternative to baseTargetWidthPx)
+ * @param input.pageHeightMm - Page height in mm (optional, alternative to baseTargetHeightPx)
+ * @param input.baseTargetWidthPx - Target width in pixels at base DPI (optional, alternative to pageWidthMm)
+ * @param input.baseTargetHeightPx - Target height in pixels at base DPI (optional, alternative to pageHeightMm)
+ * 
+ * @returns PrintableDimensions object with all calculated dimensions
+ * 
+ * @throws {Error} If neither pageWidthMm/pageHeightMm nor baseTargetWidthPx/baseTargetHeightPx are provided
+ * 
+ * @example
+ * ```typescript
+ * const dimensions = createPrintableDimensions({
+ *   dpiMultiplier: 2,
+ *   baseDpi: 300,
+ *   finishedWidthMm: 85,
+ *   finishedHeightMm: 54,
+ *   bleedMm: 2,
+ *   safeZoneMm: 3,
+ *   contentPaddingMm: 4,
+ *   baseTargetWidthPx: 1347,
+ *   baseTargetHeightPx: 981,
+ * })
+ * ```
+ */
 export function createPrintableDimensions({
   dpiMultiplier,
   baseDpi,

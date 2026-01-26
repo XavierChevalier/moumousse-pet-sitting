@@ -102,6 +102,30 @@ class ExportHandler {
   }
 }
 
+/**
+ * Initializes the export system for printables
+ * 
+ * Configures and initializes all services needed for printable exports:
+ * - Font management service
+ * - Text outline normalization
+ * - Crop coordinates calculation
+ * - Export handler
+ * - Download handler
+ * - Preview
+ * 
+ * Uses dependency injection for better testability.
+ * Prevents double initialization using a global key.
+ * 
+ * @param dimensions - Dimensions of the printable to export
+ * @returns Cleanup function to detach event listeners
+ * 
+ * @example
+ * ```typescript
+ * const cleanup = setupPrintableExport(dimensions)
+ * // Later, to cleanup:
+ * cleanup()
+ * ```
+ */
 export function setupPrintableExport(dimensions: PrintableDimensions): () => void {
   const windowWithInit = window as typeof window & {
     [GLOBAL_INIT_KEY]?: boolean

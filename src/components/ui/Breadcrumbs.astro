@@ -1,0 +1,42 @@
+---
+interface Props {
+  items: { label: string; href?: string }[]
+}
+
+const { items } = Astro.props
+---
+
+<nav aria-label="Fil d'Ariane" class="container mx-auto max-w-7xl px-4 pt-8 pb-2">
+  <ol class="flex flex-wrap items-center gap-2 text-sm">
+    {
+      items.map((item, index) => {
+        const isLast = index === items.length - 1
+        return (
+          <li class="flex items-center gap-2">
+            {index > 0 && (
+              <span class="text-gray-400" aria-hidden="true">
+                /
+              </span>
+            )}
+
+            {isLast ? (
+              <span class="font-semibold text-black" aria-current="page">
+                {item.label}
+              </span>
+            ) : item.href ? (
+              <a
+                href={item.href}
+                class="hover:text-primary text-gray-600 transition-colors duration-150"
+                data-umami-event={`breadcrumb:click-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span class="text-gray-600">{item.label}</span>
+            )}
+          </li>
+        )
+      })
+    }
+  </ol>
+</nav>

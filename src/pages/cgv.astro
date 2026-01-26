@@ -1,6 +1,8 @@
 ---
 import { siteConfig } from '../config/SiteConfig'
 import Layout from '../layouts/Layout.astro'
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
+import ScrollToTop from '../components/ui/ScrollToTop.astro'
 ---
 
 <Layout
@@ -8,7 +10,13 @@ import Layout from '../layouts/Layout.astro'
   description="Consultez les conditions générales de vente de Moumousse Pet Sitting : tarifs, modalités de paiement, annulation, soins vétérinaires et responsabilités pour la garde d'animaux à Pélussin."
   noindex={false}
 >
-  <div class="prose container mx-auto max-w-7xl px-4 py-16">
+  <Breadcrumbs
+    items={[
+      { label: 'Accueil', href: '/' },
+      { label: 'Conditions générales de vente' },
+    ]}
+  />
+  <div class="prose container mx-auto max-w-7xl px-4 pt-8 pb-16">
     <h1>Conditions générales de vente</h1>
 
     <p>
@@ -198,4 +206,5 @@ import Layout from '../layouts/Layout.astro'
       >.
     </p>
   </div>
+  <ScrollToTop />
 </Layout>

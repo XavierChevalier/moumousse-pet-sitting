@@ -61,8 +61,10 @@ const links = [
         <button
           type="button"
           id="mobile-menu-button"
-          class="hover:text-primary focus:text-primary cursor-pointer transition-colors duration-200 focus:outline-none"
+          class="hover:text-primary focus:text-primary cursor-pointer transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-label="Menu mobile"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
           data-umami-event="navigation:toggle-mobile-menu"
         >
           <MenuIcon class="h-6 w-6" />
@@ -71,7 +73,7 @@ const links = [
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden h-[calc(100dvh-4rem)] text-xl md:hidden">
+    <div id="mobile-menu" class="hidden h-[calc(100dvh-4rem)] text-xl md:hidden" role="menu" aria-label="Menu de navigation mobile">
       <div class="flex h-full flex-col py-8">
         {
           links.map((link) => (
@@ -102,14 +104,60 @@ const links = [
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.getElementById('mobile-menu') as HTMLDivElement
-    document
-      .getElementById('mobile-menu-button')!
-      .addEventListener('click', () => mobileMenu.classList.toggle('hidden'))
+    const menuButton = document.getElementById('mobile-menu-button') as HTMLButtonElement
+    if (!mobileMenu || !menuButton) return
+
+    let previousFocus: HTMLElement | null = null
+
+    function openMenu() {
+      mobileMenu.classList.remove('hidden')
+      menuButton.setAttribute('aria-expanded', 'true')
+      previousFocus = document.activeElement as HTMLElement
+      // Focus sur le premier élément du menu
+      const firstLink = mobileMenu.querySelector('a') as HTMLAnchorElement
+      if (firstLink) {
+        setTimeout(() => firstLink.focus(), 100)
+      }
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.add('hidden')
+      menuButton.setAttribute('aria-expanded', 'false')
+      // Retourner le focus au bouton menu
+      if (previousFocus) {
+        previousFocus.focus()
+        previousFocus = null
+      }
+    }
+
+    function toggleMenu() {
+      const isOpen = !mobileMenu.classList.contains('hidden')
+      if (isOpen) {
+        closeMenu()
+      } else {
+        openMenu()
+      }
+    }
+
+    menuButton.addEventListener('click', toggleMenu)
+
+    // Fermer le menu avec Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        closeMenu()
+      }
+    })
+
+    // Fermer le menu lors du clic sur les liens ou le logo
     ;[
       ...document.querySelectorAll('#mobile-menu a, #mobile-menu button'),
       document.getElementById('navigation-logo') as HTMLButtonElement,
-    ].forEach((element) =>
-      element.addEventListener('click', () => mobileMenu.classList.add('hidden'))
-    )
+    ].forEach((element) => {
+      element.addEventListener('click', () => {
+        if (!mobileMenu.classList.contains('hidden')) {
+          closeMenu()
+        }
+      })
+    })
   })
 </script>

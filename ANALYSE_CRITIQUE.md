@@ -134,11 +134,16 @@ Le projet est **globalement bien structuré** avec une architecture moderne et d
 <script defer src="..." data-website-id="..." />
 ```
 
-#### 5. **Contenu et UX** 🟢
+#### 5. **Contenu et UX** 🟢 ✅ **IMPLÉMENTÉ**
 
 **Points mineurs :**
-- ⚠️ Pas de breadcrumbs sur les pages secondaires (CGV)
-- ⚠️ Pas de "retour en haut" (scroll to top) pour les longues pages (cgv)
+- ✅ **Breadcrumbs ajoutés** sur les pages secondaires (CGV)
+  - Composant `Breadcrumbs.astro` créé avec navigation accessible (ARIA)
+  - Fil d'Ariane avec liens vers l'accueil et page courante
+- ✅ **Bouton "retour en haut" implémenté** pour les longues pages
+  - Composant `ScrollToTop.astro` créé avec animation smooth
+  - Apparaît après 300px de scroll, avec styles focus-visible pour l'accessibilité
+  - Intégré dans le Layout pour toutes les pages
 
 ---
 
@@ -409,9 +414,9 @@ export const analyticsConfig = {
    - [ ] Ajouter GitHub Actions
    - [ ] Automatiser lint/test avant déploiement
 
-8. **UX**
-   - [ ] Ajouter breadcrumbs
-   - [ ] Ajouter bouton "retour en haut"
+8. **UX** ✅ **PARTIELLEMENT TERMINÉ**
+   - [x] Ajouter breadcrumbs
+   - [x] Ajouter bouton "retour en haut"
    - [ ] Améliorer validation formulaire (temps réel)
 
 ---

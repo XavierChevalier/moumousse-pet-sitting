@@ -1,15 +1,34 @@
 // Service Worker for offline caching
-// Version 1.0.0
+// Version: Auto-updated on build (see build script)
+// IMPORTANT: Update BUILD_TIMESTAMP on each deployment to force cache invalidation
 
-const CACHE_NAME = 'moumousse-pet-sitting-v1'
+// Build timestamp - MUST be updated on each deployment
+// Format: YYYYMMDDHHMMSS (e.g., 20250126143000)
+const BUILD_TIMESTAMP = '20250126143000'
+
+// Detect if we're in development mode (localhost)
+const isDevelopment = self.location.hostname === 'localhost' || 
+                      self.location.hostname === '127.0.0.1' ||
+                      self.location.hostname.includes('localhost')
+
+// Cache name includes build timestamp for automatic invalidation
+const CACHE_NAME = `moumousse-pet-sitting-${BUILD_TIMESTAMP}`
+
+// Static assets to precache (only essential pages)
+// NOTE: CSS is inlined by Astro, so we only cache HTML pages
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
-  '/styles/global.css',
+  '/index/',
 ]
 
-// Install event - cache static assets
+// Install event - cache static assets (only in production)
 self.addEventListener('install', (event) => {
+  if (isDevelopment) {
+    // In development, skip caching and activate immediately
+    self.skipWaiting()
+    return
+  }
+
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS).catch((error) => {
@@ -23,6 +42,20 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
+  if (isDevelopment) {
+    // In development, clear all caches and unregister
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((name) => caches.delete(name))
+        )
+      }).then(() => {
+        return self.clients.claim()
+      })
+    )
+    return
+  }
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -36,8 +69,13 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim()
 })
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - Network-first strategy (prioritize fresh content, cache as fallback)
 self.addEventListener('fetch', (event) => {
+  // In development, always fetch from network (no caching)
+  if (isDevelopment) {
+    return
+  }
+
   // Only handle GET requests
   if (event.request.method !== 'GET') {
     return
@@ -48,37 +86,42 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
+  // Network-first strategy: try network first, fallback to cache
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // Return cached version if available
-      if (cachedResponse) {
-        return cachedResponse
-      }
-
-      // Otherwise fetch from network
-      return fetch(event.request)
-        .then((response) => {
-          // Don't cache non-successful responses
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response
-          }
-
-          // Clone the response (stream can only be consumed once)
-          const responseToCache = response.clone()
-
-          // Cache the response
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache)
-          })
-
+    fetch(event.request)
+      .then((response) => {
+        // Don't cache non-successful responses
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response
+        }
+
+        // Clone the response (stream can only be consumed once)
+        const responseToCache = response.clone()
+
+        // Update cache with fresh content in background
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache)
         })
-        .catch(() => {
-          // If network fails and no cache, return offline page if available
-          if (event.request.destination === 'document') {
-            return caches.match('/')
+
+        return response
+      })
+      .catch(() => {
+        // Network failed, try cache
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse
           }
+
+          // If no cache and it's a document request, return offline page
+          if (event.request.destination === 'document') {
+            return caches.match('/').then((offlinePage) => {
+              return offlinePage || new Response('Offline', { status: 503 })
+            })
+          }
+
+          // Return error for other requests
+          return new Response('Network error', { status: 503 })
         })
-    })
+      })
   )
 })

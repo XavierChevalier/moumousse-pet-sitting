@@ -1,8 +1,8 @@
 ---
-import { siteConfig } from '../config/SiteConfig'
-import Layout from '../layouts/Layout.astro'
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro'
 import ScrollToTop from '../components/ui/ScrollToTop.astro'
+import { siteConfig } from '../config/SiteConfig'
+import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout
@@ -11,11 +11,9 @@ import ScrollToTop from '../components/ui/ScrollToTop.astro'
   noindex={false}
 >
   <Breadcrumbs
-    items={[
-      { label: 'Accueil', href: '/' },
-      { label: 'Conditions générales de vente' },
-    ]}
+    items={[{ label: 'Accueil', href: '/' }, { label: 'Conditions générales de vente' }]}
   />
+
   <div class="prose container mx-auto max-w-7xl px-4 pt-8 pb-16">
     <h1>Conditions générales de vente</h1>
 

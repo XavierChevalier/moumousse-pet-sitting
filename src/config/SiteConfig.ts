@@ -50,4 +50,23 @@ export const siteConfig = {
       country: 'France',
     },
   },
+
+  pricing: {
+    zones: {
+      zone1: '0-10km',
+      zone2: '10-15km',
+      zone3: '15-20km',
+    },
+    visit: {
+      zone1: 13,
+      zone2: 15,
+      zone3: 17,
+      additionalAnimal: 5, // 5€ supplémentaires par animal par visite
+    },
+    walking: {
+      zone1: { '1h': 18, '1h30': 23, '2h': 28 },
+      zone2: { '1h': 20, '1h30': 25, '2h': 30 },
+      zone3: { '1h': 22, '1h30': 27, '2h': 32 },
+    },
+  },
 } as const

@@ -1,26 +1,27 @@
 ---
 import { AsteriskIcon } from '@lucide/astro'
+import { siteConfig } from '../../../config/SiteConfig'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
 const prices = [
   {
     duration: '1h',
-    zone1: '18€',
-    zone2: '20€',
-    zone3: '22€',
+    zone1: `${siteConfig.pricing.walking.zone1['1h']}€`,
+    zone2: `${siteConfig.pricing.walking.zone2['1h']}€`,
+    zone3: `${siteConfig.pricing.walking.zone3['1h']}€`,
   },
   {
     duration: '1h30',
-    zone1: '23€',
-    zone2: '25€',
-    zone3: '27€',
+    zone1: `${siteConfig.pricing.walking.zone1['1h30']}€`,
+    zone2: `${siteConfig.pricing.walking.zone2['1h30']}€`,
+    zone3: `${siteConfig.pricing.walking.zone3['1h30']}€`,
   },
   {
     duration: '2h',
-    zone1: '28€',
-    zone2: '30€',
-    zone3: '32€',
+    zone1: `${siteConfig.pricing.walking.zone1['2h']}€`,
+    zone2: `${siteConfig.pricing.walking.zone2['2h']}€`,
+    zone3: `${siteConfig.pricing.walking.zone3['2h']}€`,
   },
 ]
 ---

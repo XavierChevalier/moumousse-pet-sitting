@@ -3,7 +3,6 @@ export interface SEOConfig {
   description: string
   image?: string
   imageAlt?: string
-  canonical?: string
   noindex?: boolean
   nofollow?: boolean
   type?: 'website' | 'article' | 'profile'
@@ -35,7 +34,6 @@ export const siteConfig = {
       "Service professionnel de garde d'animaux à domicile à Pélussin et alentours (42). Visites, promenades canines, soins pour chiens, chats et NAC. Steffie, pet sitter passionnée et diplômée.",
     image: '/moumousse-malisse.webp',
     imageAlt: "Moumousse Pet Sitting - Garde d'animaux professionnelle à Pélussin",
-    canonical: undefined,
     noindex: false,
     nofollow: false,
     type: 'website',

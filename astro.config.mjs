@@ -7,8 +7,8 @@ import { excludePrintables } from './build/exclude-printables.js'
 // https://astro.build/config
 export default defineConfig({
   site: 'https://moumousse-pet-sitting.fr',
-  // Enforce a single URL format everywhere (avoid /cgv vs /cgv/ duplicates in GSC)
-  trailingSlash: 'always',
+  // Enforce a single URL format everywhere (avoid /cgv/ vs /cgv duplicates in GSC)
+  trailingSlash: 'never',
   integrations: [
     sitemap({
       // These routes are intentionally DEV-only (they return 404 in prod) so they must not appear in sitemap.

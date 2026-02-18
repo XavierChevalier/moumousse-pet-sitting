@@ -2,10 +2,12 @@
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
+  inLanguage: 'fr-FR',
+  url: 'https://moumousse-pet-sitting.fr/#faq',
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'Quels animaux gardez-vous ?',
+      name: 'Quels animaux je garde ?',
       acceptedAnswer: {
         '@type': 'Answer',
         text: "Je m'occupe des chats, chiens et NAC (nouveaux animaux de compagnie). Cela inclut les lapins, cochons d'Inde, furets, rongeurs, oiseaux et les poissons.",
@@ -13,26 +15,26 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'Quels sont les services proposés par Moumousse Pet Sitting ?',
+      name: 'Quels sont mes services ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Nous proposons : Visites à domicile (soins, nourriture, nettoyage, câlins, jeux), Promenades canines (sorties individuelles ou personnalisées), et Présence/compagnie pour éviter l'ennui ou l'anxiété de l'animal.",
+        text: "Je propose des visites à domicile (soins, nourriture, nettoyage, câlins, jeux), des promenades canines individuelles ou personnalisées selon les besoins du chien, et une présence/compagnie à domicile pour éviter l'ennui ou l'anxiété de l'animal.",
       },
     },
     {
       '@type': 'Question',
-      name: 'Quels sont les tarifs de garde à Pélussin et alentours ?',
+      name: 'Quels sont les tarifs ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Les tarifs varient selon la formule choisie, le temps passé et la distance. Visite ponctuelle à partir de 15€, promenade canine à partir de 15€/heure. Contactez-nous pour un devis personnalisé.',
+        text: 'Les tarifs varient selon la formule choisie, le temps passé et la distance. Les détails sont indiqués dans la section Services du site. Pour un devis personnalisé, vous pouvez me contacter directement.',
       },
     },
     {
       '@type': 'Question',
-      name: "Comment réserver une garde d'animaux ?",
+      name: 'Comment réserver ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Vous pouvez réserver par mail, SMS ou appel téléphonique à contact@moumousse-pet-sitting.fr. Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.',
+        text: 'Vous pouvez réserver par mail, SMS ou appel téléphonique, ou en utilisant le formulaire de contact disponible sur le site. Un premier rendez-vous de rencontre est recommandé avant toute garde.',
       },
     },
     {
@@ -40,23 +42,31 @@ const faqSchema = {
       name: 'Comment se passe le règlement ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Le paiement se fait en amont ou le jour-même de la prestation. Modes de paiement acceptés : espèces et virement bancaire. Une facture peut être fournie sur demande.',
+        text: 'Le paiement se fait en amont ou le jour-même de la prestation, selon la formule. Les modes de paiement acceptés sont les espèces et le virement bancaire. Une facture peut être fournie sur demande et un acompte peut être demandé pour les gardes longues ou récurrentes.',
       },
     },
     {
       '@type': 'Question',
-      name: "Avez-vous une formation pour la garde d'animaux ?",
+      name: 'Ai-je une formation ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Oui, je suis titulaire de l'ACACED (Attestation de Connaissances pour les Animaux de Compagnie d'Espèces Domestiques) pour Chien, Chat & NAC, ainsi que d'une formation de premiers secours canin/félin.",
+        text: "Oui, je suis titulaire de l’ACACED (Attestation de Connaissances pour les Animaux de Compagnie d’Espèces Domestiques) pour chien, chat et NAC (rongeurs, lapins, furets, oiseaux, poissons), ainsi que d'une formation de premiers secours canin/félin.",
       },
     },
     {
       '@type': 'Question',
-      name: 'Que se passe-t-il si mon animal tombe malade pendant la garde ?',
+      name: 'Et si mon animal tombe malade ou se blesse ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: "Je contacte votre vétérinaire habituel en priorité. En cas d'urgence, j'appelle le vétérinaire le plus proche. Vous êtes informé en temps réel de la situation.",
+        text: "En cas de problème de santé pendant la garde ou la promenade, je contacte d'abord votre vétérinaire habituel. En cas d'urgence, j'appelle le vétérinaire le plus proche, et vous êtes informé·e en temps réel de la situation.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Une question ? Un souci ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Pour toute question ou problème, vous pouvez me contacter par mail, téléphone ou via le formulaire de contact indiqué sur le site.',
       },
     },
   ],

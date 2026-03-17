@@ -15,21 +15,14 @@
 
 ## 📋 À propos
 
-**Moumousse Pet Sitting** est le site web officiel du service de garde d'animaux professionnel de Steffie Thollot, situé à Pélussin (42) et ses alentours. Le site présente les services de garde à domicile, promenades canines et soins pour chiens, chats et NAC (Nouveaux Animaux de Compagnie).
-
-### ✨ Services proposés
-
-- 🏠 **Garde à domicile** - Visites quotidiennes pour vos animaux
-- 🚶‍♀️ **Promenades canines** - Sorties régulières pour vos chiens
-- 🎾 **Jeux et divertissement** - Activités adaptées à chaque animal
-- 💉 **Soins médicaux** - Administration de médicaments si nécessaire
-- 📸 **Photos et nouvelles** - Suivi régulier avec photos de vos compagnons
+**Moumousse Pet Sitting** est le site web officiel du service de garde d'animaux professionnel de Steffie Thollot, situé à Pélussin (42) et ses alentours.
+Le site présente les services de garde à domicile, promenades canines, chats et NAC (Nouveaux Animaux de Compagnie).
 
 ---
 
 ## 🎨 Design & Style
 
-Le site utilise un design moderne et coloré avec :
+Le site utilise un design « punk-rock brutalist » moderne et coloré avec :
 
 - **Palette de couleurs vibrantes** : Teal, Yellow, Purple, Pink
 - **Style brutalist** : Bordures noires épaisses et ombres portées
@@ -38,7 +31,8 @@ Le site utilise un design moderne et coloré avec :
 
 ## 🛠️ Stack technique
 
-**[Astro](https://astro.build)** • **[Tailwind CSS 4](https://tailwindcss.com)** • **[TypeScript](https://www.typescriptlang.org/)**
+• **[Astro](https://astro.build)**
+• **[Tailwind CSS 4](https://tailwindcss.com)**
 
 ---
 
@@ -50,25 +44,9 @@ npm run dev      # http://localhost:4321
 npm run build    # Production build
 ```
 
----
-
-## 🎯 Fonctionnalités
-
-- **SEO** : Structured Data (Schema.org), sitemap auto, meta tags optimisés
-- **Performance** : Site statique, images optimisées avec Sharp
-- **Sections** : Hero, À propos, Services, Galerie, FAQ, Contact
-- **Pages** : CGV, Carte de visite, Flyer
-
----
-
-## 🎨 Configuration
-
-- **Couleurs** : `src/styles/global.css` (Teal, Yellow, Purple, Pink)
-- **Config site** : `src/config/SiteConfig.ts` (contact, SEO, Calendly)
-
 ## 🌐 Déploiement
 
-Déployé sur **Netlify** (auto-deploy sur `master`). Aucune variable d'environnement requise.
+Déployé sur **Netlify** (auto-deploy sur `master`).
 
 <div align="center">
 

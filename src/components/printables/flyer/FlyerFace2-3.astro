@@ -20,16 +20,16 @@ interface Props {
 const { withBleed = false } = Astro.props
 ---
 
-<!-- Face 2-3 : Services et zone d'intervention fusionnés (pleine largeur 210mm × 210mm) -->
+<!-- Faces 2–3: services + service area combined (full width 210mm × 210mm) -->
 <article
   class:list={[
     'bg-body relative z-0 overflow-hidden',
     withBleed ? 'h-[214mm] w-[214mm]' : 'h-[210mm] w-[210mm]',
   ]}
 >
-  <!-- Décor géométrique en arrière-plan (couvre toute la zone avec fond perdu) -->
+  <!-- Geometric background decor (full bleed) -->
   <div class="pointer-events-none absolute inset-0 opacity-15">
-    <!-- Carré -->
+    <!-- Square -->
     <div class="border-tertiary absolute top-10 -right-10 size-24 rotate-45 border-8"></div>
     <!-- Triangle -->
     <div
@@ -61,9 +61,9 @@ const { withBleed = false } = Astro.props
         Mes services
       </h2>
 
-      <!-- Deux services en quinconce -->
+      <!-- Two staggered service blocks -->
       <div class="flex flex-col gap-16 text-base leading-snug text-black">
-        <!-- Service 1 : Image chat (gauche) | Texte visites (droite) -->
+        <!-- Service 1: cat image (left) | visit copy (right) -->
         <div class="grid grid-cols-[1fr_2fr] gap-6">
           <div class="flex items-center justify-center">
             <img
@@ -109,7 +109,7 @@ const { withBleed = false } = Astro.props
           </div>
         </div>
 
-        <!-- Service 2 : Texte promenades (gauche) | Image chien (droite) -->
+        <!-- Service 2: walk copy (left) | dog image (right) -->
         <div class="grid grid-cols-[2fr_1fr] gap-6">
           <div class="space-y-2">
             <div class="flex items-baseline gap-2">
@@ -151,7 +151,7 @@ const { withBleed = false } = Astro.props
         </div>
       </div>
 
-      <!-- Zone d'intervention et informations -->
+      <!-- Service area + info -->
       <div class="mt-auto space-y-2 pt-6">
         <div class="flex items-center justify-center gap-2 leading-snug text-black">
           <MapPin class="text-primary size-4 flex-shrink-0" />

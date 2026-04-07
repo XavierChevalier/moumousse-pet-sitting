@@ -15,9 +15,9 @@ const { dimensions, currentPage, currentFaceId, faces } = Astro.props
 ---
 
 <div class="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between gap-4 bg-white/95 backdrop-blur-sm border-b border-gray-200 px-4 py-3 shadow-sm" id="printables-toolbar">
-  <!-- Navigation entre pages et toggle -->
+  <!-- Page navigation and toggle -->
   <div class="flex items-center gap-2">
-    <!-- Dropdown pour sélectionner la page -->
+    <!-- Dropdown to select page -->
     <Dropdown
       id="page-selector"
       label={currentPage === 'visit-card' ? 'Carte de visite' : 'Flyer'}
@@ -37,10 +37,10 @@ const { dimensions, currentPage, currentFaceId, faces } = Astro.props
     />
   </div>
 
-      <!-- Boutons d'export pour la face actuelle -->
+      <!-- Export buttons for the current side -->
       {currentFaceId && (
         <div class="flex items-center gap-3" data-toolbar-face={currentFaceId}>
-          <!-- Contrôle segmenté pour choisir le mode d'export -->
+          <!-- Segmented control for export mode -->
           <SegmentedControl
             id={`export-mode-${currentFaceId}`}
             defaultValue="with-overlay"
@@ -61,7 +61,7 @@ const { dimensions, currentPage, currentFaceId, faces } = Astro.props
             ]}
           />
 
-          <!-- Bouton d'export principal -->
+          <!-- Primary export button -->
           <button
             class="group relative flex items-center gap-2 rounded-md bg-teal-500 px-4 py-1.5 text-sm font-medium text-white hover:bg-teal-600 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500 disabled:cursor-not-allowed disabled:opacity-60 shadow-sm"
             data-target={currentFaceId}

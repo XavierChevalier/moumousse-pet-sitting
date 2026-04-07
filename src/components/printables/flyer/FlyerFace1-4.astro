@@ -10,16 +10,16 @@ interface Props {
 const { withBleed = false } = Astro.props
 ---
 
-<!-- Face 4-1 : Contacts et slogan fusionnés (pleine largeur 210mm × 210mm) -->
+<!-- Faces 4–1: contacts + slogan combined (full width 210mm × 210mm) -->
 <article
   class:list={[
     'bg-body relative z-0 overflow-hidden',
     withBleed ? 'h-[214mm] w-[214mm]' : 'h-[210mm] w-[210mm]',
   ]}
 >
-  <!-- Décor géométrique en arrière-plan (couvre toute la zone avec fond perdu) -->
+  <!-- Geometric background decor (full bleed) -->
   <div class="pointer-events-none absolute inset-0 opacity-15">
-    <!-- Carré -->
+    <!-- Square -->
     <div class="border-tertiary absolute top-10 -right-10 h-24 w-24 rotate-45 border-8"></div>
     <!-- Rond -->
     <div class="border-secondary absolute bottom-24 -left-12 size-32 rotate-12 rounded-full border-6"></div>
@@ -52,15 +52,15 @@ const { withBleed = false } = Astro.props
     <!-- Inner Safe Zone (8mm from trim edge) -->
     <div class="relative h-full w-full p-[8mm]">
       <div class="grid h-full grid-cols-2 gap-6">
-        <!-- Partie gauche : Face 4 (Contacts) -->
+        <!-- Left: face 4 (contacts) -->
         <div class="flex flex-col justify-between gap-4">
-          <!-- En-tête -->
+          <!-- Header -->
           <div>
             <h2 class="text-primary text-xl font-black tracking-wide uppercase">Steffie Thollot</h2>
             <p class="text-base leading-snug text-black/90">Pet Sitter Professionnelle</p>
           </div>
 
-          <!-- Informations de contact -->
+          <!-- Contact details -->
           <div class="space-y-2 text-sm leading-snug text-black">
             <div class="flex items-center gap-2">
               <Phone class="h-5 w-5" aria-hidden="true" />
@@ -83,9 +83,9 @@ const { withBleed = false } = Astro.props
             <p>Pélussin et alentours</p>
           </div>
 
-          <!-- CTA final -->
+          <!-- Final CTA -->
           <div class="mt-auto">
-            <!-- Image du chien -->
+            <!-- Dog image -->
             <div class="flex-shrink-0">
               <img
                 src={MoumousseDogImage.src}
@@ -96,9 +96,9 @@ const { withBleed = false } = Astro.props
           </div>
         </div>
 
-        <!-- Partie droite : Face 1 (Slogan et image) -->
+        <!-- Right: face 1 (slogan + image) -->
         <div class="relative flex flex-col items-center justify-center gap-6 text-center">
-          <!-- Logo/Image principale -->
+          <!-- Main logo / image -->
           <div class="flex-shrink-0">
             <img
               src={HeroImage.src}
@@ -107,7 +107,7 @@ const { withBleed = false } = Astro.props
             />
           </div>
 
-          <!-- Slogan principal -->
+          <!-- Main slogan -->
           <div class="space-y-6">
             <h1 class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl">
               <span class="text-outline-printable text-tertiary whitespace-nowrap" data-text="Faites garder">

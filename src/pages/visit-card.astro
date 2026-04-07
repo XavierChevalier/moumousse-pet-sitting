@@ -78,7 +78,7 @@ const currentFaceId = 'card-recto'
         id="printables-content"
         style="min-width: 200%; min-height: 200%;"
       >
-        <!-- Recto -->
+        <!-- Front -->
         <PrintableExportCard
           targetId="card-recto"
           dimensions={dimensions}
@@ -88,7 +88,7 @@ const currentFaceId = 'card-recto'
           <VisitCardRecto withBleed={true} />
         </PrintableExportCard>
 
-        <!-- Verso -->
+        <!-- Back -->
         <PrintableExportCard
           targetId="card-verso"
           dimensions={dimensions}

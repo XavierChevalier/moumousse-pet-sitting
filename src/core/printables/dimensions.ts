@@ -16,7 +16,7 @@ export interface PrintableDimensionsInput {
   contentPaddingMm: number
 
   /**
-   * Crop mark offset from page edge in mm (for "Après découpe" mode)
+   * Crop mark offset from page edge in mm (after-trim / trimmed export mode)
    * If not provided, defaults to pageMargin + bleed
    */
   cropMarkOffsetFromPageEdgeMm?: number

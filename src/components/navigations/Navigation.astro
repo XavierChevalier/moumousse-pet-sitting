@@ -113,7 +113,7 @@ const links = [
       mobileMenu.classList.remove('hidden')
       menuButton.setAttribute('aria-expanded', 'true')
       previousFocus = document.activeElement as HTMLElement
-      // Focus sur le premier élément du menu
+      // Focus first menu item
       const firstLink = mobileMenu.querySelector('a') as HTMLAnchorElement
       if (firstLink) {
         setTimeout(() => firstLink.focus(), 100)
@@ -123,7 +123,7 @@ const links = [
     function closeMenu() {
       mobileMenu.classList.add('hidden')
       menuButton.setAttribute('aria-expanded', 'false')
-      // Retourner le focus au bouton menu
+      // Restore focus to menu button
       if (previousFocus) {
         previousFocus.focus()
         previousFocus = null
@@ -141,14 +141,14 @@ const links = [
 
     menuButton.addEventListener('click', toggleMenu)
 
-    // Fermer le menu avec Escape
+    // Close menu on Escape
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
         closeMenu()
       }
     })
 
-    // Fermer le menu lors du clic sur les liens ou le logo
+    // Close menu when clicking links or logo
     ;[
       ...document.querySelectorAll('#mobile-menu a, #mobile-menu button'),
       document.getElementById('navigation-logo') as HTMLButtonElement,

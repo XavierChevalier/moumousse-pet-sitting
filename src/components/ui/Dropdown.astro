@@ -81,7 +81,7 @@ const chevronId = `${id}-chevron`
     />
   </button>
 
-  <!-- Menu déroulant -->
+  <!-- Dropdown menu -->
   <div
     id={menuId}
     class={cn(dropdownMenuVariants({ align }), menuClass)}
@@ -118,7 +118,7 @@ const chevronId = `${id}-chevron`
     const toggleMenu = () => {
       const isOpen = !pageSelectorMenu.classList.contains('hidden')
       if (isOpen) {
-        // Fermeture avec animation
+        // Close with animation
         pageSelectorMenu.classList.add('opacity-0', 'scale-95')
         setTimeout(() => {
           pageSelectorMenu.classList.add('hidden')
@@ -126,9 +126,9 @@ const chevronId = `${id}-chevron`
         pageSelectorChevron.classList.remove('rotate-180')
         pageSelectorButton.setAttribute('aria-expanded', 'false')
       } else {
-        // Ouverture avec animation
+        // Open with animation
         pageSelectorMenu.classList.remove('hidden')
-        // Force reflow pour que l'animation fonctionne
+        // Force reflow so the transition runs
         pageSelectorMenu.offsetHeight
         requestAnimationFrame(() => {
           pageSelectorMenu.classList.remove('opacity-0', 'scale-95')
@@ -144,7 +144,7 @@ const chevronId = `${id}-chevron`
       toggleMenu()
     })
 
-    // Fermer le menu quand on clique ailleurs
+    // Close menu on outside click
     document.addEventListener('click', (e) => {
       const target = e.target
       if (
@@ -162,7 +162,7 @@ const chevronId = `${id}-chevron`
       }
     })
 
-    // Fermer le menu quand on sélectionne une option
+    // Close menu when selecting an option
     const menuItems = pageSelectorMenu.querySelectorAll('[data-dropdown-item]')
     menuItems.forEach((item) => {
       item.addEventListener('click', () => {

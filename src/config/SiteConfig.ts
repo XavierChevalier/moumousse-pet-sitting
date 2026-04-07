@@ -59,7 +59,7 @@ export const siteConfig = {
       zone1: 13,
       zone2: 15,
       zone3: 17,
-      additionalAnimal: 5, // 5€ supplémentaires par animal par visite
+      additionalAnimal: 5, // +5€ per extra animal per visit
     },
     walking: {
       zone1: { '1h': 18, '1h30': 23, '2h': 28 },

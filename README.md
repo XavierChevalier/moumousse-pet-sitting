@@ -39,9 +39,9 @@ Le site utilise un design « punk-rock brutalist » moderne et coloré avec :
 ## 🚀 Quick start
 
 ```bash
-npm install
-npm run dev      # http://localhost:4321
-npm run build    # Production build
+pnpm install
+pnpm dev         # http://localhost:4321
+pnpm build       # Production build
 ```
 
 ## 🌐 Déploiement

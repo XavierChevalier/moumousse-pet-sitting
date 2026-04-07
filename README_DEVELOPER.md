@@ -85,18 +85,18 @@ Le projet n'utilise actuellement pas de variables d'environnement. Les URLs (ex:
 ### Prérequis
 
 - Node.js (version recommandée dans `.nvmrc` si présent)
-- npm ou yarn
+- pnpm
 
 ### Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Développement local
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Le site sera accessible sur `http://localhost:4321`
@@ -104,7 +104,7 @@ Le site sera accessible sur `http://localhost:4321`
 ### Build de production
 
 ```bash
-npm run build
+pnpm build
 ```
 
 Les fichiers générés seront dans `dist/`.
@@ -112,7 +112,7 @@ Les fichiers générés seront dans `dist/`.
 ### Prévisualisation du build
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
 ## 🧩 Composants principaux
@@ -120,6 +120,7 @@ npm run preview
 ### Composants UI
 
 Les composants UI de base sont dans `src/components/ui/` :
+
 - `Button.astro` - Bouton avec variants (filled, outlined, etc.)
 - `Input.astro` - Champ de saisie
 - `Alert.astro` - Messages d'alerte
@@ -128,7 +129,7 @@ Les composants UI de base sont dans `src/components/ui/` :
 ### Composants métier
 
 - `ContactForm.astro` - Formulaire de contact Netlify
-- `GalleryParallaxScroll.astro` - Galerie avec parallaxe
+- `GalleryEmblaRows.astro` - Galerie en rangées (Embla, défilement horizontal)
 - `Navigation.astro` - Navigation principale
 - `SEO.astro` - Gestion du SEO (meta tags, structured data)
 
@@ -194,15 +195,16 @@ Le système de printables permet de générer des documents imprimables (cartes 
 ## 📜 Scripts disponibles
 
 ```bash
-npm run dev      # Développement local
-npm run build    # Build de production
-npm run preview  # Prévisualisation du build
+pnpm dev         # Développement local
+pnpm build       # Build de production
+pnpm preview     # Prévisualisation du build
 ```
 
 **Scripts manquants recommandés** :
-- `npm run lint` - Linter le code
-- `npm run type-check` - Vérifier les types TypeScript
-- `npm run format` - Formater le code avec Prettier
+
+- `pnpm lint` - Linter le code
+- `pnpm type-check` - Vérifier les types TypeScript
+- `pnpm format` - Formater le code avec Prettier
 
 ## 🔍 Fonctions complexes documentées
 

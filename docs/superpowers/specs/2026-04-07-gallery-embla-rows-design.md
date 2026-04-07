@@ -53,11 +53,20 @@ Autoplay cadence des **sauts entre positions** ; la spec demande un **mouvement 
 - Limiter les recompositions coûteuses ; s’appuyer sur le moteur Embla pour le scroll.
 - Conserver des images dimensionnées de façon raisonnable (comme aujourd’hui) ; `will-change` ou équivalent seulement si mesurable et nécessaire.
 
+### Chargement lazy / faible priorité
+
+- **Objectif :** le code d’Embla (`embla-carousel`, `embla-carousel-auto-scroll`) ne doit **pas** être sur le chemin critique du premier rendu ni rivaliser avec le reste de la page (hero, contenu au-dessus de la galerie).
+- **Découpage :** charger Embla via **`import()` dynamique** depuis un module d’init dédié, afin que le bundler (Vite) produise un **chunk séparé** chargé seulement quand l’init démarre.
+- **Quand initialiser :** déclencher le chargement + l’`init` des carrousels lorsque la **section galerie entre dans le viewport** (`IntersectionObserver` avec marge rootMargin raisonnable), ou à défaut après **`requestIdleCallback`** (avec repli `setTimeout` pour les navigateurs sans idle).
+- **Comportement avant init :** le HTML/CSS de la galerie reste utilisable (images visibles, scroll horizontal manuel si pertinent) ; l’auto-scroll démarre **après** chargement du chunk, sans bloquer le thread principal au load.
+- **Priorité réseau :** ne pas marquer ce chunk comme critique ; s’en tenir au lazy load déclenché par la visibilité / l’idle (pas de `preload` spécifique pour Embla).
+
 ## Tests et validation (pour la phase implémentation)
 
 - Vérifier mobile et desktop : fluidité, pas de troncature visible au bouclage, scroll vertical de page non capturé par erreur.
 - Vérifier `prefers-reduced-motion` : pas d’auto-scroll ; défilement manuel fonctionnel.
 - Vérifier lightbox : ouverture sur la bonne image, navigation, accessibilité clavier.
+- Vérifier que le chunk Embla n’est pas requis avant interaction / entrée dans le viewport (réseau ou build analysé si besoin).
 
 ## Hors périmètre (cette spec)
 

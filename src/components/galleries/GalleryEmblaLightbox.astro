@@ -1,0 +1,199 @@
+---
+/**
+ * Fullscreen lightbox: Embla + parallax tween on inner layer (official predefined example pattern).
+ * @see https://www.embla-carousel.com/docs/examples/predefined#parallax
+ */
+import { cn } from '../../core/tailwindcn'
+import type { LightboxItem } from './buildLightboxItems'
+
+export interface Props {
+  items: LightboxItem[]
+}
+
+const { items } = Astro.props
+---
+
+<div
+  data-gallery-lightbox
+  class={cn(
+    'fixed inset-0 z-60 hidden touch-pan-y',
+    '[&_.gallery-lightbox__parallax__img]:backface-hidden [&_.gallery-lightbox__parallax__img]:translate-z-0'
+  )}
+  role="dialog"
+  aria-modal="true"
+  aria-label="Galerie d'images"
+>
+  <div data-lightbox-backdrop data-ui-fade class="will-change-opacity absolute inset-0 bg-black/90">
+  </div>
+
+  <button
+    type="button"
+    data-lightbox-close
+    data-ui-fade
+    aria-label="Fermer la galerie"
+    class="absolute top-4 right-4 z-62 h-10 w-10 cursor-pointer rounded-full bg-black/60 text-white transition-all duration-200 hover:bg-black focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:outline-none"
+  >
+    ✕
+  </button>
+
+  <button
+    type="button"
+    data-lightbox-prev
+    data-ui-fade
+    aria-label="Image précédente"
+    class="absolute top-1/2 left-4 z-62 flex size-18 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-2xl text-white transition-all duration-200 hover:bg-black focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:outline-none"
+  >
+    ‹
+  </button>
+  <button
+    type="button"
+    data-lightbox-next
+    data-ui-fade
+    aria-label="Image suivante"
+    class="absolute top-1/2 right-4 z-62 flex size-18 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-2xl text-white transition-all duration-200 hover:bg-black focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:outline-none"
+  >
+    ›
+  </button>
+
+  <div
+    data-lightbox-stage
+    data-ui-fade
+    class="absolute inset-0 z-61 flex items-center justify-center overflow-hidden"
+  >
+    <div
+      data-lightbox-viewport
+      class="gallery-lightbox-embla__viewport h-full w-full max-w-screen overflow-hidden"
+    >
+      <div
+        class="gallery-lightbox-embla__container flex h-full touch-pan-y gap-3 sm:gap-4 md:gap-5"
+      >
+        {
+          items.map(({ src, intrinsicWidth, intrinsicHeight, title, subtitle, alt }) => (
+            <div
+              class="gallery-lightbox-embla__slide flex min-h-0 min-w-0 shrink-0 items-center justify-center overflow-hidden"
+              data-title={title}
+              data-subtitle={subtitle}
+              data-slide-iw={intrinsicWidth}
+              data-slide-ih={intrinsicHeight}
+            >
+              <div class="gallery-lightbox__parallax h-[min(85vh,100%)] w-full overflow-hidden rounded-md shadow-xl md:max-h-[90vh] lg:max-h-[95vh]">
+                <div
+                  data-lightbox-parallax-layer
+                  class="gallery-lightbox__parallax__layer relative flex h-full w-full items-stretch justify-center"
+                >
+                  {/*
+                    loading / fetchPriority : défaut lazy côté HTML ; à l’ouverture, gallery-embla-lightbox.ts
+                    met eager + fetchPriority high (slide active), auto (voisins ±1), low (rayon de préfetch).
+                  */}
+                  <img
+                    src={src}
+                    alt={alt}
+                    width={intrinsicWidth}
+                    height={intrinsicHeight}
+                    loading="lazy"
+                    decoding="async"
+                    class="gallery-lightbox__parallax__img block h-full max-w-none object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div
+    data-lightbox-title
+    data-ui-fade
+    class="pointer-events-none absolute top-4 left-1/2 z-62 -translate-x-1/2 text-center text-white transition-opacity duration-200 sm:top-6 lg:top-8"
+  >
+    <div class="rounded-lg bg-black/60 px-6 py-3 backdrop-blur-sm sm:px-8 sm:py-4">
+      <div data-lightbox-title-text class="text-2xl font-bold sm:text-3xl lg:text-4xl"></div>
+      <div data-lightbox-subtitle-text class="mt-1 text-base text-white/90 sm:text-lg lg:text-xl">
+      </div>
+    </div>
+  </div>
+
+  <div
+    data-lightbox-thumbs
+    class="absolute inset-x-0 bottom-0 z-62 max-h-[30vh] translate-y-0 bg-black/40 backdrop-blur-sm transition-transform duration-300 will-change-transform"
+  >
+    <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto p-3">
+      {
+        /* Miniatures : loading / fetchPriority ajustés comme les slides plein écran (script). */
+        items.map(({ thumbSrc, title }, idx) => (
+          <img
+            src={thumbSrc}
+            data-thumb-index={idx}
+            class="h-16 w-16 shrink-0 cursor-pointer rounded object-cover opacity-70 ring-2 ring-transparent transition-all duration-150"
+            alt={`Miniature ${title}`}
+            loading="lazy"
+            decoding="async"
+            width="64"
+            height="64"
+          />
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* Largeur des « gouttières » entre slides (utilisée pour l’image parallax plus large que le cadre). */
+  [data-gallery-lightbox] {
+    --lightbox-slide-gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    [data-gallery-lightbox] {
+      --lightbox-slide-gap: 1rem;
+    }
+  }
+  @media (min-width: 768px) {
+    [data-gallery-lightbox] {
+      --lightbox-slide-gap: 1.25rem;
+    }
+  }
+
+  /* Ouverture : fondu contrôles. Fermeture : retirer data-state puis .hidden après 300ms (JS). */
+  [data-gallery-lightbox] [data-ui-fade] {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  [data-gallery-lightbox][data-state='open'] [data-ui-fade] {
+    opacity: 1;
+  }
+
+  /* Bandeau miniatures : glisse depuis le bas quand la lightbox est ouverte. */
+  [data-gallery-lightbox] [data-lightbox-thumbs] {
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  [data-gallery-lightbox][data-state='open'] [data-lightbox-thumbs] {
+    transform: translateY(0);
+  }
+  [data-gallery-lightbox].hidden [data-lightbox-thumbs] {
+    transform: translateY(0);
+    transition: none;
+  }
+
+  /* Calque animé en translateX chaque frame : promouvoir en couche composite pour le scroll. */
+  [data-gallery-lightbox][data-state='open'] [data-lightbox-parallax-layer] {
+    will-change: transform;
+  }
+
+  /*
+   * Même hauteur visuelle entre slides : le cadre (.gallery-lightbox__parallax) a une hauteur fixe ;
+   * l’image remplit la hauteur et object-fit: contain évite la déformation (bandes latérales si besoin).
+   * Embla n’a pas d’option pour ça — c’est 100 % CSS.
+   */
+  .gallery-lightbox__parallax__img {
+    flex: 0 0 calc(115% + (var(--lightbox-slide-gap) * 2));
+    width: auto;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    max-width: none;
+  }
+</style>

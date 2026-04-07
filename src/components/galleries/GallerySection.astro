@@ -21,43 +21,40 @@ import Wisty from '../../assets/gallery/wisty.jpg'
 import Zoom from '../../assets/gallery/zoom.webp'
 import Zuri from '../../assets/gallery/zuri.jpeg'
 import SectionAnchor from '../ui/SectionAnchor.astro'
-import GalleryParallaxScroll from './GalleryParallaxScroll.astro'
+import GalleryEmblaRows from './GalleryEmblaRows.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
 }
 
-const gallery = [
-  // Colonne 1 — indices 0–3
-  { img: Moumousse, title: 'Moumousse' },
-  { img: Bobby, title: 'Bobby' },
-  { img: Luna, title: 'Luna' },
-  { img: Mistigri, title: 'Mistigri' },
-
-  // Colonne 2 — indices 4–7
-  { img: Naska, title: 'Naska' },
-  { img: Bene, title: 'Bene' },
-  { img: KyonBlizGlobulOdin, title: 'Kyon Bliz Globul Odin' },
-  { img: Fiona, title: 'Fiona' },
-
-  // Colonne 3 — indices 8–11
-  { img: Mambo, title: 'Mambo' },
-  { img: OttawaLeika, title: 'Ottawa & Leïka', subtitle: 'mes 2 amours' },
-  { img: Maki, title: 'Maki' },
-  { img: Tiska, title: 'Tiska' },
-
-  // Colonne 4 — indices 12–15
-  { img: DoubleFaceHailey, title: 'Double-Face & Hailey' },
-  { img: Ginger, title: 'Ginger' },
-  { img: Zuri, title: 'Zuri' },
-  { img: PaleoEtSacha, title: 'Paleo & Sacha' },
-
-  // Colonne 5 — indices 16–20
-  { img: TsukiSun, title: 'Tsuki' },
-  { img: Zoom, title: 'Zoom' },
-  { img: Wisty, title: 'Wisty' },
-  { img: Gipsy, title: 'Gipsy' },
-  { img: Soul, title: 'Soul' },
+const galleryRows = [
+  [
+    { img: Moumousse, title: 'Moumousse' },
+    { img: Naska, title: 'Naska' },
+    { img: Mambo, title: 'Mambo' },
+    { img: DoubleFaceHailey, title: 'Double-Face & Hailey' },
+    { img: TsukiSun, title: 'Tsuki' },
+    { img: Bobby, title: 'Bobby' },
+    { img: Bene, title: 'Bene' },
+  ],
+  [
+    { img: OttawaLeika, title: 'Ottawa & Leïka', subtitle: 'mes 2 amours' },
+    { img: Ginger, title: 'Ginger' },
+    { img: Zoom, title: 'Zoom' },
+    { img: Luna, title: 'Luna' },
+    { img: KyonBlizGlobulOdin, title: 'Kyon Bliz Globul Odin' },
+    { img: Maki, title: 'Maki' },
+    { img: Zuri, title: 'Zuri' },
+  ],
+  [
+    { img: Wisty, title: 'Wisty' },
+    { img: Mistigri, title: 'Mistigri' },
+    { img: Fiona, title: 'Fiona' },
+    { img: Tiska, title: 'Tiska' },
+    { img: PaleoEtSacha, title: 'Paleo & Sacha' },
+    { img: Gipsy, title: 'Gipsy' },
+    { img: Soul, title: 'Soul' },
+  ],
 ]
 
 const { id, ...props } = Astro.props
@@ -77,5 +74,5 @@ const { id, ...props } = Astro.props
     </div>
   </div>
 
-  <GalleryParallaxScroll images={gallery} />
+  <GalleryEmblaRows rows={galleryRows} />
 </section>

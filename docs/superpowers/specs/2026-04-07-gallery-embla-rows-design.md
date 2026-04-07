@@ -19,7 +19,7 @@ La section galerie utilise aujourd’hui `GallerySection.astro` et `GalleryParal
 
 ## Décision technique : Embla Carousel
 
-- **Bibliothèque :** [Embla Carousel](https://www.embla-carousel.com/docs/examples/predefined) (préférence pour la **branche stable documentée v8** pour les versions npm en production, sauf besoin explicite d’une capacité réservée à la v9).
+- **Bibliothèque :** [Embla Carousel](https://www.embla-carousel.com/docs/examples/predefined) — projet sur **v9** (`embla-carousel@9.0.0-rc01` + `embla-carousel-auto-scroll` aligné ; passer aux versions stables npm quand publiées).
 - **Plugins :**
   - **`loop`** (option du carrousel, pas un package séparé) pour la boucle sans fin.
   - **`embla-carousel-auto-scroll`** — plugin **[Auto Scroll](https://www.embla-carousel.com/docs/plugins/auto-scroll)** : défilement **continu** (pixels par frame, direction `forward` | `backward`).
@@ -46,7 +46,7 @@ Autoplay cadence des **sauts entre positions** ; la spec demande un **mouvement 
 
 - Remplacer ou refactorer `GalleryParallaxScroll.astro` en un composant dont le nom reflète le comportement (ex. galerie à rangées Embla), et mettre à jour l’import dans `GallerySection.astro`.
 - Retirer : logique `splitIntoBalancedColumns`, classes et script **parallax / scroll**, styles associés au parallax.
-- Ajouter les dépendances npm : `embla-carousel`, `embla-carousel-auto-scroll` (versions **alignées sur la doc v8 stable** choisie pour le projet).
+- Dépendances **pnpm** : `embla-carousel` et `embla-carousel-auto-scroll` sur la **même version majeure** (v9 RC au moment de l’implémentation).
 
 ## Performance
 

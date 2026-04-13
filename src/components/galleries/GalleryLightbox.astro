@@ -68,7 +68,7 @@ const { items } = Astro.props
         class="gallery-lightbox-embla__container flex h-full touch-pan-y gap-3 sm:gap-4 md:gap-5"
       >
         {
-          items.map(({ src, intrinsicWidth, intrinsicHeight, title, subtitle, alt }) => (
+          items.map(({ fullSrc, posterSrc, intrinsicWidth, intrinsicHeight, title, subtitle }) => (
             <div
               class="gallery-lightbox-embla__slide flex min-h-0 min-w-0 shrink-0 items-center justify-center overflow-hidden"
               data-title={title}
@@ -81,18 +81,19 @@ const { items } = Astro.props
                   data-lightbox-parallax-layer
                   class="gallery-lightbox__parallax__layer relative flex h-full w-full items-stretch justify-center"
                 >
-                  {/*
-                    loading / fetchPriority : défaut lazy côté HTML ; à l’ouverture, gallery-embla-lightbox.ts
-                    met eager + fetchPriority high (slide active), auto (voisins ±1), low (rayon de préfetch).
-                  */}
+                  <div
+                    aria-hidden="true"
+                    class="pointer-events-none absolute inset-0 z-0 scale-110 blur-2xl"
+                    style={`background-image:url(${posterSrc});background-size:contain;background-position:center;background-repeat:no-repeat`}
+                  />
                   <img
-                    src={src}
-                    alt={alt}
+                    src={fullSrc}
+                    alt={title}
                     width={intrinsicWidth}
                     height={intrinsicHeight}
                     loading="lazy"
                     decoding="async"
-                    class="gallery-lightbox__parallax__img block h-full max-w-none object-contain"
+                    class="gallery-lightbox__parallax__img gallery-lightbox-reveal relative z-10 block h-full max-w-none object-contain"
                   />
                 </div>
               </div>
@@ -121,18 +122,24 @@ const { items } = Astro.props
   >
     <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto p-3">
       {
-        /* Miniatures : loading / fetchPriority ajustés comme les slides plein écran (script). */
-        items.map(({ thumbSrc, title }, idx) => (
-          <img
-            src={thumbSrc}
-            data-thumb-index={idx}
-            class="h-16 w-16 shrink-0 cursor-pointer rounded object-cover opacity-70 ring-2 ring-transparent transition-all duration-150"
-            alt={`Miniature ${title}`}
-            loading="lazy"
-            decoding="async"
-            width="64"
-            height="64"
-          />
+        items.map(({ thumbSrc, posterSrc, title }, idx) => (
+          <div class="relative h-16 w-16 shrink-0 cursor-pointer overflow-hidden rounded">
+            <div
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-0 z-0 scale-110 blur-2xl"
+              style={`background-image:url(${posterSrc});background-size:cover;background-position:center`}
+            />
+            <img
+              src={thumbSrc}
+              data-thumb-index={idx}
+              class="gallery-blur-img relative z-10 h-full w-full object-cover ring-2 ring-transparent transition-[opacity,box-shadow] duration-300 ease-out"
+              alt={`Miniature ${title}`}
+              loading="lazy"
+              decoding="async"
+              width="64"
+              height="64"
+            />
+          </div>
         ))
       }
     </div>
@@ -140,7 +147,7 @@ const { items } = Astro.props
 </div>
 
 <style is:global>
-  /* Largeur des « gouttières » entre slides (utilisée pour l’image parallax plus large que le cadre). */
+  /* Slide gutter width (parallax image is wider than the frame). */
   [data-gallery-lightbox] {
     --lightbox-slide-gap: 0.75rem;
   }
@@ -155,7 +162,7 @@ const { items } = Astro.props
     }
   }
 
-  /* Ouverture : fondu contrôles. Fermeture : retirer data-state puis .hidden après 300ms (JS). */
+  /* Open: fade in controls. Close: remove data-state then .hidden after 300ms (JS). */
   [data-gallery-lightbox] [data-ui-fade] {
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -164,7 +171,7 @@ const { items } = Astro.props
     opacity: 1;
   }
 
-  /* Bandeau miniatures : glisse depuis le bas quand la lightbox est ouverte. */
+  /* Thumbnail strip: slides up from the bottom when the lightbox is open. */
   [data-gallery-lightbox] [data-lightbox-thumbs] {
     transform: translateY(100%);
     transition: transform 0.3s ease;
@@ -177,15 +184,15 @@ const { items } = Astro.props
     transition: none;
   }
 
-  /* Calque animé en translateX chaque frame : promouvoir en couche composite pour le scroll. */
+  /* Layer animated with translateX each frame: promote to its own compositor layer for scrolling. */
   [data-gallery-lightbox][data-state='open'] [data-lightbox-parallax-layer] {
     will-change: transform;
   }
 
   /*
-   * Même hauteur visuelle entre slides : le cadre (.gallery-lightbox__parallax) a une hauteur fixe ;
-   * l’image remplit la hauteur et object-fit: contain évite la déformation (bandes latérales si besoin).
-   * Embla n’a pas d’option pour ça — c’est 100 % CSS.
+   * Consistent visual height across slides: the frame (.gallery-lightbox__parallax) has a fixed height;
+   * the image fills the height and object-fit: contain avoids distortion (letterboxing if needed).
+   * Embla has no option for this — it is 100% CSS.
    */
   .gallery-lightbox__parallax__img {
     flex: 0 0 calc(115% + (var(--lightbox-slide-gap) * 2));
@@ -195,5 +202,34 @@ const { items } = Astro.props
     object-fit: contain;
     object-position: center;
     max-width: none;
+  }
+
+  /* Lightbox reveal: LQIP poster (same asset as grid) via background; full image fades in when loaded. */
+  .lightbox-reveal-active .gallery-lightbox-reveal {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .lightbox-reveal-active .gallery-lightbox-reveal.lb-loaded {
+    opacity: 1;
+  }
+
+  /*
+   * Thumbs: same pattern as grid — LQIP (`posterSrc`) under blur until `thumbSrc` loads.
+   * Opacity tiers coexist with JS toggling `opacity-70` / `opacity-100` for selection (gallery-embla-lightbox).
+   */
+  [data-gallery-lightbox]
+    [data-lightbox-thumbs]
+    img[data-thumb-index].gallery-blur-img:not([data-loaded='true']) {
+    opacity: 0;
+  }
+  [data-gallery-lightbox]
+    [data-lightbox-thumbs]
+    img[data-thumb-index].gallery-blur-img[data-loaded='true']:not(.opacity-100) {
+    opacity: 0.7;
+  }
+  [data-gallery-lightbox]
+    [data-lightbox-thumbs]
+    img[data-thumb-index].gallery-blur-img[data-loaded='true'].opacity-100 {
+    opacity: 1;
   }
 </style>

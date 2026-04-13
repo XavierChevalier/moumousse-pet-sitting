@@ -21,7 +21,7 @@ import Wisty from '../../assets/gallery/wisty.jpg'
 import Zoom from '../../assets/gallery/zoom.webp'
 import Zuri from '../../assets/gallery/zuri.jpeg'
 import SectionAnchor from '../ui/SectionAnchor.astro'
-import GalleryEmblaRows from './GalleryEmblaRows.astro'
+import GalleryRows from './GalleryRows.astro'
 
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   id: string
@@ -74,5 +74,5 @@ const { id, ...props } = Astro.props
     </div>
   </div>
 
-  <GalleryEmblaRows rows={galleryRows} />
+  <GalleryRows rows={galleryRows} />
 </section>

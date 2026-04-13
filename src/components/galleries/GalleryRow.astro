@@ -1,0 +1,70 @@
+---
+import type { ImageMetadata } from 'astro'
+import { Image } from 'astro:assets'
+
+export interface GalleryRowItem {
+  img: ImageMetadata
+  title: string
+  subtitle?: string
+  globalIndex: number
+  lightboxFullSrc: string
+  cardLqipSrc: string
+}
+
+export interface Props {
+  row: GalleryRowItem[]
+}
+
+const { row } = Astro.props
+---
+
+<div class="w-full" data-gallery-row>
+  <div
+    class="gallery-embla__viewport w-full touch-pan-x overflow-x-auto overflow-y-hidden"
+    data-gallery-viewport
+  >
+    <div
+      class="gallery-embla__container flex flex-row gap-4 px-4 sm:gap-5 sm:px-6 md:gap-6 lg:gap-8 lg:px-8"
+    >
+      {
+        row.map(({ img, title, subtitle, globalIndex, cardLqipSrc, lightboxFullSrc }) => (
+          <div
+            class="gallery-lightbox-item min-w-[min(78vw,16rem)] shrink-0 select-none sm:min-w-[18rem] lg:min-w-[20rem]"
+            data-index={globalIndex}
+            data-title={title}
+            data-subtitle={subtitle || ''}
+            data-lightbox-full-src={lightboxFullSrc}
+          >
+            <div class="group relative cursor-zoom-in overflow-hidden rounded-lg">
+              <div
+                aria-hidden="true"
+                class="pointer-events-none absolute inset-0 z-0 scale-110 blur-2xl"
+                style={`background-image:url(${cardLqipSrc});background-size:cover;background-position:left top`}
+              />
+              <Image
+                src={img}
+                class="gallery-blur-img pointer-events-none relative z-10 h-52 w-full object-cover object-left-top opacity-0 transition-opacity duration-500 ease-in-out select-none data-[loaded=true]:opacity-100 sm:h-64 lg:h-72"
+                height={400}
+                width={400}
+                format="webp"
+                quality={75}
+                alt={`${title} - Animal gardé par Moumousse Pet Sitting à Pélussin et alentours`}
+                draggable={false}
+                decoding="async"
+                loading="lazy"
+                layout="fixed"
+              />
+
+              <div class="bg-opacity-50 group-hover:bg-secondary/15 absolute inset-0 z-20 flex items-end justify-center py-3 text-center font-bold text-white opacity-0 transition-all group-hover:opacity-100 sm:py-4">
+                <div>
+                  <div class="text-lg sm:text-xl lg:text-2xl">{title}</div>
+                  {subtitle && <div class="text-sm sm:text-base lg:text-lg">{subtitle}</div>}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>

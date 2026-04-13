@@ -1,6 +1,6 @@
 /**
- * Lightbox plein écran : carousel, drag et navigation = Embla.
- * Parallax sur la couche interne (pattern tween officiel).
+ * Fullscreen lightbox: carousel, drag, and navigation via Embla.
+ * Parallax on the inner layer (official tween pattern).
  * @see https://www.embla-carousel.com/docs/examples/predefined#parallax
  */
 import EmblaCarousel, { type EmblaCarouselType, type EmblaEventModelType } from 'embla-carousel'
@@ -8,24 +8,24 @@ import EmblaCarousel, { type EmblaCarouselType, type EmblaEventModelType } from 
 const FOCUSABLE =
   'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
 
-/** Comme l’exemple officiel Parallax (Tween). */
+/** Matches the official Parallax (Tween) example. */
 const TWEEN_FACTOR_BASE = 0.2
 
-/** Voisins à précharger (HTTP cache) autour de la slide active pour lisser le swipe. */
+/** Neighbor slides to prefetch (HTTP cache) around the active slide for smoother swiping. */
 const LIGHTBOX_PREFETCH_RADIUS = 3
 
 function loopSlideIndex(i: number, n: number): number {
   return ((i % n) + n) % n
 }
 
-/** Distance circulaire entre indices de slide (mode loop). */
+/** Circular distance between slide indices (loop mode). */
 function circularSlideDistance(a: number, b: number, n: number): number {
   if (n <= 0) return 0
   const d = Math.abs(a - b)
   return Math.min(d, n - d)
 }
 
-/** Slide active = priorité haute ; ±1 = auto ; dans le rayon de préfetch = basse ; au-delà = défaut navigateur. */
+/** Active slide = high priority; ±1 = auto; within prefetch radius = low; beyond = browser default. */
 function setImageLoadingPriorityByDistance(img: HTMLImageElement, dist: number): void {
   img.loading = dist <= LIGHTBOX_PREFETCH_RADIUS ? 'eager' : 'lazy'
   if (dist === 0) img.fetchPriority = 'high'
@@ -34,7 +34,7 @@ function setImageLoadingPriorityByDistance(img: HTMLImageElement, dist: number):
   else img.removeAttribute('fetchpriority')
 }
 
-/** Grandes images : `loading` / `fetchPriority` selon la distance à la slide active. */
+/** Full-size images: `loading` / `fetchPriority` from distance to the active slide. */
 function setLightboxLoadingHints(host: HTMLElement, centerIndex: number, loop: boolean): void {
   const slides = [...host.querySelectorAll<HTMLElement>('.gallery-lightbox-embla__slide')]
   const n = slides.length
@@ -46,7 +46,7 @@ function setLightboxLoadingHints(host: HTMLElement, centerIndex: number, loop: b
   })
 }
 
-/** Miniatures : même logique que les slides (bandeau scrollable). */
+/** Thumbnails: same logic as slides (scrollable strip). */
 function setLightboxThumbLoadingHints(
   thumbs: HTMLElement,
   centerIndex: number,
@@ -62,7 +62,7 @@ function setLightboxThumbLoadingHints(
   })
 }
 
-/** Précharge les URLs des images incomplètes autour de la slide active (HTTP cache, swipe plus fluide). */
+/** Prefetch URLs of incomplete images around the active slide (HTTP cache, smoother swipe). */
 function warmLightboxNeighbors(host: HTMLElement, centerIndex: number, loop: boolean): void {
   const slides = [...host.querySelectorAll<HTMLElement>('.gallery-lightbox-embla__slide')]
   const n = slides.length
@@ -81,7 +81,7 @@ function warmLightboxNeighbors(host: HTMLElement, centerIndex: number, loop: boo
   }
 }
 
-/** Plafond largeur d’une slide (~72rem), en phase avec le peek multi-slides. */
+/** Max slide width cap (~72rem), aligned with multi-slide peek. */
 function maxLightboxSlideWidthPx(): number {
   return Math.min(window.innerWidth * 0.92, 1152)
 }
@@ -96,8 +96,8 @@ export function resolveLightboxTrigger(target: EventTarget | null): HTMLElement 
 }
 
 /**
- * Largeur slide = hauteur cadre × ratio intrinsèque (build), jamais naturalWidth après decode.
- * Sinon la slide grossit au chargement → ResizeObserver Embla → reInit → casse dragFree / momentum.
+ * Slide width = frame height × intrinsic ratio (from build), never naturalWidth after decode.
+ * Otherwise the slide grows on load → Embla ResizeObserver → reInit → breaks dragFree / momentum.
  */
 function measureLightboxSlideWidthPx(slide: HTMLElement): number {
   const maxW = maxLightboxSlideWidthPx()
@@ -139,7 +139,7 @@ function applyLightboxSlideWidths(api: EmblaCarouselType, host: HTMLElement): vo
   api.goTo(i, true)
 }
 
-/** Tween parallax (vanilla Embla, v9 engine). Un seul passage par frame (coalescence rAF). */
+/** Parallax tween (vanilla Embla, v9 engine). Single pass per frame (rAF coalescing). */
 function setupTweenParallax(api: EmblaCarouselType): void {
   let factor = 0
   let layers: (HTMLElement | null)[] = []
@@ -159,8 +159,8 @@ function setupTweenParallax(api: EmblaCarouselType): void {
     const inView = api.slidesInView()
     const bySnap = eng.scrollSnapList.slidesBySnap
     const isScroll = eventType === 'scroll'
-    // slidesInView() est alimenté par IntersectionObserver : tant qu’il est vide, ne pas
-    // sauter de slides sinon aucun tween pendant le swipe (includes est toujours faux).
+    // slidesInView() is driven by IntersectionObserver: while it is empty, do not skip
+    // off-screen slides or there is no tween during swipe (includes is always false).
     const skipOffscreen = isScroll && inView.length > 0
 
     api.snapList().forEach((snap, si) => {
@@ -221,6 +221,24 @@ function setupTweenParallax(api: EmblaCarouselType): void {
     .on('slidefocus', onScrollOrFocus)
 }
 
+/** Enable fade-in reveal on lightbox images: preview (background) shows instantly, high-res fades in. */
+function setupLightboxReveal(host: HTMLElement): void {
+  host.classList.add('lightbox-reveal-active')
+  host.querySelectorAll<HTMLImageElement>('.gallery-lightbox-reveal').forEach((img) => {
+    const reveal = () => img.classList.add('lb-loaded')
+    if (img.complete && img.naturalWidth > 0) reveal()
+    else img.addEventListener('load', reveal, { once: true })
+  })
+}
+
+/** Reset reveal state so next open starts fresh (images may have been swapped/reloaded). */
+function resetLightboxReveal(host: HTMLElement): void {
+  host.classList.remove('lightbox-reveal-active')
+  host.querySelectorAll<HTMLImageElement>('.gallery-lightbox-reveal').forEach((img) => {
+    img.classList.remove('lb-loaded')
+  })
+}
+
 export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
   const host = galleryRoot.querySelector<HTMLElement>('[data-gallery-lightbox]')
   const viewport = host?.querySelector<HTMLElement>('[data-lightbox-viewport]')
@@ -232,7 +250,7 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
   const thumbs = host.querySelector<HTMLElement>('[data-lightbox-thumbs]')
   let api: EmblaCarouselType | null = null
   let savedFocus: HTMLElement | null = null
-  /** Dernière miniature « active » : évite de parcourir toutes les thumbs à chaque `select`. */
+  /** Last “active” thumbnail: avoids scanning every thumb on each `select`. */
   let lastActiveThumbIndex = -1
 
   const $ = <T extends HTMLElement>(sel: string) => host.querySelector<T>(sel)
@@ -245,12 +263,12 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
 
   let layoutDebounceTimer: number | null = null
   let layoutAbort: AbortController | null = null
-  /** Embla émet `scroll` tant que le scroll / dragFree n’est pas au repos (y compris inertie). */
+  /** Embla fires `scroll` while scroll / dragFree is still moving (including inertia). */
   let emblaScrollInMotion = false
-  /** Resize (etc.) : attendre `settle` avant `reInit` pour ne pas couper le momentum. */
+  /** Resize (etc.): wait for `settle` before `reInit` so momentum is not cut off. */
   let layoutQueuedUntilSettle = false
 
-  /** @returns true si un `reInit` / layout complet a été exécuté (déjà inclut sync lourd). */
+  /** @returns true if a `reInit` / full layout run happened (already includes heavy sync). */
   const tryFlushLayoutWhenSettled = (): boolean => {
     if (!layoutQueuedUntilSettle || !api || host.classList.contains('hidden')) return false
     if (emblaScrollInMotion) return false
@@ -265,7 +283,7 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
     tryFlushLayoutWhenSettled()
   }
 
-  /** Titre + surbrillance miniatures : léger, pour chaque `select` (flèches rapides, swipe). */
+  /** Title + thumbnail highlight: lightweight, on every `select` (fast arrows, swipe). */
   const syncLightboxUi = () => {
     if (!api) return
     const i = api.selectedSnap()
@@ -295,8 +313,8 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
   }
 
   /**
-   * Hints chargement, précharge voisins, scroll bandeau miniatures : coûteux —
-   * uniquement au repos (`settle`) ou après recalcul layout, pas à chaque `select`.
+   * Loading hints, neighbor prefetch, thumbnail-strip scroll: expensive —
+   * only when settled (`settle`) or after layout recalc, not on every `select`.
    */
   const syncLightboxHeavy = () => {
     if (!api) return
@@ -366,6 +384,7 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
 
     host.classList.remove('hidden')
     lockBody(true)
+    resetLightboxReveal(host)
 
     window.addEventListener(
       'resize',
@@ -386,9 +405,10 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
         if (thumbs)
           setLightboxThumbLoadingHints(thumbs, index, loopOpen, instance.slideNodes().length)
         warmLightboxNeighbors(host, index, loopOpen)
+        setupLightboxReveal(host)
         scheduleSlideLayout()
-        // Premier init : le viewport sortait de `display:none` — Embla mesure souvent 0×0.
-        // Les ouvertures suivantes passent déjà par `reInit()` dans ensureApi().
+        // First mount: viewport was coming from `display:none` — Embla often measures 0×0.
+        // Later opens already go through `reInit()` in ensureApi().
         if (firstMount) {
           requestAnimationFrame(() => {
             scheduleSlideLayout()

@@ -11,20 +11,20 @@ describe('buildLightboxItems', () => {
           subtitle: 'Portrait',
         },
       ],
-      highResSources: ['/optimized/bene-lightbox.webp'],
-      thumbSources: ['/optimized/bene-thumb.webp'],
-      imageAltSuffix: 'Animal gardé par Moumousse Pet Sitting à Pélussin et alentours',
+      lightboxFullSrcs: ['/optimized/bene-lightbox.webp'],
+      lightboxThumbSrcs: ['/optimized/bene-thumb.webp'],
+      cardLqipSrcs: ['/optimized/bene-lqip.webp'],
     })
 
     expect(items).toEqual([
       {
-        src: '/optimized/bene-lightbox.webp',
+        fullSrc: '/optimized/bene-lightbox.webp',
+        posterSrc: '/optimized/bene-lqip.webp',
         thumbSrc: '/optimized/bene-thumb.webp',
         intrinsicWidth: 3024,
         intrinsicHeight: 4032,
         title: 'Bene',
         subtitle: 'Portrait',
-        alt: 'Bene - Animal gardé par Moumousse Pet Sitting à Pélussin et alentours',
       },
     ])
   })

@@ -1,13 +1,14 @@
 import type { ImageMetadata } from 'astro'
 
 export interface LightboxItem {
-  src: string
+  fullSrc: string
+  /** Same as grid LQIP (`cardLqipSrcs`): slide poster + blurred thumb placeholder until `thumbSrc` / `fullSrc` load. */
+  posterSrc: string
   thumbSrc: string
   intrinsicWidth: number
   intrinsicHeight: number
   title: string
   subtitle: string
-  alt: string
 }
 
 interface GalleryImageInput {
@@ -18,24 +19,24 @@ interface GalleryImageInput {
 
 interface BuildLightboxItemsOptions {
   images: GalleryImageInput[]
-  highResSources: string[]
-  thumbSources: string[]
-  imageAltSuffix: string
+  lightboxFullSrcs: string[]
+  lightboxThumbSrcs: string[]
+  cardLqipSrcs: string[]
 }
 
 export function buildLightboxItems({
   images,
-  highResSources,
-  thumbSources,
-  imageAltSuffix,
+  lightboxFullSrcs,
+  lightboxThumbSrcs,
+  cardLqipSrcs,
 }: BuildLightboxItemsOptions): LightboxItem[] {
   return images.map(({ img, title, subtitle }, idx) => ({
-    src: highResSources[idx]!,
-    thumbSrc: thumbSources[idx]!,
+    fullSrc: lightboxFullSrcs[idx]!,
+    posterSrc: cardLqipSrcs[idx]!,
+    thumbSrc: lightboxThumbSrcs[idx]!,
     intrinsicWidth: img.width,
     intrinsicHeight: img.height,
     title,
     subtitle: subtitle ?? '',
-    alt: `${title} - ${imageAltSuffix}`,
   }))
 }

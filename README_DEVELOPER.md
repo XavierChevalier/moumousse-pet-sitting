@@ -67,7 +67,7 @@ Toute la configuration du site est centralisée dans `src/config/SiteConfig.ts` 
 export const siteConfig = {
   contact: {
     email: '...',
-    encodedPhone: '...',  // Téléphone encodé (anti-spam)
+    encodedPhone: '...',  // Encoded phone (anti-spam)
   },
   seo: { ... },
   calendly: { ... },

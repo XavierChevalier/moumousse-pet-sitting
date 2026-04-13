@@ -5,6 +5,7 @@ Ce dossier contient le système complet de génération et d'export de documents
 ## 🎯 Vue d'ensemble
 
 Le système de printables permet de :
+
 - **Créer** des documents imprimables avec dimensions précises (mm, DPI)
 - **Prévisualiser** les documents avec repères de coupe (crop marks)
 - **Exporter** en PNG haute résolution pour l'impression
@@ -33,11 +34,13 @@ printables/
 ### `PrintableExportCard.astro`
 
 Conteneur principal pour un printable. Gère :
+
 - L'affichage du contenu avec marges
 - L'overlay des repères de coupe (crop marks)
 - Les dimensions via data attributes
 
 **Props :**
+
 - `targetId` : ID unique de l'élément à exporter
 - `dimensions` : Objet `PrintableDimensions` avec toutes les dimensions
 - `overlaySrc` : Chemin vers l'image overlay (repères de coupe)
@@ -46,6 +49,7 @@ Conteneur principal pour un printable. Gère :
 ### `PrintablesToolbar.astro`
 
 Barre d'outils en haut de la page avec :
+
 - Boutons d'export (avec/sans repères de coupe)
 - Toggle de prévisualisation
 - Navigation entre faces (recto/verso)
@@ -72,14 +76,14 @@ Le système utilise `createPrintableDimensions()` pour calculer toutes les dimen
 import { createPrintableDimensions } from '../../core/printables/dimensions'
 
 const dimensions = createPrintableDimensions({
-  dpiMultiplier: 2,        // 600 DPI final (300 × 2)
+  dpiMultiplier: 2, // 600 DPI final (300 × 2)
   baseDpi: 300,
-  finishedWidthMm: 85,     // Taille finie
+  finishedWidthMm: 85, // Finished trim width
   finishedHeightMm: 54,
-  bleedMm: 2,              // 2mm de bleed par côté
-  safeZoneMm: 3,           // 3mm de zone de sécurité
-  contentPaddingMm: 4,     // Padding interne
-  baseTargetWidthPx: 1347, // Largeur cible en pixels
+  bleedMm: 2, // 2mm bleed per side
+  safeZoneMm: 3, // 3mm safe zone per side
+  contentPaddingMm: 4, // Inner padding
+  baseTargetWidthPx: 1347, // Target width in pixels
   baseTargetHeightPx: 981,
 })
 ```
@@ -135,6 +139,7 @@ Le système charge automatiquement les polices utilisées dans le printable avan
 ## 🔍 Prévisualisation
 
 Un système de prévisualisation permet de voir l'export avant téléchargement :
+
 - Toggle dans la toolbar
 - Modal avec l'image générée
 - Bouton de téléchargement depuis la prévisualisation
@@ -185,15 +190,19 @@ const dimensions = createPrintableDimensions({
 ## 🛠️ Services et utilitaires
 
 ### `FontService`
+
 Gère le chargement et l'embedding des polices pour l'export.
 
 ### `TextOutlineNormalizer`
+
 Normalise les éléments avec `text-outline` pour un rendu correct à l'export.
 
 ### `CropCoordinatesCalculator`
+
 Calcule les coordonnées de recadrage pour l'export final.
 
 ### `CanvasCropper`
+
 Recadre l'image exportée sur la zone finie.
 
 ## ⚠️ Notes importantes

@@ -11,21 +11,27 @@
 ## 📁 Composants
 
 ### `FlyerFace1-4.astro`
+
 Face extérieure du flyer (visible quand plié) avec :
+
 - Design principal
 - Informations essentielles
 - Call-to-action
 
 **Props :**
+
 - `withBleed` : Affiche les zones de bleed (pour l'export)
 
 ### `FlyerFace2-3.astro`
+
 Face intérieure du flyer (visible quand ouvert) avec :
+
 - Contenu détaillé
 - Services proposés
 - Informations complètes
 
 **Props :**
+
 - `withBleed` : Affiche les zones de bleed (pour l'export)
 
 ## 🚀 Utilisation
@@ -35,6 +41,7 @@ Le flyer est accessible sur `/flyer` en mode développement uniquement.
 ### Export
 
 Deux modes d'export disponibles :
+
 1. **Avec repères de coupe** : Pour l'impression avec repères
 2. **Sans repères** : Export final recadré sur la zone finie
 
@@ -44,7 +51,7 @@ Deux modes d'export disponibles :
 const dimensions = createPrintableDimensions({
   dpiMultiplier: 2,
   baseDpi: 300,
-  finishedWidthMm: 99,    // Format plié
+  finishedWidthMm: 99, // Folded trim width
   finishedHeightMm: 210,
   bleedMm: 2,
   safeZoneMm: 3,

@@ -51,6 +51,7 @@ const { id, ...props } = Astro.props
           alt="Leika - Garde à domicile avec visites ponctuelles à Pélussin et alentours"
           decoding="async"
           loading="lazy"
+          formats={['avif', 'webp']}
           widths={[364, 728]}
           sizes="(max-width: 1024px) 100vw, 364px"
         />
@@ -87,8 +88,9 @@ const { id, ...props } = Astro.props
 
           <p>
             <AsteriskIcon class="mr-1 inline w-5" />
-            <strong>Au-delà de 2 chats ou d’1 chien :</strong>
-            {siteConfig.pricing.visit.additionalAnimal}€ par animal supplémentaire par visite.
+            <strong>Au-delà de 2 chats, d’1 chien ou d’1 NAC :</strong>
+            {siteConfig.pricing.visit.additionalAnimal}€ par animal supplémentaire par visite. NAC
+            supplémentaire : sur devis.
           </p>
 
           <VisitPricing />
@@ -123,6 +125,7 @@ const { id, ...props } = Astro.props
           alt="Chien Jazz en promenade - Service de promenade canine professionnelle à Pélussin et alentours"
           decoding="async"
           loading="lazy"
+          formats={['avif', 'webp']}
           widths={[364, 728]}
           sizes="(max-width: 1024px) 100vw, 364px"
         />

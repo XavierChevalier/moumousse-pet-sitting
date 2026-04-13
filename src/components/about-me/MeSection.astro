@@ -26,13 +26,18 @@ const { id, ...props } = Astro.props
     </div>
 
     <div
-      class="bg-body border-4 border-black p-4 text-lg leading-loose shadow-[10px_10px_0px_0px_theme(colors.black)] sm:p-6 lg:gap-8 lg:p-8 lg:text-xl"
+      class="bg-body border-4 border-black p-4 text-lg leading-loose shadow-[10px_10px_0px_0px_var(--color-black)] sm:p-6 lg:gap-8 lg:p-8 lg:text-xl"
     >
       <div class="flex flex-col items-center gap-8 md:inline">
         <Picture
           src={SteffieOttawa}
           alt="Steffie Thollot, pet sitter professionnelle diplômée ACACED avec sa chatte Ottawa - Moumousse Pet Sitting Pélussin"
           width={350}
+          widths={[350, 450, 600]}
+          sizes="(max-width: 768px) 100vw, 350px"
+          formats={['avif', 'webp']}
+          loading="lazy"
+          decoding="async"
           class="pointer-events-none float-left mr-8 select-none"
         />
 

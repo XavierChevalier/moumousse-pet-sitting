@@ -1,6 +1,6 @@
 ---
 import Button from '../ui/Button.astro'
-import { MenuIcon } from '@lucide/astro'
+import { MenuIcon, XIcon } from '@lucide/astro'
 import NavigationLogo from './NavigationLogo.astro'
 
 const isHomePage = Astro.url.pathname === '/'
@@ -61,20 +61,30 @@ const links = [
         <button
           type="button"
           id="mobile-menu-button"
-          class="hover:text-primary focus:text-primary cursor-pointer transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          class="hover:text-primary focus:text-primary focus-visible:ring-primary group inline-flex cursor-pointer touch-manipulation items-center justify-center rounded-md p-3 leading-none transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           aria-label="Menu mobile"
           aria-expanded="false"
           aria-controls="mobile-menu"
           data-umami-event="navigation:toggle-mobile-menu"
         >
-          <MenuIcon class="h-6 w-6" />
+          <span class="inline-flex group-aria-expanded:hidden" aria-hidden="true">
+            <MenuIcon class="h-6 w-6" />
+          </span>
+          <span class="hidden group-aria-expanded:inline-flex" aria-hidden="true">
+            <XIcon class="h-6 w-6" />
+          </span>
         </button>
       </div>
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden h-[calc(100dvh-4rem)] text-xl md:hidden" role="menu" aria-label="Menu de navigation mobile">
-      <div class="flex h-full flex-col py-8">
+    <div
+      id="mobile-menu"
+      class="hidden h-[calc(100dvh-4rem)] text-xl md:hidden"
+      role="menu"
+      aria-label="Menu de navigation mobile"
+    >
+      <div class="flex h-full flex-col justify-center py-8">
         {
           links.map((link) => (
             <a

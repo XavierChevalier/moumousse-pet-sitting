@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets'
 import MoumousseMalisse from '../../assets/moumousse-malisse.webp'
+import { cn } from '../../core/tailwindcn'
 import Button from '../ui/Button.astro'
 import PunkBackground from '../ui/PunkBackground.astro'
 
@@ -15,28 +16,27 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
   <div class="relative z-10 container mx-auto max-w-7xl">
     <div class="grid gap-8 sm:gap-16 lg:grid-cols-2 lg:gap-24">
-      <div class="space-y-2 text-center sm:space-y-4 lg:text-left">
+      <div class="flex flex-col justify-center space-y-2 text-center sm:space-y-4 lg:text-left">
         <!-- Main Headline -->
         <h1
-          class="text-3xl leading-tight font-black tracking-wide text-balance uppercase sm:text-4xl md:text-5xl lg:text-7xl"
+          class={cn(
+            'flex flex-col items-center gap-[0.15em] leading-tight font-black tracking-tight text-balance uppercase lg:items-start',
+            'text-4xl md:text-6xl lg:text-7xl'
+          )}
         >
           <span
-            class="text-outline text-tertiary transform whitespace-nowrap"
-            data-text="Faites garder"
+            class="text-tertiary w-fit -rotate-2 bg-black px-[0.35em] py-[0.1em] leading-[1.15] whitespace-nowrap"
+            >Faites garder</span
           >
-            Faites garder
-          </span>
           <span
-            class="text-outline text-secondary transform whitespace-nowrap"
-            data-text="vos animaux"
+            class="text-secondary w-fit rotate-1 bg-black px-[0.35em] py-[0.1em] leading-[1.15] whitespace-nowrap"
+            >vos animaux</span
           >
-            vos animaux
-          </span>
-          <span class="text-outline text-primary transform whitespace-nowrap" data-text="en bonne">
-            en bonne
-          </span>
-          <span class="transform whitespace-nowrap text-black" data-text="compagnie">
-            compagnie
+          <span
+            class="w-fit -rotate-1 bg-black px-[0.35em] py-[0.1em] text-[0.72em] leading-[1.15] whitespace-nowrap"
+          >
+            <span class="text-primary">en bonne</span>
+            <span class="text-white">compagnie</span>
           </span>
         </h1>
 
@@ -44,7 +44,9 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
         <p class="text-lg font-bold text-black sm:text-xl">À Pélussin et alentours</p>
 
         <!-- CTA Buttons -->
-        <div class="mt-6 flex flex-col justify-center gap-3 sm:mt-8 sm:flex-row lg:justify-start">
+        <div
+          class="mx-auto mt-6 flex flex-col justify-center gap-3 sm:mt-8 sm:flex-row lg:ml-0 lg:justify-start"
+        >
           <Button
             href="#services"
             size="small"

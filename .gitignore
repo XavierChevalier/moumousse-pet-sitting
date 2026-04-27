@@ -31,3 +31,6 @@ pnpm-debug.log*
 
 # Temporary printables exclusion
 .printables-temp/
+
+# Ai stuff
+.superpowers/

@@ -95,6 +95,33 @@ export function resolveLightboxTrigger(target: EventTarget | null): HTMLElement 
   return closest.call(target, '.gallery-lightbox-item[data-index]') as HTMLElement | null
 }
 
+export function portalLightboxHostToBody(
+  host: HTMLElement,
+  body: HTMLElement = document.body
+): void {
+  if (host.parentElement === body) return
+  body.appendChild(host)
+}
+
+export function setupLightboxBlurImageLoadedState(host: HTMLElement): void {
+  const markLoaded = (img: HTMLImageElement) => {
+    img.dataset.loaded = 'true'
+  }
+
+  host.addEventListener(
+    'load',
+    (e) => {
+      const t = e.target
+      if (t instanceof HTMLImageElement && t.classList.contains('gallery-blur-img')) markLoaded(t)
+    },
+    true
+  )
+
+  host.querySelectorAll<HTMLImageElement>('.gallery-blur-img').forEach((img) => {
+    if (img.complete && img.naturalWidth > 0) markLoaded(img)
+  })
+}
+
 /**
  * Slide width = frame height × intrinsic ratio (from build), never naturalWidth after decode.
  * Otherwise the slide grows on load → Embla ResizeObserver → reInit → breaks dragFree / momentum.
@@ -246,6 +273,10 @@ export function initGalleryEmblaLightbox(galleryRoot: HTMLElement): void {
     host?.querySelectorAll<HTMLElement>('.gallery-lightbox-embla__slide').length ?? 0
   const hasMultipleSlides = slideCount > 1
   if (!host || !viewport || slideCount === 0) return
+
+  // The gallery section uses containment for performance; keep the fixed overlay outside it.
+  portalLightboxHostToBody(host)
+  setupLightboxBlurImageLoadedState(host)
 
   const thumbs = host.querySelector<HTMLElement>('[data-lightbox-thumbs]')
   let api: EmblaCarouselType | null = null

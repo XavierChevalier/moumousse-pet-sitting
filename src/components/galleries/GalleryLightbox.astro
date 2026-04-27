@@ -161,6 +161,9 @@ const { items } = Astro.props
       --lightbox-slide-gap: 1.25rem;
     }
   }
+  .gallery-lightbox-embla__slide:last-child {
+    margin-inline-end: var(--lightbox-slide-gap);
+  }
 
   /* Open: fade in controls. Close: remove data-state then .hidden after 300ms (JS). */
   [data-gallery-lightbox] [data-ui-fade] {

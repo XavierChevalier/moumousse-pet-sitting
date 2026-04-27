@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
 
 class FakeClassList {
@@ -62,6 +63,75 @@ function createFakeElement(options?: {
 }
 
 describe('gallery embla interactions', () => {
+  it('marks already loaded lightbox thumbnail blur images after the host is moved outside the gallery root', async () => {
+    const lightboxModule = await import('./gallery-embla-lightbox')
+
+    expect(lightboxModule.setupLightboxBlurImageLoadedState).toBeTypeOf('function')
+
+    const loadedThumb = {
+      complete: true,
+      naturalWidth: 64,
+      dataset: {},
+      classList: new FakeClassList(['gallery-blur-img']),
+    } as unknown as HTMLImageElement
+    const pendingThumb = {
+      complete: false,
+      naturalWidth: 0,
+      dataset: {},
+      classList: new FakeClassList(['gallery-blur-img']),
+    } as unknown as HTMLImageElement
+    const host = createFakeElement()
+    host.addEventListener = (() => undefined) as HTMLElement['addEventListener']
+    host.querySelectorAll = ((selector: string) =>
+      selector.includes('.gallery-blur-img')
+        ? [loadedThumb, pendingThumb]
+        : []) as unknown as HTMLElement['querySelectorAll']
+
+    lightboxModule.setupLightboxBlurImageLoadedState?.(host)
+
+    expect(loadedThumb.dataset.loaded).toBe('true')
+    expect(pendingThumb.dataset.loaded).toBeUndefined()
+  })
+
+  it('keeps a gap between the first and last lightbox slides in loop mode', async () => {
+    const source = await readFile(
+      new URL('../components/galleries/GalleryLightbox.astro', import.meta.url),
+      'utf8'
+    )
+
+    expect(source).toMatch(
+      /\.gallery-lightbox-embla__slide:last-child\s*\{[^}]*margin-inline-end:\s*var\(--lightbox-slide-gap\)/s
+    )
+  })
+
+  it('moves the fixed lightbox host to body so section containment cannot constrain it', async () => {
+    const lightboxModule = await import('./gallery-embla-lightbox')
+
+    expect(lightboxModule.portalLightboxHostToBody).toBeTypeOf('function')
+
+    const section = createFakeElement()
+    const host = createFakeElement()
+    Object.defineProperty(host, 'parentElement', {
+      configurable: true,
+      value: section,
+    })
+    const body = createFakeElement()
+    const appended: HTMLElement[] = []
+    body.appendChild = ((child: HTMLElement) => {
+      appended.push(child)
+      Object.defineProperty(child, 'parentElement', {
+        configurable: true,
+        value: body,
+      })
+      return child
+    }) as HTMLElement['appendChild']
+
+    lightboxModule.portalLightboxHostToBody?.(host, body)
+
+    expect(appended).toEqual([host])
+    expect(host.parentElement).toBe(body)
+  })
+
   it('keeps duplicated slides clickable while still marking them as marquee clones', async () => {
     const galleryInitModule = await import('./gallery-embla-init')
 

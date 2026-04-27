@@ -12,7 +12,10 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
 const { id, ...props } = Astro.props
 ---
 
-<section {...props} class="bg-tertiary/5 relative px-4 py-20">
+<section
+  {...props}
+  class="bg-tertiary/5 relative px-4 py-20 contain-[layout_paint] [contain-intrinsic-size:auto_1600px] [content-visibility:auto]"
+>
   <SectionAnchor id={id} />
 
   <div class="container mx-auto max-w-7xl">

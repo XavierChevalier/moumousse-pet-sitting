@@ -60,7 +60,10 @@ const galleryRows = [
 const { id, ...props } = Astro.props
 ---
 
-<section {...props} class="relative overflow-x-hidden pt-12 sm:pt-16 lg:pt-20">
+<section
+  {...props}
+  class="gallery-resize-containment relative overflow-x-hidden pt-12 contain-[layout_paint] [contain-intrinsic-size:auto_1000px] [content-visibility:auto] sm:pt-16 lg:pt-20"
+>
   <SectionAnchor id={id} />
 
   <div class="container mx-auto max-w-7xl px-4">

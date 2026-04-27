@@ -15,7 +15,10 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
 const { id, ...props } = Astro.props
 ---
 
-<section {...props} class="relative px-4 py-12 sm:py-16 lg:py-20">
+<section
+  {...props}
+  class="relative px-4 py-12 contain-[layout_paint] [contain-intrinsic-size:auto_1600px] [content-visibility:auto] sm:py-16 lg:py-20"
+>
   <SectionAnchor id={id} />
 
   <div class="container mx-auto max-w-7xl">
@@ -109,7 +112,7 @@ const { id, ...props } = Astro.props
             >.
           </p>
           <p class="flex items-center gap-4 leading-tight">
-            <AlertTriangle class="h-6 w-6 text-yellow-400 flex-shrink-0" />
+            <AlertTriangle class="h-6 w-6 shrink-0 text-yellow-400" />
             Un premier rendez-vous de rencontre est toujours recommandé avant toute garde.
           </p>
         </AccordionItem>

@@ -29,7 +29,10 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {
 const { id, ...props } = Astro.props
 ---
 
-<section {...props} class="relative overflow-hidden px-4 py-24 text-lg">
+<section
+  {...props}
+  class="relative overflow-hidden px-4 py-24 text-lg contain-[layout_paint] [contain-intrinsic-size:auto_3000px] [content-visibility:auto]"
+>
   <SectionAnchor id={id} />
 
   <div class="relative z-10 container mx-auto max-w-7xl">

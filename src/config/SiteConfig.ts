@@ -56,15 +56,15 @@ export const siteConfig = {
       zone3: '15-20km',
     },
     visit: {
-      zone1: 13,
-      zone2: 15,
-      zone3: 17,
+      zone1: 16,
+      zone2: 18,
+      zone3: 20,
       additionalAnimal: 5, // +5€ per extra animal per visit
     },
     walking: {
-      zone1: { '1h': 18, '1h30': 23, '2h': 28 },
-      zone2: { '1h': 20, '1h30': 25, '2h': 30 },
-      zone3: { '1h': 22, '1h30': 27, '2h': 32 },
+      zone1: { '1h': 20, '1h30': 25, '2h': 30 },
+      zone2: { '1h': 22, '1h30': 27, '2h': 32 },
+      zone3: { '1h': 24, '1h30': 29, '2h': 34 },
     },
   },
 } as const

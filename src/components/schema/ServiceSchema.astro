@@ -34,7 +34,7 @@ const serviceSchema = {
         priceSpecification: {
           '@type': 'UnitPriceSpecification',
           priceCurrency: 'EUR',
-          price: 15,
+          price: siteConfig.pricing.visit.zone1,
           unitText: 'Par visite (à partir de)',
         },
       },
@@ -49,7 +49,7 @@ const serviceSchema = {
         priceSpecification: {
           '@type': 'UnitPriceSpecification',
           priceCurrency: 'EUR',
-          price: 15,
+          price: siteConfig.pricing.walking.zone1['1h'],
           unitText: 'Par heure (à partir de)',
         },
       },

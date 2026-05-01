@@ -1,5 +1,4 @@
 import sitemap from '@astrojs/sitemap'
-import playformInline from '@playform/inline'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 import { excludePrintables } from './build/exclude-printables.js'
@@ -18,7 +17,6 @@ export default defineConfig({
         return !['/flyer', '/visit-card'].flatMap(withTrailingSlash).includes(pathname)
       },
     }),
-    playformInline(),
     excludePrintables(),
   ],
   vite: {

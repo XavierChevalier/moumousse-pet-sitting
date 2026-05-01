@@ -1,7 +1,8 @@
 ---
+import MoumousseMalisse from '../assets/moumousse-malisse.webp'
 import Navigation from '../components/navigations/Navigation.astro'
-import Footer from '../components/ui/Footer.astro'
 import SEO from '../components/SEO.astro'
+import Footer from '../components/ui/Footer.astro'
 import { siteConfig, type SEOConfig } from '../config/SiteConfig'
 import '../styles/global.css'
 
@@ -33,24 +34,16 @@ const seoProps = Astro.props
     <!-- SEO Meta Tags -->
     <SEO {...seoProps} />
 
-    <!-- Google Fonts - optimized loading with font-display: swap and async loading -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap"
-      media="print"
-      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap"
-      />
-    </noscript>
 
     <!-- Preload critical hero image -->
-    <link rel="preload" as="image" href="/moumousse-malisse.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href={MoumousseMalisse.src} fetchpriority="high" />
 
     <!-- Umami Analytics - async loading -->
     <script

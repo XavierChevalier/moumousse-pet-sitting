@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 
 class FakeClassList {
   private readonly names = new Set<string>()
@@ -66,7 +66,7 @@ describe('gallery embla interactions', () => {
   it('marks already loaded lightbox thumbnail blur images after the host is moved outside the gallery root', async () => {
     const lightboxModule = await import('./gallery-embla-lightbox')
 
-    expect(lightboxModule.setupLightboxBlurImageLoadedState).toBeTypeOf('function')
+    expect(typeof lightboxModule.setupLightboxBlurImageLoadedState).toBe('function')
 
     const loadedThumb = {
       complete: true,
@@ -107,7 +107,7 @@ describe('gallery embla interactions', () => {
   it('moves the fixed lightbox host to body so section containment cannot constrain it', async () => {
     const lightboxModule = await import('./gallery-embla-lightbox')
 
-    expect(lightboxModule.portalLightboxHostToBody).toBeTypeOf('function')
+    expect(typeof lightboxModule.portalLightboxHostToBody).toBe('function')
 
     const section = createFakeElement()
     const host = createFakeElement()
@@ -135,7 +135,7 @@ describe('gallery embla interactions', () => {
   it('keeps duplicated slides clickable while still marking them as marquee clones', async () => {
     const galleryInitModule = await import('./gallery-embla-init')
 
-    expect(galleryInitModule.prepareGalleryLoopClone).toBeTypeOf('function')
+    expect(typeof galleryInitModule.prepareGalleryLoopClone).toBe('function')
 
     const clone = createFakeElement({
       classNames: ['gallery-lightbox-item'],
@@ -159,7 +159,7 @@ describe('gallery embla interactions', () => {
   it('finds a lightbox trigger from a nested click target', async () => {
     const lightboxModule = await import('./gallery-embla-lightbox')
 
-    expect(lightboxModule.resolveLightboxTrigger).toBeTypeOf('function')
+    expect(typeof lightboxModule.resolveLightboxTrigger).toBe('function')
 
     const trigger = createFakeElement({
       classNames: ['gallery-lightbox-item'],

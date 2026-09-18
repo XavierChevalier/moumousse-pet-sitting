@@ -12,7 +12,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "bun test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",

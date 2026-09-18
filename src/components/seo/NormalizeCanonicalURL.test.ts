@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'bun:test'
 import { normalizeCanonicalURL } from './NormalizeCanonicalURL'
 
 const baseURL = 'https://example.com'

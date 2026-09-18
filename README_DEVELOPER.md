@@ -85,18 +85,18 @@ Le projet n'utilise actuellement pas de variables d'environnement. Les URLs (ex:
 ### Prérequis
 
 - Node.js (version recommandée dans `.nvmrc` si présent)
-- pnpm
+- Bun
 
 ### Installation
 
 ```bash
-pnpm install
+bun install
 ```
 
 ### Développement local
 
 ```bash
-pnpm dev
+bun run dev
 ```
 
 Le site sera accessible sur `http://localhost:4321`
@@ -104,7 +104,7 @@ Le site sera accessible sur `http://localhost:4321`
 ### Build de production
 
 ```bash
-pnpm build
+bun run build
 ```
 
 Les fichiers générés seront dans `dist/`.
@@ -112,7 +112,7 @@ Les fichiers générés seront dans `dist/`.
 ### Prévisualisation du build
 
 ```bash
-pnpm preview
+bun run preview
 ```
 
 ## 🧩 Composants principaux
@@ -195,16 +195,17 @@ Le système de printables permet de générer des documents imprimables (cartes 
 ## 📜 Scripts disponibles
 
 ```bash
-pnpm dev         # Développement local
-pnpm build       # Build de production
-pnpm preview     # Prévisualisation du build
+bun run dev         # Développement local
+bun run build       # Build de production
+bun run preview     # Prévisualisation du build
+bun test            # Tests unitaires
 ```
 
 **Scripts manquants recommandés** :
 
-- `pnpm lint` - Linter le code
-- `pnpm type-check` - Vérifier les types TypeScript
-- `pnpm format` - Formater le code avec Prettier
+- `bun run lint` - Linter le code
+- `bun run type-check` - Vérifier les types TypeScript
+- `bun run format` - Formater le code avec Prettier
 
 ## 🔍 Fonctions complexes documentées
 

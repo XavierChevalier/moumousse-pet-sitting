@@ -33,15 +33,16 @@ Le site utilise un design « punk-rock brutalist » moderne et coloré avec :
 
 • **[Astro](https://astro.build)**
 • **[Tailwind CSS 4](https://tailwindcss.com)**
+• **[Bun](https://bun.sh)**
 
 ---
 
 ## 🚀 Quick start
 
 ```bash
-pnpm install
-pnpm dev         # http://localhost:4321
-pnpm build       # Production build
+bun install
+bun run dev     # http://localhost:4321
+bun run build   # Production build
 ```
 
 ## 🌐 Déploiement

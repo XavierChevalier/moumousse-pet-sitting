@@ -203,7 +203,7 @@ bun test            # Tests unitaires
 
 **Scripts manquants recommandés** :
 
-- `bun run lint` - Linter le code
+- `bun run lint` - Linter le code avec Oxlint
 - `bun run type-check` - Vérifier les types TypeScript
 - `bun run format` - Formater le code avec Prettier
 

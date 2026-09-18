@@ -34,3 +34,5 @@ pnpm-debug.log*
 
 # Ai stuff
 .superpowers/
+# Local package manager store
+.pnpm-store/

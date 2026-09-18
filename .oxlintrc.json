@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    "dist/**",
+    "node_modules/**",
+    "build/**",
+    "coverage/**",
+    ".idea/**",
+    ".history/**",
+    ".playwright-mcp/**",
+    ".printables-temp/**",
+    ".astro/**",
+    ".pnpm-store/**"
+  ]
+}

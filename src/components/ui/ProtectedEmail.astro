@@ -7,9 +7,9 @@ export interface Props extends astroHTML.JSX.HTMLAttributes {}
 
 <ProtectedContent
   {...Astro.props}
-  encodedContent={siteConfig.contact.encodedPhone}
-  placeholder="Cliquez pour voir le téléphone"
-  contentType="phone"
+  encodedContent={siteConfig.contact.encodedEmail}
+  placeholder="Cliquez pour voir l'email"
+  contentType="email"
 >
   <slot name="prepend" slot="prepend" />
 </ProtectedContent>

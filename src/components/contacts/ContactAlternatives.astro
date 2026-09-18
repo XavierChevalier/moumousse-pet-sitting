@@ -1,0 +1,38 @@
+---
+import { Mail, Phone } from '@lucide/astro'
+import ProtectedEmail from '../ui/ProtectedEmail.astro'
+import ProtectedPhone from '../ui/ProtectedPhone.astro'
+import PrevisitInfo from './PrevisitInfo.astro'
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {}
+---
+
+<div {...Astro.props} class="mx-auto max-w-2xl space-y-8">
+  <div
+    class="border-2 border-black bg-white/40 px-4 py-6 text-black shadow-[6px_6px_0px_0px_theme(colors.black)] sm:px-6 sm:py-8"
+  >
+    <h3 class="text-xl font-black tracking-tight uppercase sm:text-2xl">Me joindre</h3>
+    <p class="mt-3 text-base leading-relaxed sm:text-lg">
+      Écrivez-moi ou appelez-moi, je vous répondrai rapidement.
+    </p>
+
+    <ul class="mt-6 space-y-3">
+      <li
+        class="border-2 border-black bg-white px-4 py-3 transition-colors hover:bg-primary/5 sm:px-5"
+      >
+        <ProtectedEmail class="w-full">
+          <Mail slot="prepend" class="h-5 w-5 shrink-0" aria-hidden="true" />
+        </ProtectedEmail>
+      </li>
+      <li
+        class="border-2 border-black bg-white px-4 py-3 transition-colors hover:bg-primary/5 sm:px-5"
+      >
+        <ProtectedPhone class="w-full">
+          <Phone slot="prepend" class="h-5 w-5 shrink-0" aria-hidden="true" />
+        </ProtectedPhone>
+      </li>
+    </ul>
+  </div>
+
+  <PrevisitInfo />
+</div>

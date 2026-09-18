@@ -3,7 +3,7 @@ import { cn } from '../../core/tailwindcn'
 export interface Props extends astroHTML.JSX.HTMLAttributes {
   encodedContent: string
   placeholder?: string
-  contentType: 'phone' | 'text'
+  contentType: 'phone' | 'email' | 'text'
 }
 
 const {
@@ -22,7 +22,7 @@ const {
   data-content-type={contentType}
 >
   <button
-    class="protected-trigger hover:text-primary flex cursor-pointer items-center gap-2 text-left transition-colors"
+    class="protected-trigger hover:text-primary flex w-full cursor-pointer items-center gap-2 text-left font-semibold transition-colors"
     data-umami-event={`contact:reveal-${contentType}`}
   >
     <slot name="prepend" />
@@ -87,7 +87,7 @@ const {
   function decodeProtectedContent(
     element: HTMLElement,
     encodedContent: string,
-    contentType: 'phone' | 'text'
+    contentType: 'phone' | 'email' | 'text'
   ) {
     const contentText = element.querySelector('.protected-content-text') as HTMLSpanElement
     const trigger = element.querySelector('.protected-trigger') as HTMLButtonElement
@@ -95,7 +95,7 @@ const {
 
     const decodedContent = decode(encodedContent)
     switch (contentType) {
-      case 'phone':
+      case 'phone': {
         const phoneLink = document.createElement('a')
         phoneLink.href = `tel:${decodedContent.replaceAll(/ /g, '')}`
         phoneLink.className =
@@ -106,6 +106,20 @@ const {
         )
         element.replaceWith(phoneLink)
         break
+      }
+
+      case 'email': {
+        const emailLink = document.createElement('a')
+        emailLink.href = `mailto:${decodedContent}`
+        emailLink.className =
+          'hover:text-primary flex items-center text-left gap-2 transition-colors'
+        emailLink.innerHTML = revealed.innerHTML.replace(
+          '<span class="protected-content-text"></span>',
+          `<span>${decodedContent}</span>`
+        )
+        element.replaceWith(emailLink)
+        break
+      }
 
       default:
         contentText.textContent = decodedContent
@@ -123,7 +137,10 @@ const {
       const revealed = element.querySelector('.protected-revealed') as HTMLDivElement
       const contentText = element.querySelector('.protected-content-text') as HTMLSpanElement
       const encodedContent = element.getAttribute('data-encoded')
-      const contentType = element.getAttribute('data-content-type') as 'phone' | 'text'
+      const contentType = element.getAttribute('data-content-type') as
+        | 'phone'
+        | 'email'
+        | 'text'
       if (!trigger || !revealed || !contentText || !encodedContent) return
 
       trigger.addEventListener(

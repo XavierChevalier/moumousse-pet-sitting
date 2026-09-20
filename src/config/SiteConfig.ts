@@ -13,8 +13,7 @@ export const siteConfig = {
   bookPrevisiteUrl: 'https://calendly.com/steffiethollot/30min',
 
   contact: {
-    /** Set to true to re-enable the Netlify contact form */
-    formEnabled: false,
+    formEnabled: true,
     encodedPhone: '@HWPjD}PjfGQj\\GQj\\GP',
     encodedEmail: '@Lq]xfpesUKgsQ[O3YJfwX5f}Y6ewY6ewEHgmIJgx<5\\',
     email: 'contact@moumousse-pet-sitting.fr',

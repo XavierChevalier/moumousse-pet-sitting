@@ -3,6 +3,7 @@ import MoumousseMalisse from '../assets/moumousse-malisse.webp'
 import Navigation from '../components/navigations/Navigation.astro'
 import SEO from '../components/SEO.astro'
 import Footer from '../components/ui/Footer.astro'
+import ClosureBanner from '../components/ui/ClosureBanner.astro'
 import { siteConfig, type SEOConfig } from '../config/SiteConfig'
 import '../styles/global.css'
 
@@ -49,13 +50,16 @@ const seoProps = Astro.props
     <script
       defer
       src="https://umami-production-6320.up.railway.app/script.js"
-      data-website-id="4d35333e-130b-4d7d-b00b-2ca3d21e88b1"></script>
+      data-website-id="4d35333e-130b-4d7d-b00b-2ca3d21e88b1"
+    ></script>
   </head>
 
   <body class="bg-body overflow-x-hidden font-sans text-base text-black">
     <Navigation />
 
     <main class="min-h-screen overflow-hidden pt-20">
+      <ClosureBanner />
+
       <slot />
     </main>
 
